@@ -233,12 +233,22 @@ function gHtml(){
 function gf(u,o){o=o||{};o.headers=Object.assign({Authorization:'Bearer '+g.tok},o.headers||{});return fetch(u,o).then(function(r){if(!r.ok)throw r.status;return r})}
 function gInit(){
  if(g.tc||!window.google||!google.accounts)return;
- g.tc=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email',callback:onTok,error_callback:function(){gs('লগইন হয়নি, আবার চেষ্টা করুন')}});
+ g.tc=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email',callback:onTok,error_callback:function(){if(!g.silent)gs('লগইন হয়নি, আবার চেষ্টা করুন')}});
 }
-function gLogin(silent){gInit();if(!g.tc){gs('Google লোড হয়নি, ইন্টারনেট দেখুন');return}g.tc.requestAccessToken(silent?{prompt:''}:{prompt:'select_account'})}
-function gReady(){var f='';try{f=localStorage.getItem('hishab-g')}catch(e){}if(f==='1'&&CLIENT_ID.indexOf('YOUR_')!==0)gLogin(true)}
+function gLogin(silent){gInit();if(!g.tc){if(!silent)gs('Google লোড হয়নি, ইন্টারনেট দেখুন');return}g.silent=!!silent;var o={prompt:silent?'':'select_account'};if(silent&&g.email)o.hint=g.email;g.tc.requestAccessToken(o)}
+function gAuto(){
+ if(g.armed||lsGet('hishab-g')!=='1'||CLIENT_ID.indexOf('YOUR_')===0)return;
+ if(g.tok&&Date.now()<g.exp)return;
+ g.armed=true;
+ var go=function(){gInit();if(!g.tc)return;
+  document.removeEventListener('pointerdown',go,true);document.removeEventListener('keydown',go,true);g.armed=false;
+  if(!g.tok||Date.now()>g.exp)gLogin(true)};
+ document.addEventListener('pointerdown',go,true);document.addEventListener('keydown',go,true);
+}
+function gReady(){gAuto()}
+gAuto();
 function onTok(r){
- if(r.error||!r.access_token){gs('লগইন হয়নি, আবার চেষ্টা করুন');return}
+ if(r.error||!r.access_token){if(!g.silent)gs('লগইন হয়নি, আবার চেষ্টা করুন');return}
  g.tok=r.access_token;g.exp=Date.now()+(r.expires_in-60)*1000;
  gf('https://www.googleapis.com/oauth2/v3/userinfo').then(function(x){return x.json()}).then(function(u){
   var ow='';try{ow=localStorage.getItem('hishab-owner')||''}catch(e){}
@@ -271,8 +281,8 @@ function gSync(){
 function gQueue(){
  if(!g.tok)return;clearTimeout(g.timer);
  g.timer=setTimeout(function(){
-  if(Date.now()>g.exp){gLogin(true);return}
-  gPut().then(function(){gs('সিঙ্ক হয়েছে ✓')}).catch(function(e){if(e===401)gLogin(true);else gs('অফলাইন: ইন্টারনেট এলে সিঙ্ক হবে')});
+  if(Date.now()>g.exp){gAuto();return}
+  gPut().then(function(){gs('সিঙ্ক হয়েছে ✓')}).catch(function(e){if(e===401)gAuto();else gs('অফলাইন: ইন্টারনেট এলে সিঙ্ক হবে')});
  },2000);
 }
 function gLogout(){
@@ -404,7 +414,7 @@ function press(k){
  $('ex').textContent=ex;var r2=calc(ex);$('out').textContent=r2===null?(ex?'…':'0'):r2.toLocaleString('bn-BD')}
 $('fab').onclick=function(){$('calc').classList.toggle('on')};
 $('use').onclick=function(){var r=calc(ex),a=$('amt');if(r!==null&&a){a.value=r;a.focus()}};
-window.addEventListener('online',function(){if(lsGet('hishab-g')!=='1')return;if(g.tok&&Date.now()<g.exp)gSync();else gLogin(true)});
+window.addEventListener('online',function(){if(lsGet('hishab-g')!=='1')return;if(g.tok&&Date.now()<g.exp)gSync();else gAuto()});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
 render();
 </script>
