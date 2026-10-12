@@ -220,7 +220,7 @@ function pdfReport(){
  }).catch(function(){pm.textContent='PDF তৈরি করা যায়নি'});
 }
 /* ===== Google লগইন ও Drive সিঙ্ক ===== */
-var CLIENT_ID='YOUR_CLIENT_ID.apps.googleusercontent.com'; /* <-- এখানে আপনার Client ID বসান */
+var CLIENT_ID='661182603134-vlb50kutks8rku726qu86aot4r6grm96.apps.googleusercontent.com'; /* <-- এখানে আপনার Client ID বসান */
 var g={tok:null,exp:0,email:'',st:'',fid:null,tc:null,timer:null};
 try{g.email=localStorage.getItem('hishab-owner')||''}catch(e){}
 function gs(t){g.st=t;if(view==='acct')render()}
