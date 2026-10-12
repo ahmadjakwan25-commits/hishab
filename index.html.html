@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#17603c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<title>হিসাবের খাতা</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f5f2;--inc:#1f7a4d;--card:#fff;--ink:#14261c;--mut:#5d7066;--g:#1f7a4d;--g2:#17603c;--line:#dbe5de;--red:#c0392b;--amb:#b7791f;--blue:#2b6cb0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a14;--inc:#3fae77;--card:#182a20;--ink:#e8f1ea;--mut:#9bb1a3;--g:#3fae77;--g2:#2d8a5b;--line:#2a4234;--red:#ef7a6c;--amb:#e0b050;--blue:#6aa7e8}}
+:root[data-theme="dark"]{--bg:#0f1a14;--inc:#3fae77;--card:#182a20;--ink:#e8f1ea;--mut:#9bb1a3;--g:#3fae77;--g2:#2d8a5b;--line:#2a4234;--red:#ef7a6c;--amb:#e0b050;--blue:#6aa7e8}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'Hind Siliguri','Noto Sans Bengali','Kalpurush',sans-serif;font-size:16px;line-height:1.5;padding-bottom:90px}
+header{background:var(--g2);color:#fff;padding:18px 16px 54px;text-align:center}
+header h1{margin:0;font-size:22px;font-weight:700}
+header p{margin:2px 0 0;font-size:13px;opacity:.85}
+main{max-width:620px;margin:-38px auto 0;padding:0 14px}
+.bal{background:var(--card);border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.12);text-align:center}
+.bal small{color:var(--mut)}
+.bal .big{font-size:34px;font-weight:700;color:var(--g)}
+.bal .big.neg{color:var(--red)}
+.row3{display:flex;gap:8px;margin-top:10px}
+.row3 div{flex:1;background:var(--bg);border-radius:10px;padding:6px;font-size:13px;color:var(--mut)}
+.row3 b{display:block;font-size:15px;color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 8px;text-align:center;font:inherit;color:var(--ink);cursor:pointer}
+.tile span{display:block;font-size:28px}
+.tile b{font-weight:600}
+.tile:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.top{display:flex;align-items:center;gap:10px;margin:16px 0 10px}
+.top h2{margin:0;font-size:20px}
+.back{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:6px 12px;font:inherit;cursor:pointer}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.panel label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
+input,select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--bg);color:var(--ink)}
+.btn{width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:var(--g);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}
+.item small{color:var(--mut);display:block}
+.amt{font-weight:700;white-space:nowrap}
+.x{background:none;border:0;color:var(--red);font-size:18px;cursor:pointer;padding:4px 8px}
+.chip{border:1px solid var(--line);background:none;color:var(--ink);border-radius:20px;padding:2px 10px;font:inherit;font-size:12px;cursor:pointer}
+.empty{color:var(--mut);text-align:center;padding:14px}
+.sum{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+#fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:54px;height:54px;border-radius:50%;border:0;background:var(--g);color:#fff;font-size:24px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3);z-index:5}
+#calc{position:fixed;right:12px;bottom:calc(80px + env(safe-area-inset-bottom,0px));width:min(290px,calc(100% - 24px));background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:5;display:none}
+#calc.on{display:block}
+#disp{background:var(--bg);border-radius:10px;padding:8px 10px;text-align:right;min-height:58px;word-break:break-all}
+#disp small{display:block;color:var(--mut);min-height:20px}
+#disp b{font-size:26px}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.keys button{padding:12px 0;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:18px;cursor:pointer}
+.keys .op{background:var(--g);color:#fff;border-color:var(--g)}
+.keys .wide{grid-column:span 2}
+@media(min-width:900px){#calc{display:block;right:max(12px,calc(50% - 560px));bottom:auto;top:110px}#fab{display:none}}
+.ph{width:48px;height:48px;object-fit:cover;border-radius:8px;flex:none}#prev{width:96px;height:96px;margin-top:8px}.tile.wide{grid-column:span 2;margin-top:10px}.sum.gi b{color:var(--inc)}.sum.re b{color:var(--red)}.cg,.cr{font-style:normal}.cg{color:var(--inc)}.cr{color:var(--red)}.led{border-left-width:5px}.led.gi{border-left-color:var(--inc)}.led.re{border-left-color:var(--red)}.led .lh{font-size:17px}.led.gi .lh,.led.gi .amt{color:var(--inc)}.led.re .lh,.led.re .amt{color:var(--red)}.tot{border-top:2px solid var(--line);font-size:17px;margin-top:4px}.led.gi .tot b{color:var(--inc)}.led.re .tot b{color:var(--red)}:root[data-accent="blue"]{--g:#2b6cb0;--g2:#1f4f86}:root[data-accent="purple"]{--g:#6b46c1;--g2:#553c9a}:root[data-accent="orange"]{--g:#c05621;--g2:#9c4221}:root[data-accent="rose"]{--g:#be185d;--g2:#9d174d}@media(prefers-color-scheme:dark){:root[data-accent="blue"]:not([data-theme="light"]){--g:#6aa7e8;--g2:#3b82c4}:root[data-accent="purple"]:not([data-theme="light"]){--g:#a78bfa;--g2:#7c5ccc}:root[data-accent="orange"]:not([data-theme="light"]){--g:#f0a060;--g2:#d97a2e}:root[data-accent="rose"]:not([data-theme="light"]){--g:#f472b6;--g2:#db2777}}:root[data-accent="blue"][data-theme="dark"]{--g:#6aa7e8;--g2:#3b82c4}:root[data-accent="purple"][data-theme="dark"]{--g:#a78bfa;--g2:#7c5ccc}:root[data-accent="orange"][data-theme="dark"]{--g:#f0a060;--g2:#d97a2e}:root[data-accent="rose"][data-theme="dark"]{--g:#f472b6;--g2:#db2777}
+header{position:relative}
+#mb{position:absolute;left:10px;top:12px;width:42px;height:42px;border:0;border-radius:10px;background:rgba(255,255,255,.2);color:#fff;font-size:22px;cursor:pointer}
+#dov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:19;display:none}#dov.on{display:block}
+#drw{position:fixed;top:0;left:0;bottom:0;width:min(290px,84%);background:var(--card);z-index:20;transform:translateX(-105%);transition:transform .2s;padding:calc(env(safe-area-inset-top,0px) + 18px) 12px 14px;overflow:auto;box-shadow:4px 0 20px rgba(0,0,0,.3)}
+#drw.on{transform:none}
+#dtop{text-align:center;padding-bottom:12px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.avb{background:none;border:0;padding:0;cursor:pointer}
+.av{width:78px;height:78px;border-radius:50%;background:var(--g) center/cover no-repeat;color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;margin:0 auto;border:3px solid var(--line)}
+.cn{font-size:18px;font-weight:700;margin-top:8px}
+.mi{display:flex;gap:10px;align-items:center;width:100%;padding:12px;border:0;background:none;color:var(--ink);font:inherit;font-size:16px;border-radius:10px;cursor:pointer;text-align:left}
+.mi:hover{background:var(--bg)}.mi[hidden]{display:none}
+.sw{display:flex;gap:10px;margin-top:8px}.swb{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer}.swb.on{border-color:var(--ink)}
+#lock{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}#lock[hidden]{display:none}
+.lbox{width:100%;max-width:320px;text-align:center}.lbox h2{color:var(--g)}
+</style>
+</head>
+<body>
+<header><button id="mb" aria-label="মেনু">☰</button><h1>হিসাবের খাতা</h1><p>আয়–ব্যয়ের সহজ হিসাব</p></header>
+<main id="app"></main>
+<div id="dov"></div>
+<nav id="drw" aria-label="মেনু"><div id="dtop"></div>
+<button class="mi" data-m="home">🏠 হোম</button>
+<button class="mi" data-m="acct">✉️ Google অ্যাকাউন্ট (Gmail)</button>
+<button class="mi" data-m="set">⚙️ সেটিং</button>
+<button class="mi" data-m="lock" id="mlock" hidden>🔒 এখনই লক করুন</button></nav>
+<input type="file" id="avf" accept="image/*" hidden>
+<div id="lock" hidden><div class="lbox"><h2>🔒 হিসাবের খাতা</h2><input type="password" id="lpw" placeholder="পাসওয়ার্ড" autocomplete="off"><button class="btn" id="lgo">খুলুন</button><div id="lm2" class="empty"></div></div></div>
+
+<button id="fab" aria-label="ক্যালকুলেটর">🧮</button>
+<aside id="calc" aria-label="ক্যালকুলেটর">
+<div id="disp"><small id="ex"></small><b id="out">0</b></div>
+<div class="keys" id="keys"></div>
+<button class="btn" id="use">পরিমাণ ঘরে বসান</button>
+</aside>
+<script src="https://accounts.google.com/gsi/client" async defer onload="gReady()"></script>
+<script>
+var lday='',lmonth='all',pendingPic='',KEY='hishab-v1', db={entries:[]}, view='home', month=new Date().toISOString().slice(0,7);
+try{var s=localStorage.getItem(KEY);if(s)db=JSON.parse(s)}catch(e){}
+function save(skip){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}if(!skip&&window.gQueue)gQueue()}
+var T={income:['আয়','💰'],expense:['খরচ','🧾'],loan:['ধার–পাওনা','🤝'],saving:['সঞ্চয়','🐷'],market:['বাজার','🛒']};
+var $=function(i){return document.getElementById(i)};
+function tk(n){return '৳'+Number(n||0).toLocaleString('bn-BD')}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function sum(t,f){return db.entries.filter(function(e){return e.type===t&&(!f||f(e))}).reduce(function(a,e){return a+e.amt},0)}
+function bal(f){return sum('income',f)-sum('expense',f)-sum('market',f)}
+function render(){
+ var h='';
+ if(view==='home'){
+  var b=bal();
+  h+='<div class="bal"><small>বর্তমান ব্যালেন্স</small><div class="big'+(b<0?' neg':'')+'">'+tk(b)+'</div><div class="row3"><div>আয়<b>'+tk(sum('income'))+'</b></div><div>খরচ + বাজার<b>'+tk(sum('expense')+sum('market'))+'</b></div><div>সঞ্চয়<b>'+tk(sum('saving'))+'</b></div></div></div><div class="grid">';
+  ['income','expense','loan','saving','market'].forEach(function(k){h+='<button class="tile" data-v="'+k+'"><span>'+T[k][1]+'</span><b>'+T[k][0]+'</b></button>'});
+  h+='<button class="tile" data-v="month"><span>📅</span><b>মাসিক হিসাব</b></button><button class="tile wide" data-v="chart"><span>📋</span><b>সব <i class="cg">আয়</i>–<i class="cr">ব্যয়</i></b></button></div><div class="panel"><b>ডাটা ব্যাকআপ</b><button class="btn" id="exp">ব্যাকআপ ফাইল নামান</button><button class="btn" id="imp" style="background:var(--g2)">ফাইল থেকে ফিরিয়ে আনুন</button><input type="file" id="impf" accept=".json,application/json" hidden><div id="msg" class="empty"></div></div>';
+ } else if(view==='acct'){
+  h+=hd('Google অ্যাকাউন্ট')+acctHtml();
+ } else if(view==='set'){
+  h+=hd('সেটিং')+setHtml();
+ } else if(view==='chart'){
+  h+=hd('সব <i class="cg">আয়</i>–<i class="cr">ব্যয়</i>')+ledgerHtml();
+ } else if(view==='month'){
+  var f=function(e){return e.date.slice(0,7)===month};
+  h+=hd('মাসিক হিসাব')+'<div class="panel"><label>মাস নির্বাচন</label><input type="month" id="mo" value="'+month+'">'+
+  '<div class="sum"><span>আয়</span><b>'+tk(sum('income',f))+'</b></div><div class="sum"><span>খরচ</span><b>'+tk(sum('expense',f))+'</b></div><div class="sum"><span>বাজার</span><b>'+tk(sum('market',f))+'</b></div><div class="sum"><span>সঞ্চয়</span><b>'+tk(sum('saving',f))+'</b></div><div class="sum"><span>মাসের ব্যালেন্স</span><b>'+tk(bal(f))+'</b></div></div>';
+ } else {
+  var k=view, isL=k==='loan', list=db.entries.filter(function(e){return e.type===k}).sort(function(a,b){return b.date<a.date?-1:1});
+  h+=hd(T[k][0]);
+  if(isL){var p=sum('loan',function(e){return e.dir==='পাওনা'&&!e.done}),d=sum('loan',function(e){return e.dir==='ধার'&&!e.done});
+   h+='<div class="panel"><div class="sum"><span>মোট পাওনা (পাব)</span><b>'+tk(p)+'</b></div><div class="sum"><span>মোট ধার (দেব)</span><b>'+tk(d)+'</b></div></div>'}
+  else h+='<div class="panel"><div class="sum"><span>মোট '+T[k][0]+'</span><b>'+tk(sum(k))+'</b></div></div>';
+  h+='<div class="panel">'+(isL?'<label>ধরন</label><select id="dir"><option>পাওনা</option><option>ধার</option></select>':'')+
+  '<label>'+(isL?'ব্যক্তির নাম':'বিবরণ')+'</label><input id="note" placeholder="'+(isL?'যেমন: রহিম':'যেমন: বেতন')+'">'+
+  '<label>পরিমাণ (টাকা)</label><input id="amt" type="number" inputmode="decimal" min="0"><label>তারিখ</label><input id="dt" type="date" value="'+new Date().toISOString().slice(0,10)+'"><label>পণ্যের ছবি (ঐচ্ছিক)</label><input id="pic" type="file" accept="image/*"><img id="prev" class="ph" alt="" hidden><button class="btn" id="add">যোগ করুন</button></div><div class="panel">';
+  if(!list.length)h+='<div class="empty">এখনো কিছু যোগ করা হয়নি</div>';
+  list.forEach(function(e){h+='<div class="item">'+(e.pic?'<img class="ph" src="'+e.pic+'" alt="">':'')+'<div style="flex:1">'+esc(e.note||'—')+'<small>'+(isL?e.dir+' · ':'')+e.date+'</small></div><div><span class="amt">'+tk(e.amt)+'</span> '+(isL?'<button class="chip" data-s="'+e.id+'">'+(e.done?'মিটেছে ✓':'বাকি')+'</button>':'')+'<button class="x" data-d="'+e.id+'" aria-label="মুছুন">✕</button></div></div>'});
+  h+='</div>';
+ }
+ $('app').innerHTML=h;$('app').style.marginTop=view==='home'?'':'18px';
+}
+function ledgerHtml(){
+ var all=db.entries.filter(function(e){return e.type==='income'||e.type==='expense'||e.type==='market'}),ms=[],h='',ti=0,te=0;
+ all.forEach(function(e){var m=e.date.slice(0,7);if(ms.indexOf(m)<0)ms.push(m)});ms.sort().reverse();
+ var l=ledgerList(all);
+ h+='<div class="panel"><label>সময়</label><select id="lm"><option value="all">সব সময়</option>'+ms.map(function(m){return '<option value="'+m+'"'+(m===lmonth?' selected':'')+'>'+m+'</option>'}).join('')+'</select><label>নির্দিষ্ট দিন (ঐচ্ছিক)</label><input type="date" id="ld" value="'+lday+'"><button class="btn" id="pdf">PDF ডাউনলোড</button><div id="pm" class="empty"></div></div>';
+ [['income','আয়','gi'],['out','খরচ','re']].forEach(function(s){
+  var r=l.filter(function(e){return s[0]==='income'?e.type==='income':e.type!=='income'}),t=0;
+  h+='<div class="panel led '+s[2]+'"><b class="lh">'+s[1]+'</b>';
+  if(!r.length)h+='<div class="empty">কিছু নেই</div>';
+  r.forEach(function(e){t+=e.amt;h+='<div class="item">'+(e.pic?'<img class="ph" src="'+e.pic+'" alt="">':'')+'<div style="flex:1">'+esc(e.note||'—')+'<small>'+(e.type==='market'?'বাজার · ':'')+e.date+'</small></div><span class="amt">'+tk(e.amt)+'</span><button class="x" data-d="'+e.id+'" aria-label="মুছুন">✕</button></div>'});
+  h+='<div class="sum tot"><span>মোট '+s[1]+'</span><b>'+tk(t)+'</b></div></div>';
+  if(s[0]==='income')ti=t;else te=t});
+ return h+'<div class="panel"><div class="sum"><span>বাকি (আয় − খরচ)</span><b>'+tk(ti-te)+'</b></div></div>';
+}
+function exportData(){
+ var n='hishab-backup-'+new Date().toISOString().slice(0,10)+'.json',d=JSON.stringify(db);
+ var fb=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:'application/json'}));a.download=n;document.body.appendChild(a);a.click();a.remove()};
+ if(window.claude&&claude.use){claude.use('downloads').then(function(x){if(x)x.save({filename:n,data:d}).catch(function(){});else fb()},fb)}else fb()
+}
+function importData(f){
+ var r=new FileReader();
+ r.onload=function(){var n=0,ok=false;
+  try{var o=JSON.parse(r.result);if(!o||!Array.isArray(o.entries))throw 0;
+   var ids={};db.entries.forEach(function(e){ids[e.id]=1});
+   o.entries.forEach(function(e){
+    if(!e||!T[e.type]||typeof e.amt!=='number'||!/^\d{4}-\d{2}-\d{2}$/.test(e.date||'')||ids[e.id])return;
+    if(e.pic&&!/^data:image\/[a-z]+;base64,[A-Za-z0-9+\/=]+$/.test(e.pic))delete e.pic;
+    if(e.type==='loan'&&e.dir!=='ধার'&&e.dir!=='পাওনা')e.dir='পাওনা';
+    e.id=Number(e.id)||Date.now()+n;e.note=String(e.note||'');db.entries.push(e);ids[e.id]=1;n++});
+   save();ok=true}catch(x){}
+  render();var m=$('msg');if(m)m.textContent=ok?n.toLocaleString('bn-BD')+' টি এন্ট্রি ফিরে এসেছে':'ফাইলটি সঠিক ব্যাকআপ নয়'};
+ r.readAsText(f)
+}
+function ledgerList(all){
+ if(!all)all=db.entries.filter(function(e){return e.type==='income'||e.type==='expense'||e.type==='market'});
+ return all.filter(function(e){return lday?e.date===lday:(lmonth==='all'||e.date.slice(0,7)===lmonth)}).sort(function(a,b){return b.date<a.date?-1:1});
+}
+function saveFile(n,d,mime,done){
+ var fb=function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([d],{type:mime}));a.download=n;document.body.appendChild(a);a.click();a.remove()};
+ if(window.claude&&claude.use){claude.use('downloads').then(function(x){if(x)x.save({filename:n,data:d}).then(done,done);else{fb();done()}},function(){fb();done()})}else{fb();done()}
+}
+function mkPdf(pgs,PW,PH){
+ var enc=new TextEncoder(),parts=[],off=0,xr=[],N=pgs.length,i;
+ function add(v){var b=typeof v==='string'?enc.encode(v):v;parts.push(b);off+=b.length}
+ function obj(n,head,data){xr[n]=off;add(n+' 0 obj\n'+head);if(data){add('\nstream\n');add(data);add('\nendstream')}add('\nendobj\n')}
+ add('%PDF-1.4\n');obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+ var kids=[];for(i=0;i<N;i++)kids.push((3+i*3)+' 0 R');
+ obj(2,'<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+N+' >>');
+ pgs.forEach(function(p,i){var b=3+i*3,c=enc.encode('q 595 0 0 842 0 0 cm /Im'+i+' Do Q');
+  obj(b,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im'+i+' '+(b+2)+' 0 R >> >> /Contents '+(b+1)+' 0 R >>');
+  obj(b+1,'<< /Length '+c.length+' >>',c);
+  obj(b+2,'<< /Type /XObject /Subtype /Image /Width '+PW+' /Height '+PH+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+p.length+' >>',p)});
+ var x=off;add('xref\n0 '+(3*N+3)+'\n0000000000 65535 f \n');
+ for(i=1;i<3*N+3;i++)add(('0000000000'+xr[i]).slice(-10)+' 00000 n \n');
+ add('trailer\n<< /Size '+(3*N+3)+' /Root 1 0 R >>\nstartxref\n'+x+'\n%%EOF');
+ return new Blob(parts,{type:'application/pdf'});
+}
+function pdfReport(){
+ var pm=$('pm'),l=ledgerList(),S=2,W=595*S,H=842*S,M=40*S,cs=[],c,x,y,lab=lday||(lmonth==='all'?'সব সময়':lmonth);
+ pm.textContent='PDF তৈরি হচ্ছে…';
+ function np(){c=document.createElement('canvas');c.width=W;c.height=H;x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);y=M+14*S;cs.push(c)}
+ function f(sz,w){x.font=(w||400)+' '+(sz*S)+'px "Hind Siliguri","Noto Sans Bengali",sans-serif'}
+ function row(a,b,col,sz,w){if(y>H-M-24*S)np();f(sz,w);x.fillStyle=col;x.textAlign='left';x.fillText(a,M,y);x.textAlign='right';x.fillText(b,W-M,y);y+=(sz+9)*S}
+ function rule(){x.fillStyle='#cfd9d2';x.fillRect(M,y-12*S,W-2*M,1*S)}
+ Promise.all([document.fonts.load('400 16px "Hind Siliguri"'),document.fonts.load('700 16px "Hind Siliguri"')]).catch(function(){}).then(function(){
+  np();row('হিসাবের খাতা','','#17603c',22,700);row('আয়–ব্যয় প্রতিবেদন · '+lab,'','#5d7066',13);y+=6*S;
+  var gm={},ks=[],GI=0,GE=0;
+  l.slice().sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(e){var k=e.date.slice(0,7);if(!gm[k]){gm[k]=[];ks.push(k)}gm[k].push(e)});
+  if(!ks.length)row('এই সময়ে কোনো হিসাব নেই','','#5d7066',14);
+  ks.forEach(function(k){
+   var p=k.split('-'),mn=new Date(+p[0],+p[1]-1,1).toLocaleDateString('bn-BD',{month:'long',year:'numeric'}),g=gm[k],mi=0,me=0;
+   y+=10*S;if(y>H-M-90*S)np();
+   x.fillStyle='#e6f1ea';x.fillRect(M,y-17*S,W-2*M,26*S);row(lday?lab:mn,'','#17603c',16,700);y+=2*S;
+   [['income','আয়','#1f7a4d'],['out','খরচ','#c0392b']].forEach(function(s){
+    var r=g.filter(function(e){return s[0]==='income'?e.type==='income':e.type!=='income'}),sm=0;
+    row(s[1],'',s[2],14,700);
+    if(!r.length)row('কিছু নেই','','#5d7066',12);
+    r.forEach(function(e){sm+=e.amt;var n=(e.note||'—');if(n.length>42)n=n.slice(0,41)+'…';row(e.date+'   '+(e.type==='market'?'[বাজার] ':'')+n,tk(e.amt),s[2],12)});
+    rule();row('মোট '+s[1],tk(sm),s[2],14,700);if(s[0]==='income')mi=sm;else me=sm});
+   row('এই সময়ের বাকি (আয় − খরচ)',tk(mi-me),'#14261c',14,700);GI+=mi;GE+=me});
+  if(ks.length>1){y+=12*S;if(y>H-M-90*S)np();rule();row('সর্বমোট আয়',tk(GI),'#1f7a4d',16,700);row('সর্বমোট খরচ',tk(GE),'#c0392b',16,700);row('সর্বমোট বাকি',tk(GI-GE),'#14261c',17,700)}
+  var pgs=cs.map(function(k){var u=atob(k.toDataURL('image/jpeg',.9).split(',')[1]),b=new Uint8Array(u.length);for(var i=0;i<u.length;i++)b[i]=u.charCodeAt(i);return b});
+  var blob=mkPdf(pgs,W,H);
+  saveFile('hishab-'+lab+'.pdf',blob,'application/pdf',function(){pm.textContent=''});
+ }).catch(function(){pm.textContent='PDF তৈরি করা যায়নি'});
+}
+/* ===== Google লগইন ও Drive সিঙ্ক ===== */
+var CLIENT_ID='YOUR_CLIENT_ID.apps.googleusercontent.com'; /* <-- এখানে আপনার Client ID বসান */
+var g={tok:null,exp:0,email:'',st:'',fid:null,tc:null,timer:null};
+try{g.email=localStorage.getItem('hishab-owner')||''}catch(e){}
+function gs(t){g.st=t;if(view==='acct')render()}
+function gHtml(){
+ var h='<div class="panel"><b>Google অ্যাকাউন্টে সেভ</b>';
+ if(CLIENT_ID.indexOf('YOUR_')===0)return h+'<div class="empty">Client ID বসানো হয়নি</div></div>';
+ if(g.tok)return h+'<div class="empty">✓ '+esc(g.email)+'<br>'+esc(g.st||'সংযুক্ত')+'</div><button class="btn" id="gsync">এখনই সিঙ্ক করুন</button><button class="btn" id="gout" style="background:var(--red)">লগআউট</button></div>';
+ return h+'<div class="empty">'+esc(g.st||'লগইন করলে হিসাব আপনার Google Drive-এ নিরাপদ থাকবে')+'</div><button class="btn" id="gin">Google দিয়ে লগইন</button></div>';
+}
+function gf(u,o){o=o||{};o.headers=Object.assign({Authorization:'Bearer '+g.tok},o.headers||{});return fetch(u,o).then(function(r){if(!r.ok)throw r.status;return r})}
+function gInit(){
+ if(g.tc||!window.google||!google.accounts)return;
+ g.tc=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.email',callback:onTok,error_callback:function(){gs('লগইন হয়নি, আবার চেষ্টা করুন')}});
+}
+function gLogin(silent){gInit();if(!g.tc){gs('Google লোড হয়নি, ইন্টারনেট দেখুন');return}g.tc.requestAccessToken(silent?{prompt:''}:{prompt:'select_account'})}
+function gReady(){var f='';try{f=localStorage.getItem('hishab-g')}catch(e){}if(f==='1'&&CLIENT_ID.indexOf('YOUR_')!==0)gLogin(true)}
+function onTok(r){
+ if(r.error||!r.access_token){gs('লগইন হয়নি, আবার চেষ্টা করুন');return}
+ g.tok=r.access_token;g.exp=Date.now()+(r.expires_in-60)*1000;
+ gf('https://www.googleapis.com/oauth2/v3/userinfo').then(function(x){return x.json()}).then(function(u){
+  var ow='';try{ow=localStorage.getItem('hishab-owner')||''}catch(e){}
+  if(ow&&ow!==u.email)db={entries:[],del:[]};
+  g.email=u.email;try{localStorage.setItem('hishab-owner',u.email);localStorage.setItem('hishab-g','1')}catch(e){}
+  return gSync();
+ }).catch(function(){gs('সংযোগে সমস্যা হয়েছে')});
+}
+function merge(rm){
+ var del={},m={};
+ (db.del||[]).concat(rm.del||[]).forEach(function(i){del[i]=1});
+ (rm.entries||[]).concat(db.entries).forEach(function(e){if(e&&e.id&&!del[e.id])m[e.id]=e});
+ db.entries=Object.keys(m).map(function(k){return m[k]});db.del=Object.keys(del).map(Number);
+}
+function gPut(){
+ var body=JSON.stringify(db);
+ if(g.fid)return gf('https://www.googleapis.com/upload/drive/v3/files/'+g.fid+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body:body});
+ var bd='hb'+Date.now(),mp='--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify({name:'hishab.json',parents:['appDataFolder']})+'\r\n--'+bd+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+bd+'--';
+ return gf('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+bd},body:mp}).then(function(r){return r.json()}).then(function(j){g.fid=j.id});
+}
+function gSync(){
+ gs('সিঙ্ক হচ্ছে…');
+ return gf('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id)&q='+encodeURIComponent("name='hishab.json'")).then(function(r){return r.json()}).then(function(j){
+  g.fid=j.files&&j.files[0]?j.files[0].id:null;
+  return g.fid?gf('https://www.googleapis.com/drive/v3/files/'+g.fid+'?alt=media').then(function(r){return r.json()}):null;
+ }).then(function(rm){if(rm)merge(rm);save(true);return gPut()})
+ .then(function(){gs('সিঙ্ক হয়েছে ✓ '+new Date().toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'}));if(view!=='home')render()})
+ .catch(function(e){if(e===401){g.tok=null}gs(e===401?'আবার লগইন করুন':'অফলাইন: ইন্টারনেট এলে সিঙ্ক হবে')});
+}
+function gQueue(){
+ if(!g.tok)return;clearTimeout(g.timer);
+ g.timer=setTimeout(function(){
+  if(Date.now()>g.exp){gLogin(true);return}
+  gPut().then(function(){gs('সিঙ্ক হয়েছে ✓')}).catch(function(e){if(e===401)gLogin(true);else gs('অফলাইন: ইন্টারনেট এলে সিঙ্ক হবে')});
+ },2000);
+}
+function gLogout(){
+ if(!confirm('লগআউট করলে এই ডিভাইস থেকে হিসাব মুছে যাবে (Google Drive-এ নিরাপদ থাকবে)। চালিয়ে যাবেন?'))return;
+ clearTimeout(g.timer);
+ gPut().then(function(){
+  try{google.accounts.oauth2.revoke(g.tok,function(){})}catch(e){}
+  g.tok=null;g.email='';g.fid=null;db={entries:[],del:[]};
+  try{localStorage.removeItem('hishab-g');localStorage.removeItem('hishab-owner');localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}
+  gs('');render();
+ }).catch(function(){gs('সিঙ্ক না হওয়ায় লগআউট বাতিল হয়েছে')});
+}
+/* ===== মেনু, সেটিং, পাসওয়ার্ড লক ===== */
+var CREATOR_PHOTO=''; /* নির্মাতার ছবি এখানে বসানো যায় (data:image/jpeg;base64,...) */
+var T0=document.documentElement.getAttribute('data-theme');
+var AC=[['green','সবুজ','#1f7a4d'],['blue','নীল','#2b6cb0'],['purple','বেগুনি','#6b46c1'],['orange','কমলা','#c05621'],['rose','গোলাপি','#be185d']];
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+function getSet(){try{return JSON.parse(lsGet('hishab-set'))||{}}catch(e){return {}}}
+function applySet(){
+ var s=getSet(),r=document.documentElement;
+ if(s.ac&&s.ac!=='green')r.setAttribute('data-accent',s.ac);else r.removeAttribute('data-accent');
+ if(s.md==='light'||s.md==='dark')r.setAttribute('data-theme',s.md);else if(T0)r.setAttribute('data-theme',T0);else r.removeAttribute('data-theme');
+}
+function setAc(a){var s=getSet();s.ac=a;lsSet('hishab-set',JSON.stringify(s));applySet();render()}
+function setMd(m){var s=getSet();s.md=m;lsSet('hishab-set',JSON.stringify(s));applySet()}
+function hashPw(p){
+ var salt='hishab:'+p;
+ if(window.crypto&&crypto.subtle&&window.TextEncoder)return crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')});
+ var h=5381;for(var i=0;i<salt.length;i++)h=((h<<5)+h+salt.charCodeAt(i))|0;return Promise.resolve('f'+h);
+}
+function pwm(t){var m=$('pwm');if(m)m.textContent=t}
+function pwSet(){
+ var p1=$('pw1').value,p2=$('pw2').value,old=lsGet('hishab-pw');
+ if(p1.length<4){pwm('পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের দিন');return}
+ if(p1!==p2){pwm('দুটি পাসওয়ার্ড মিলছে না');return}
+ var go=function(){hashPw(p1).then(function(h){lsSet('hishab-pw',h);render();pwm('পাসওয়ার্ড লক চালু হয়েছে ✓')})};
+ if(!old){go();return}
+ hashPw($('pw0').value).then(function(h){if(h===old)go();else pwm('বর্তমান পাসওয়ার্ড ভুল')});
+}
+function pwOff(){
+ var old=lsGet('hishab-pw');
+ hashPw($('pw0').value).then(function(h){if(h===old){lsDel('hishab-pw');render();pwm('লক বন্ধ হয়েছে')}else pwm('বর্তমান পাসওয়ার্ড ভুল')});
+}
+function setHtml(){
+ var st=getSet(),has=!!lsGet('hishab-pw'),md=st.md||'auto';
+ var h='<div class="panel"><b>স্ক্রিনের রং</b><div class="sw">'+AC.map(function(a){return '<button class="swb'+((st.ac||'green')===a[0]?' on':'')+'" data-ac="'+a[0]+'" style="background:'+a[2]+'" aria-label="'+a[1]+'"></button>'}).join('')+'</div>'
+ +'<label>মোড</label><select id="md"><option value="auto"'+(md==='auto'?' selected':'')+'>অটো (ফোনের মতো)</option><option value="light"'+(md==='light'?' selected':'')+'>দিন (হালকা)</option><option value="dark"'+(md==='dark'?' selected':'')+'>রাত (গাঢ়)</option></select></div>';
+ h+='<div class="panel"><b>পাসওয়ার্ড লক</b><div class="empty">'+(has?'চালু আছে 🔒':'বন্ধ আছে')+'</div>'
+ +(has?'<label>বর্তমান পাসওয়ার্ড</label><input type="password" id="pw0" autocomplete="off">':'')
+ +'<label>'+(has?'নতুন পাসওয়ার্ড (বদলাতে চাইলে)':'নতুন পাসওয়ার্ড')+'</label><input type="password" id="pw1" autocomplete="new-password"><label>আবার লিখুন</label><input type="password" id="pw2" autocomplete="new-password">'
+ +'<button class="btn" id="pwset">'+(has?'পাসওয়ার্ড বদলান':'লক চালু করুন')+'</button>'+(has?'<button class="btn" id="pwoff" style="background:var(--red)">লক বন্ধ করুন</button>':'')
+ +'<div id="pwm" class="empty"></div><small style="color:var(--mut)">অ্যাপ খোলার সময় পাসওয়ার্ড চাইবে। পাসওয়ার্ড ভুলে গেলে ফিরে পাওয়া যাবে না। তাই নিজের মনে রাখা পাসওয়ার্ড দিন।</small></div>';
+ return h;
+}
+function acctHtml(){
+ if(typeof gHtml==='function')return gHtml()+'<div class="panel"><small style="color:var(--mut)">লগইন করলে আপনার হিসাব নিজের Google Drive-এর গোপন অ্যাপ-ফোল্ডারে সেভ হয়। অ্যাপ মুছে গেলেও একই Google অ্যাকাউন্টে লগইন করলে হিসাব ফিরে আসবে।</small></div>';
+ return '<div class="panel"><b>Google অ্যাকাউন্ট (Gmail)</b><div class="empty">এই ভার্সনে Google লগইন চালু নেই। নিজের হোস্টিংয়ে রাখা ভার্সনে এটি কাজ করবে।</div></div>';
+}
+function avUrl(){return CREATOR_PHOTO||lsGet('hishab-av')||''}
+function dtop(){
+ var u=avUrl();
+ $('dtop').innerHTML='<button class="avb" id="avb" aria-label="ছবি বদলান"><div class="av"'+(u?' style="background-image:url('+u+')"':'')+'>'+(u?'':'য')+'</div></button><div class="cn">যাকওয়ান আহমদ</div><small style="color:var(--mut)">অ্যাপ নির্মাতা</small>';
+}
+function dopen(o){
+ $('drw').classList.toggle('on',o);$('dov').classList.toggle('on',o);
+ if(o){dtop();$('mlock').hidden=!lsGet('hishab-pw')}
+}
+function lockNow(){
+ if(!lsGet('hishab-pw'))return;
+ $('lock').hidden=false;$('lpw').value='';$('lm2').textContent='';
+ setTimeout(function(){$('lpw').focus()},60);
+}
+$('mb').onclick=function(){dopen(true)};
+$('dov').onclick=function(){dopen(false)};
+$('drw').addEventListener('click',function(ev){
+ var b=ev.target.closest('button');if(!b)return;
+ if(b.id==='avb'){$('avf').click();return}
+ if(b.dataset.m){dopen(false);if(b.dataset.m==='lock')lockNow();else{view=b.dataset.m;pendingPic='';render();window.scrollTo(0,0)}}
+});
+$('avf').onchange=function(){
+ var f=this.files[0];if(!f)return;var r=new FileReader();
+ r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=200;c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,200,200);lsSet('hishab-av',c.toDataURL('image/jpeg',.8));dtop()};im.src=r.result};
+ r.readAsDataURL(f);this.value='';
+};
+$('lgo').onclick=function(){hashPw($('lpw').value).then(function(h){if(h===lsGet('hishab-pw'))$('lock').hidden=true;else $('lm2').textContent='পাসওয়ার্ড ভুল'})};
+$('lpw').onkeydown=function(e){if(e.key==='Enter')$('lgo').click()};
+applySet();lockNow();
+function hd(t){return '<div class="top"><button class="back" data-v="home">← ফিরুন</button><h2>'+t+'</h2></div>'}
+$('app').addEventListener('click',function(ev){
+ var t=ev.target.closest('button');if(!t)return;
+ if(t.dataset.v){view=t.dataset.v;pendingPic='';render();window.scrollTo(0,0)}
+ else if(t.id==='add'){var a=parseFloat($('amt').value);if(!(a>0)){$('amt').focus();return}
+  var e={id:Date.now(),type:view,amt:a,note:$('note').value.trim(),date:$('dt').value||new Date().toISOString().slice(0,10),pic:pendingPic};pendingPic='';
+  if(view==='loan')e.dir=$('dir').value;db.entries.push(e);save();render()}
+ else if(t.dataset.d){if(confirm('এটি মুছে ফেলবেন?')){(db.del=db.del||[]).push(Number(t.dataset.d));db.entries=db.entries.filter(function(e){return e.id!=t.dataset.d});save();render()}}
+ else if(t.id==='gin'){gLogin(false)}
+ else if(t.id==='gsync'){gSync()}
+ else if(t.id==='gout'){gLogout()}
+ else if(t.dataset.ac){setAc(t.dataset.ac)}
+ else if(t.id==='pwset'){pwSet()}
+ else if(t.id==='pwoff'){pwOff()}
+ else if(t.id==='pdf'){pdfReport()}
+ else if(t.id==='exp'){exportData()}
+ else if(t.id==='imp'){$('impf').click()}
+ else if(t.dataset.s){db.entries.forEach(function(e){if(e.id==t.dataset.s)e.done=!e.done});save();render()}
+});
+$('app').addEventListener('change',function(ev){
+ if(ev.target.id==='impf'){if(ev.target.files[0])importData(ev.target.files[0]);ev.target.value=''}
+ if(ev.target.id==='md'){setMd(ev.target.value)}
+ if(ev.target.id==='ld'){lday=ev.target.value;render()}
+ if(ev.target.id==='lm'){lmonth=ev.target.value;render()}
+ if(ev.target.id==='mo'){month=ev.target.value||month;render()}
+ if(ev.target.id==='pic'){var f=ev.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,320/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);pendingPic=c.toDataURL('image/jpeg',.7);var pv=$('prev');pv.src=pendingPic;pv.hidden=false};im.src=r.result};r.readAsDataURL(f)}
+});
+/* ক্যালকুলেটর */
+var ex='';
+['C','⌫','÷','×','7','8','9','−','4','5','6','+','1','2','3','=','0','.','(',')'].forEach(function(k){
+ var b=document.createElement('button');b.textContent=k;
+ if('÷×−+='.indexOf(k)>-1||k==='C'||k==='⌫')b.className='op';
+ b.onclick=function(){press(k)};$('keys').appendChild(b)});
+function calc(s){var j=s.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+ if(!/^[0-9+\-*\/.() ]+$/.test(j))return null;try{var r=Function('"use strict";return ('+j+')')();return isFinite(r)?Math.round(r*1e6)/1e6:null}catch(e){return null}}
+function press(k){
+ if(k==='C')ex='';else if(k==='⌫')ex=ex.slice(0,-1);
+ else if(k==='='){var r=calc(ex);if(r!==null)ex=String(r)}
+ else ex+=k;
+ $('ex').textContent=ex;var r2=calc(ex);$('out').textContent=r2===null?(ex?'…':'0'):r2.toLocaleString('bn-BD')}
+$('fab').onclick=function(){$('calc').classList.toggle('on')};
+$('use').onclick=function(){var r=calc(ex),a=$('amt');if(r!==null&&a){a.value=r;a.focus()}};
+window.addEventListener('online',function(){if(lsGet('hishab-g')!=='1')return;if(g.tok&&Date.now()<g.exp)gSync();else gLogin(true)});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+render();
+</script>
+</body>
+</html>
