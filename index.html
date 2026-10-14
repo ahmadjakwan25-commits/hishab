@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#17603c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json"><meta name="application-name" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-title" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#17603c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <title>আল-মিফতাহ</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
@@ -74,7 +74,7 @@ header{position:relative}
 textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--bg);color:var(--ink);resize:vertical}.note{white-space:pre-wrap;margin-top:4px;word-break:break-word}.cmp{padding:10px;border-radius:10px;background:var(--bg);text-align:center;font-weight:700;margin-top:8px}.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;z-index:60;max-width:90%;text-align:center}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.g3 .tile{padding:12px 4px}.g3 .tile span{font-size:24px}.g3 .tile b{font-size:13px;font-weight:600}
 .ar{font-family:'Amiri','Noto Naskh Arabic','Scheherazade New',serif;direction:rtl;text-align:right;line-height:2.1;font-size:26px;margin:6px 0}.an{font-size:.6em;color:var(--g)}.tr{margin:4px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .srb{display:flex;align-items:center;gap:10px;width:100%;padding:11px 4px;background:none;border:0;border-bottom:1px solid var(--line);font:inherit;color:var(--ink);cursor:pointer}.srb:last-child{border:0}.sno{width:34px;height:34px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--g);font-weight:700}
-details{border-bottom:1px solid var(--line);padding:8px 0}summary{cursor:pointer;font-weight:600}</style>
+details{border-bottom:1px solid var(--line);padding:8px 0}summary{cursor:pointer;font-weight:600}.hc{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;background:linear-gradient(135deg,var(--g2),var(--g));color:#fff;border-radius:18px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.18)}.hcr{text-align:center;flex:1;min-width:170px}.dig{font-size:28px;font-weight:700}.hd1{font-size:14px;opacity:.95}.hd2{font-size:15px;font-weight:700;color:#ffe9a8;margin:2px 0 8px}.hn{background:rgba(255,255,255,.14);border-radius:12px;padding:8px}</style>
 </head>
 <body>
 <header><button id="mb" aria-label="মেনু">☰</button><h1>আল-মিফতাহ</h1><p id="hsub">ইবাদত ও হিসাব এক জায়গায়</p></header>
@@ -86,7 +86,8 @@ details{border-bottom:1px solid var(--line);padding:8px 0}summary{cursor:pointer
 <button class="mi" data-m="books">📚 আমার পেইজসমূহ</button>
 <button class="mi" data-m="acct">✉️ Google অ্যাকাউন্ট (Gmail)</button>
 <button class="mi" data-m="set">⚙️ সেটিং</button>
-<button class="mi" data-m="lock" id="mlock" hidden>🔒 এখনই লক করুন</button></nav>
+<button class="mi" data-m="lock" id="mlock" hidden>🔒 এখনই লক করুন</button>
+<button class="mi" data-m="admin" id="madm" hidden>🛠 নির্মাতা মোড</button></nav>
 <input type="file" id="avf" accept="image/*" hidden>
 <div id="lock" hidden><div class="lbox"><h2>🔒 হিসাবের খাতা</h2><input type="password" id="lpw" placeholder="পাসওয়ার্ড" autocomplete="off"><button class="btn" id="lgo">খুলুন</button><div id="lm2" class="empty"></div></div></div>
 
@@ -147,7 +148,7 @@ function render(){normalize();
   list.forEach(function(e){h+='<div class="item">'+(e.pic?'<img class="ph" src="'+e.pic+'" alt="">':'')+'<div style="flex:1">'+esc(e.note||'—')+'<small>'+(isL?e.dir+' · ':'')+e.date+'</small></div><div><span class="amt">'+tk(e.amt)+'</span> '+(isL?'<button class="chip" data-s="'+e.id+'">'+(e.done?'মিটেছে ✓':'বাকি')+'</button>'+(e.dir==='পাওনা'&&!e.done?'<button class="chip" data-lm="'+e.id+'" aria-label="বার্তা">✉️</button>':''):'')+(k==='income'?'<button class="chip" data-rc="'+e.id+'" aria-label="রসিদ">🧾</button>':'')+'<button class="x" data-d="'+e.id+'" aria-label="মুছুন">✕</button></div></div>'});
   h+='</div>';
  }
- $('app').innerHTML=h;$('app').style.marginTop='16px';var hs=$('hsub');if(hs){var cb=curBook();hs.textContent=(isHub(view)||view==='set'||view==='acct')?'ইবাদত ও হিসাব এক জায়গায়':cb.name+(cb.sub?' · '+cb.sub:'')}if(typeof hubAfter==='function')hubAfter();
+ $('app').innerHTML=h;$('app').style.marginTop='16px';var hs=$('hsub');if(hs){var cb=curBook();hs.textContent=(isHub(view)||view==='set'||view==='acct')?'ইবাদত ও হিসাব এক জায়গায়':cb.name+(cb.sub?' · '+cb.sub:'')}var acv=!isHub(view)&&view!=='set'&&view!=='acct',fb=$('fab'),cc=$('calc');if(fb)fb.style.display=acv?'':'none';if(cc)cc.style.display=acv?'':'none';if(typeof hubAfter==='function')hubAfter();
 }
 function ledgerHtml(){
  var all=bookE().filter(function(e){return e.type==='income'||e.type==='expense'||e.type==='market'}),ms=[],h='',ti=0,te=0;
@@ -362,7 +363,7 @@ function dtop(){
 }
 function dopen(o){
  $('drw').classList.toggle('on',o);$('dov').classList.toggle('on',o);
- if(o){dtop();$('mlock').hidden=!lsGet('hishab-pw')}
+ if(o){dtop();$('mlock').hidden=!lsGet('hishab-pw');$('madm').hidden=!(lsGet('mf-adm')==='1'||ghTok())}
 }
 function lockNow(){
  if(!lsGet('hishab-pw'))return;
@@ -576,7 +577,7 @@ $('app').addEventListener('input',function(ev){
  else if(t.dataset.lim){cf().lim=Math.max(0,parseFloat(t.value)||0);save()}
 });
 /* ===== আল-মিফতাহ: ইবাদত অংশ ===== */
-var HUBV={hub:1,salat:1,quran:1,surah:1,hadith:1,dua:1,masail:1,library:1,essay:1,live:1,qibla:1,tasbih:1,amol:1},curS=1,QC={},CT=null,amd=null,tk1=null,hdBusy=0;
+var HUBV={hub:1,salat:1,quran:1,surah:1,hadith:1,dua:1,masail:1,library:1,essay:1,live:1,qibla:1,tasbih:1,amol:1,admin:1},curS=1,QC={},CT=null,amd=null,tk1=null,hdBusy=0;
 function isHub(v){return !!HUBV[v]}
 function mfs(){try{return JSON.parse(lsGet('mf-set'))||{}}catch(e){return {}}}
 function mfw(o){lsSet('mf-set',JSON.stringify(o))}
@@ -619,9 +620,7 @@ function nextP(){
  return{k:'fajr',at:f,left:f-h};
 }
 function pName(k){for(var i=0;i<PN.length;i++)if(PN[i][0]===k)return PN[i][1];return k}
-function nextHtml(){var p=nextP();return '<b style="font-size:18px">'+pName(p.k)+' · '+mfFmt(p.at)+'</b><br><small style="color:var(--mut)">'+mfLeft(p.left)+' বাকি · '+esc(locInfo().name)+'</small>'}
 function gdate(){var n=nowTz(locInfo().tz);try{return n.toLocaleDateString('bn-BD',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'})}catch(e){return ''}}
-function hijriS(){var s=mfs(),n=nowTz(locInfo().tz),d=new Date(n.getTime()+(s.hj||0)*864e5);try{return new Intl.DateTimeFormat('bn-BD-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(d).replace(/\s*যুগ\s*$/,'')+' হিজরি'}catch(e){return ''}}
 function salatHtml(){
  var s=mfs(),L=locInfo(),t=todayTimes(),np=nextP(),a=s.adj||{},hj=s.hj||0;
  var opts=DIST.map(function(d,i){return '<option value="'+i+'"'+(!s.gps&&(s.d||0)===i?' selected':'')+'>'+d[0]+'</option>'}).join('');
@@ -769,7 +768,7 @@ function duaInit(){
 }
 /* ---------- কিতাব, প্রবন্ধ, মাসায়েল, লাইভ ---------- */
 function okUrl(u){return /^(https?:\/\/|[\w\-\/\.%]+\.pdf$)/i.test(u||'')}
-function listPage(title,ph){return hdH(title)+'<div class="panel"><input data-fl="1" placeholder="খুঁজুন"></div><div id="lst" class="panel">'+mfLd()+'</div>'}
+function listPage(title,kind){return hdH(title)+(ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:'+kind+'">✏️ নতুন যোগ / সম্পাদনা</button></div>':'')+'<div class="panel"><input data-fl="1" placeholder="খুঁজুন"></div><div id="lst" class="panel">'+mfLd()+'</div>'}
 function listInit(kind){
  loadContent(function(c){
   var a=c[kind]||[],h='',b=$('lst');if(!b)return;
@@ -790,11 +789,6 @@ function liveHtml(){
 function liveInit(){loadContent(function(c){var a=c.live||[],h='';a.forEach(function(x){if(okUrl(x.url))h+='<a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;background:var(--g2)">'+esc(x.title||'লাইভ')+'</a>'});var b=$('lvx');if(b&&h)b.innerHTML='<div class="panel"><b>আরও</b>'+h+'</div>'})}
 /* ---------- মূল পাতা ---------- */
 var HT=[['salat','🕋','নামাজের সময়'],['quran','📖','কুরআন'],['hadith','📜','হাদিস'],['dua','🤲','দোয়া'],['masail','❓','মাসায়েল'],['library','📚','কিতাব'],['essay','✍️','প্রবন্ধ'],['live','📺','ইসলামিক লাইভ'],['qibla','🧭','কিবলা'],['tasbih','📿','তাসবিহ'],['amol','✅','আমল ট্র্যাকার'],['set','🎨','থিম ও সেটিং']];
-function hubHome(){
- var h='<div class="bal"><small>আজ</small><div style="font-size:17px;font-weight:600">'+gdate()+'</div><div style="color:var(--g);font-weight:600">'+hijriS()+'</div><div id="nxt" style="margin-top:10px">'+nextHtml()+'</div></div><div class="grid"><button class="tile wide" data-v="home" style="margin-top:0"><span>📒</span><b>হিসাবের খাতা</b></button></div><div class="g3">';
- HT.forEach(function(t){h+='<button class="tile" data-v="'+t[0]+'"><span>'+t[1]+'</span><b>'+t[2]+'</b></button>'});
- return h+'</div>';
-}
 function hubHtml(){
  switch(view){
   case 'hub':return hubHome();
@@ -803,19 +797,22 @@ function hubHtml(){
   case 'surah':return surahHtml();
   case 'hadith':return hdH('হাদিস')+hadithHtml();
   case 'dua':return hdH('দোয়া')+duaHtml();
-  case 'masail':return listPage('মাসায়েল');
-  case 'library':return listPage('কিতাব (PDF)');
-  case 'essay':return listPage('প্রবন্ধ');
+  case 'masail':return listPage('মাসায়েল','masail');
+  case 'library':return listPage('কিতাব (PDF)','books');
+  case 'essay':return listPage('প্রবন্ধ','essays');
   case 'live':return liveHtml();
   case 'qibla':return hdH('কিবলা')+qiblaHtml();
   case 'tasbih':return hdH('তাসবিহ')+tasbihHtml();
   case 'amol':return hdH('আমল ট্র্যাকার')+amolHtml();
+  case 'admin':return hdH('নির্মাতা মোড')+adminHtml();
  }
  return '';
 }
 function hubAfter(){
  if(tk1){clearInterval(tk1);tk1=null}
- if(view==='hub'||view==='salat')tk1=setInterval(function(){var e=$('nxt');if(e)e.innerHTML=nextHtml()},20000);
+ if(tkc){clearInterval(tkc);tkc=null}
+ if(view==='hub'||view==='salat')tk1=setInterval(function(){var e=$('nxt');if(e)e.innerHTML=nextHtml(view==='hub')},20000);
+ if(view==='hub'){clockTick();tkc=setInterval(clockTick,1000)}
  if(view==='surah')loadSurah();
  else if(view==='hadith')hadithInit();
  else if(view==='dua')duaInit();
@@ -823,6 +820,7 @@ function hubAfter(){
  else if(view==='library')listInit('books');
  else if(view==='essay')listInit('essays');
  else if(view==='live')liveInit();
+ else if(view==='admin')adminInit();
  else if(view==='qibla'){var L=locInfo();qBearing=qiblaB(L.lat,L.lng)}
 }
 function hubAct(a){
@@ -840,6 +838,7 @@ function hubAct(a){
   else if(p[1]==='a'){var v=$('amn').value.trim();if(!v)return;db.amolx.push({id:Date.now(),name:v});save();render()}
   else if(p[1]==='d'){var id=+p[2];db.del.push(id);db.amolx=db.amolx.filter(function(x){return x.id!==id});save();render()}
  }
+ else if(c==='ad')adminAct(p);
  else if(c==='hd'){var inp=$('hdn'),n2=inp?parseInt(inp.value)||1:1;if(p[1]==='p')n2=Math.max(1,n2-1);else if(p[1]==='n')n2++;else if(p[1]==='r')n2=1+Math.floor(Math.random()*500);hadithGo(n2)}
 }
 $('app').addEventListener('change',function(ev){
@@ -853,6 +852,126 @@ $('app').addEventListener('input',function(ev){
  else if(t.id==='qs'){var q=$('qlist');if(q)q.innerHTML=surahRows(t.value.trim())}
  else if(t.dataset&&t.dataset.fl){var v=t.value.trim(),els=document.querySelectorAll('#app .fi');for(var i=0;i<els.length;i++)els[i].style.display=(!v||els[i].textContent.indexOf(v)>=0)?'':'none'}
 });
+/* ===== নির্মাতা মোড: কিতাব, মাসায়েল, প্রবন্ধ ইত্যাদি যোগ ===== */
+var adT='books',adEd=-1,ADD=null,adMsg='',adTaps=0;
+var ADN={books:'কিতাব (PDF)',masail:'মাসায়েল',essays:'প্রবন্ধ',hadiths:'হাদিস',duas:'দোয়া',live:'লাইভ লিংক'};
+var FS={books:[['title','কিতাবের নাম'],['author','লেখক'],['file','PDF ফাইল (ফোন/কম্পিউটার থেকে)'],['url','অথবা PDF-এর লিংক (ঐচ্ছিক)']],masail:[['q','প্রশ্ন বা বিষয়'],['a','উত্তর','t'],['source','সূত্র (কিতাব/আলেমের নাম)']],essays:[['title','প্রবন্ধের শিরোনাম'],['author','লেখক'],['text','লেখা','t'],['url','লিংক (ঐচ্ছিক)']],hadiths:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অনুবাদ','t'],['source','সূত্র (গ্রন্থ ও নম্বর)']],duas:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অর্থ','t'],['source','সূত্র']],live:[['title','নাম'],['url','লিংক']]};
+function ghTok(){return lsGet('mf-gh')||''}
+function ghInfo(){var s=mfs().gh||{},h=location.hostname||'';return{o:s.o||h.split('.')[0],r:s.r||(location.pathname||'/').split('/')[1]||'',b:s.b||'main'}}
+function ghApi(path,opt){
+ var i=ghInfo();opt=opt||{};var put=opt.method==='PUT';
+ opt.headers=Object.assign({Authorization:'Bearer '+ghTok(),Accept:'application/vnd.github+json'},opt.headers||{});
+ return fetch('https://api.github.com/repos/'+i.o+'/'+i.r+'/contents/'+path+(put?'':'?ref='+i.b+'&t='+Date.now()),opt).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.message||('কোড '+r.status));return j})});
+}
+function b64e(s){return btoa(unescape(encodeURIComponent(s)))}
+function b64d(s){return decodeURIComponent(escape(atob(String(s).replace(/\n/g,''))))}
+function ghLoad(){return ghApi('content.json').then(function(j){return{sha:j.sha,data:JSON.parse(b64d(j.content))}},function(e){if(/not found/i.test(e.message))return{sha:undefined,data:{}};throw e})}
+function ghSave(d,sha,msg){var o={message:msg||'content update',content:b64e(JSON.stringify(d,null,1)),branch:ghInfo().b};if(sha)o.sha=sha;return ghApi('content.json',{method:'PUT',body:JSON.stringify(o)})}
+function adSet(t){adMsg=t;var e=$('adm');if(e)e.textContent=t}
+function tokenHtml(){
+ var i=ghInfo();
+ return '<div class="panel"><b>নির্মাতা প্রবেশ</b><small style="color:var(--mut);display:block;margin-bottom:6px">এখান থেকে শুধু আপনিই কিতাব, মাসায়েল, প্রবন্ধ যোগ করতে পারবেন। এর জন্য GitHub থেকে একটি গোপন চাবি (টোকেন) একবার বানিয়ে এখানে বসাতে হয়। টোকেন শুধু এই ফোনে থাকে, কারো সঙ্গে শেয়ার করবেন না।</small><label>GitHub টোকেন</label><input id="adtk" type="password" autocomplete="off" placeholder="github_pat_…"><label>GitHub ইউজারনেম</label><input id="ado" value="'+esc(i.o)+'"><label>রিপোজিটরির নাম</label><input id="adr" value="'+esc(i.r)+'"><button class="btn" data-h="ad:tok">সংরক্ষণ করুন</button><div id="adm" class="empty">'+esc(adMsg)+'</div></div>';
+}
+function adminHtml(){
+ if(!ghTok())return tokenHtml();
+ var h='<div class="panel"><div class="row3" style="flex-wrap:wrap">';
+ Object.keys(ADN).forEach(function(k){h+='<button class="chip" data-h="ad:t:'+k+'">'+(adT===k?'✓ ':'')+ADN[k]+'</button>'});
+ h+='</div></div><div class="panel"><b>'+(adEd>=0?'সম্পাদনা':'নতুন যোগ করুন')+': '+ADN[adT]+'</b>';
+ var cu=(adEd>=0&&ADD&&ADD.data[adT]&&ADD.data[adT][adEd])||{};
+ FS[adT].forEach(function(f){
+  if(f[0]==='file')h+='<label>'+f[1]+'</label><input type="file" id="af-file" accept="application/pdf">';
+  else if(f[2]==='t')h+='<label>'+f[1]+'</label><textarea id="af-'+f[0]+'" rows="5">'+esc(cu[f[0]]||'')+'</textarea>';
+  else h+='<label>'+f[1]+'</label><input id="af-'+f[0]+'" value="'+esc(cu[f[0]]||'')+'">';
+ });
+ h+='<button class="btn" data-h="ad:s">'+(adEd>=0?'আপডেট করুন':'সেভ করুন')+'</button>'+(adEd>=0?'<button class="btn" data-h="ad:c" style="background:var(--mut)">বাতিল</button>':'')+'<div id="adm" class="empty">'+esc(adMsg)+'</div></div><div class="panel"><b>বর্তমান তালিকা</b><div id="adl">'+mfLd()+'</div></div><div class="panel"><small style="color:var(--mut);display:block">সেভ করার ১–২ মিনিট পর সবার অ্যাপে নতুন লেখা দেখা যাবে। বড় PDF (২৫ এমবির বেশি) আপলোড না করে লিংক দিন।</small><button class="btn" data-h="ad:out" style="background:var(--red)">এই ফোন থেকে টোকেন মুছুন</button></div>';
+ return h;
+}
+function adTitle(x){return x.title||x.q||x.name||'(নামহীন)'}
+function adList(){
+ var b=$('adl');if(!b)return;var a=(ADD&&ADD.data[adT])||[],h='';
+ a.forEach(function(x,i){h+='<div class="item"><div style="flex:1"><b>'+esc(adTitle(x))+'</b><small>'+esc(x.author||x.source||'')+'</small></div><button class="x" style="color:var(--ink)" data-h="ad:e:'+i+'" aria-label="সম্পাদনা">✎</button><button class="x" data-h="ad:d:'+i+'" aria-label="মুছুন">✕</button></div>'});
+ b.innerHTML=h||'<div class="empty">এখনো কিছু নেই</div>';
+}
+function adminInit(){
+ if(!ghTok())return;
+ ghLoad().then(function(x){ADD=x;if(view==='admin')adList()}).catch(function(e){var b=$('adl');if(b)b.innerHTML='<div class="empty">⚠️ লোড হয়নি: '+esc(e.message)+'</div>'});
+}
+function adCommit(mut,msg){
+ adSet('সেভ হচ্ছে…');
+ return ghLoad().then(function(x){var d=x.data;Object.keys(ADN).forEach(function(k){d[k]=d[k]||[]});mut(d);
+  return ghSave(d,x.sha,msg).then(function(r){ADD={sha:r.content&&r.content.sha,data:d};CT=d;lsSet('mf-ct',JSON.stringify(d));adEd=-1;adMsg='✅ সেভ হয়েছে। ১–২ মিনিট পর সবার অ্যাপে দেখা যাবে।';if(view==='admin')render()})
+ }).catch(function(e){adSet('⚠️ সমস্যা: '+e.message)});
+}
+function adminAct(p){
+ var c=p[1];
+ if(c==='go'){adT=p[2]||'books';adEd=-1;adMsg='';view='admin';render();window.scrollTo(0,0)}
+ else if(c==='t'){adT=p[2];adEd=-1;adMsg='';render()}
+ else if(c==='tok'){
+  var t=($('adtk').value||'').trim();if(!t){adSet('টোকেন লিখুন');return}
+  var s=mfs();s.gh={o:($('ado').value||'').trim(),r:($('adr').value||'').trim(),b:'main'};mfw(s);lsSet('mf-gh',t);adMsg='';render();
+ }
+ else if(c==='out'){lsDel('mf-gh');ADD=null;adMsg='';render()}
+ else if(c==='c'){adEd=-1;render()}
+ else if(c==='e'){adEd=+p[2];render();window.scrollTo(0,0)}
+ else if(c==='d'){
+  var i=+p[2];if(!confirm('এটি মুছে ফেলবেন?'))return;
+  adCommit(function(d){d[adT].splice(i,1)},'delete '+adT);
+ }
+ else if(c==='s'){
+  var it={},keys=FS[adT];
+  keys.forEach(function(f){if(f[0]==='file')return;var e=$('af-'+f[0]);it[f[0]]=((e&&e.value)||'').trim()});
+  if(!it[keys[0][0]]){adSet('প্রথম ঘরটি পূরণ করুন');return}
+  var fi=$('af-file'),file=fi&&fi.files&&fi.files[0],idx=adEd;
+  var fin=function(){adCommit(function(d){var old=idx>=0?d[adT][idx]:{};var m=Object.assign({},old,it);if(idx>=0)d[adT][idx]=m;else d[adT].push(m)},(idx>=0?'update ':'add ')+adT)};
+  if(adT==='books'&&file){
+   if(file.size>25*1024*1024){adSet('ফাইল ২৫ এমবির বেশি। লিংক দিন।');return}
+   adSet('PDF আপলোড হচ্ছে… একটু অপেক্ষা করুন');
+   var r=new FileReader();
+   r.onload=function(){
+    var path='books/b'+Date.now()+'.pdf';
+    ghApi(path,{method:'PUT',body:JSON.stringify({message:'add book pdf',content:String(r.result).split(',')[1],branch:ghInfo().b})}).then(function(){it.url=path;fin()}).catch(function(e){adSet('⚠️ আপলোড হয়নি: '+e.message)});
+   };
+   r.readAsDataURL(file);
+  }else fin();
+ }
+}
+function admTap(){adTaps++;if(adTaps>=5){adTaps=0;lsSet('mf-adm','1');var m=$('madm');if(m)m.hidden=false;toast('নির্মাতা মোড চালু হয়েছে')}}
+$('drw').addEventListener('click',function(ev){var e=ev.target;if(e&&e.classList&&e.classList.contains('cn'))admTap()});
+/* ===== হিজরি তারিখ ও ঘড়ি ===== */
+var HM=['মুহাররম','সফর','রবিউল আউয়াল','রবিউস সানি','জমাদিউল আউয়াল','জমাদিউস সানি','রজব','শাবান','রমজান','শাওয়াল','জিলকদ','জিলহজ'],tkc=null;
+function hijriP(){
+ var s=mfs(),n=nowTz(locInfo().tz),d=new Date(n.getTime()+(s.hj||0)*864e5);
+ try{var o={};new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'numeric',year:'numeric',timeZone:'UTC'}).formatToParts(d).forEach(function(p){o[p.type]=p.value});
+  var m=parseInt(o.month),y=parseInt(o.year),dd=parseInt(o.day);if(!(m>=1&&m<=12&&dd>0&&y>0))return null;return{d:dd,m:m,y:y}}catch(e){return null}
+}
+function hijriS(){var p=hijriP();return p?bd(p.d)+' '+HM[p.m-1]+' '+bd(p.y)+' হিজরি':''}
+function clockSvg(){
+ var h='<svg id="clk" viewBox="0 0 200 200" width="168" height="168" role="img" aria-label="ঘড়ি"><defs><linearGradient id="cgd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d77a"/><stop offset="1" stop-color="#b98a1f"/></linearGradient></defs>'
+ +'<circle cx="100" cy="100" r="97" fill="url(#cgd)"/><circle cx="100" cy="100" r="90" style="fill:var(--card)"/>';
+ for(var i=0;i<60;i++){var a=i*6*Math.PI/180,big=i%5===0,r1=big?76:81,r2=87,x1=100+r1*Math.sin(a),y1=100-r1*Math.cos(a),x2=100+r2*Math.sin(a),y2=100-r2*Math.cos(a);
+  h+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" style="stroke:'+(big?'var(--g)':'var(--line)')+'" stroke-width="'+(big?3:1.5)+'" stroke-linecap="round"/>'}
+ for(var k=1;k<=12;k++){var b=k*30*Math.PI/180;h+='<text x="'+(100+62*Math.sin(b)).toFixed(1)+'" y="'+(100-62*Math.cos(b)+5).toFixed(1)+'" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink)">'+bd(k)+'</text>'}
+ h+='<text x="100" y="132" text-anchor="middle" font-size="10" style="fill:var(--g)" font-weight="700">আল-মিফতাহ</text><text x="100" y="78" text-anchor="middle" font-size="14">🌙</text>'
+ +'<line id="ch" x1="100" y1="100" x2="100" y2="58" style="stroke:var(--ink)" stroke-width="6" stroke-linecap="round"/>'
+ +'<line id="cm" x1="100" y1="100" x2="100" y2="38" style="stroke:var(--g)" stroke-width="4" stroke-linecap="round"/>'
+ +'<line id="cs" x1="100" y1="112" x2="100" y2="30" stroke="#c0392b" stroke-width="2" stroke-linecap="round"/>'
+ +'<circle cx="100" cy="100" r="6" fill="#e8c76a" stroke="#b98a1f" stroke-width="2"/></svg>';
+ return h;
+}
+function clockTick(){
+ var a=$('ch');if(!a)return;
+ var n=nowTz(locInfo().tz),hh=n.getUTCHours(),mm=n.getUTCMinutes(),ss=n.getUTCSeconds();
+ a.setAttribute('transform','rotate('+((hh%12)*30+mm*0.5)+' 100 100)');
+ $('cm').setAttribute('transform','rotate('+(mm*6+ss*0.1)+' 100 100)');
+ $('cs').setAttribute('transform','rotate('+(ss*6)+' 100 100)');
+ var d=$('dig');if(d)d.textContent=bd(('0'+(hh%12||12)).slice(-2)+':'+('0'+mm).slice(-2)+':'+('0'+ss).slice(-2))+' '+pPeriod(hh);
+}
+function nextHtml(w){var p=nextP();return '<b style="font-size:17px">'+pName(p.k)+' · '+mfFmt(p.at)+'</b><br><small style="'+(w?'color:rgba(255,255,255,.88)':'color:var(--mut)')+'">'+mfLeft(p.left)+' বাকি · '+esc(locInfo().name)+'</small>'}
+function hubHome(){
+ var h='<div class="hc"><div class="hcl">'+clockSvg()+'</div><div class="hcr"><div id="dig" class="dig"></div><div class="hd1">'+gdate()+'</div><div class="hd2">'+hijriS()+'</div><div id="nxt" class="hn">'+nextHtml(true)+'</div></div></div><div class="grid" style="margin-top:12px"><button class="tile wide" data-v="home" style="margin-top:0"><span>📒</span><b>হিসাবের খাতা</b></button></div><div class="g3">';
+ HT.forEach(function(t){h+='<button class="tile" data-v="'+t[0]+'"><span>'+t[1]+'</span><b>'+t[2]+'</b></button>'});
+ return h+'</div>';
+}
 function hd(t){return '<div class="top"><button class="back" data-v="'+((view==='set'||view==='acct')?'hub':'home')+'">← ফিরুন</button><h2>'+t+'</h2></div>'}
 $('app').addEventListener('click',function(ev){
  var t=ev.target.closest('button');if(!t)return;
