@@ -577,7 +577,7 @@ $('app').addEventListener('input',function(ev){
  else if(t.dataset.lim){cf().lim=Math.max(0,parseFloat(t.value)||0);save()}
 });
 /* ===== আল-মিফতাহ: ইবাদত অংশ ===== */
-var HUBV={hub:1,salat:1,quran:1,surah:1,hadith:1,dua:1,masail:1,library:1,essay:1,live:1,qibla:1,tasbih:1,amol:1,admin:1},curS=1,QC={},CT=null,amd=null,tk1=null,hdBusy=0;
+var HUBV={hub:1,salat:1,quran:1,surah:1,hadith:1,dua:1,masail:1,library:1,essay:1,live:1,qibla:1,tasbih:1,amol:1,admin:1,topic:1},curS=1,QC={},CT=null,amd=null,tk1=null,hdBusy=0;
 function isHub(v){return !!HUBV[v]}
 function mfs(){try{return JSON.parse(lsGet('mf-set'))||{}}catch(e){return {}}}
 function mfw(o){lsSet('mf-set',JSON.stringify(o))}
@@ -634,22 +634,52 @@ function salatHtml(){
  return h;
 }
 /* ---------- কিবলা ---------- */
-function qiblaHtml(){
- var L=locInfo(),b=qiblaB(L.lat,L.lng);
- return '<div class="panel" style="text-align:center"><b>কিবলার দিক</b><div class="empty">'+esc(L.name)+' থেকে উত্তর বরাবর '+bd(b.toFixed(1))+'° (ঘড়ির কাঁটার দিকে)</div><div style="position:relative;width:230px;height:230px;margin:10px auto;border:3px solid var(--line);border-radius:50%"><div style="position:absolute;left:50%;top:4px;transform:translateX(-50%);font-size:13px;color:var(--mut)">উত্তর</div><div id="qarrow" style="position:absolute;inset:0;transform:rotate('+b+'deg);transition:transform .15s"><div style="position:absolute;left:50%;top:22px;transform:translateX(-50%);font-size:34px">🕋</div><div style="position:absolute;left:50%;top:66px;width:5px;height:70px;background:var(--g);transform:translateX(-50%);border-radius:3px"></div></div></div><div id="qst" class="empty">কম্পাস বন্ধ। ফোন সমতলে ধরে নিচের বাটন চাপুন।</div><button class="btn" data-h="qb">📡 কম্পাস চালু করুন</button><small style="color:var(--mut);display:block;margin-top:8px">কম্পাস ফোনের সেন্সরের ওপর নির্ভর করে। লোহা বা চুম্বকের কাছ থেকে দূরে রাখুন। সন্দেহ হলে মসজিদের মিহরাবের দিক দেখে নিন।</small></div>';
+/* ---------- কিবলা (উন্নত কম্পাস) ---------- */
+var qBearing=0,qOn=0,qAl=0,qOffC=0,qs={x:0,y:0,ok:0},qTimer=null;
+function roseSvg(b){
+ var h='<svg viewBox="0 0 260 260" width="100%" style="max-width:300px;display:block;margin:0 auto" role="img" aria-label="কিবলা কম্পাস"><g id="qrose"><circle cx="130" cy="130" r="122" style="fill:var(--card);stroke:var(--g)" stroke-width="4"/>';
+ for(var i=0;i<36;i++){var a=i*10*Math.PI/180,l=i%3===0?14:7,x1=130+(118-l)*Math.sin(a),y1=130-(118-l)*Math.cos(a),x2=130+118*Math.sin(a),y2=130-118*Math.cos(a);h+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" style="stroke:var(--mut)" stroke-width="'+(i%9===0?2.5:1.2)+'"/>'}
+ h+='<text x="130" y="46" text-anchor="middle" font-size="17" font-weight="700" fill="#c0392b">উ</text><text x="214" y="136" text-anchor="middle" font-size="15" style="fill:var(--ink)">পূ</text><text x="130" y="226" text-anchor="middle" font-size="15" style="fill:var(--ink)">দ</text><text x="46" y="136" text-anchor="middle" font-size="15" style="fill:var(--ink)">প</text>'
+ +'<g transform="rotate('+b+' 130 130)"><line x1="130" y1="130" x2="130" y2="70" stroke="#d4a017" stroke-width="4" stroke-linecap="round"/><text x="130" y="68" text-anchor="middle" font-size="28">🕋</text></g></g>'
+ +'<polygon points="130,20 119,2 141,2" style="fill:var(--g)"/><circle cx="130" cy="130" r="7" fill="#e8c76a" stroke="#b98a1f" stroke-width="2"/></svg>';
+ return h;
 }
-var qBearing=0;
+function qiblaHtml(){
+ var L=locInfo(),b=qiblaB(L.lat,L.lng),o=+(mfs().qoff||0);
+ return '<div class="panel" style="text-align:center"><b>কিবলার দিক</b><div class="empty">'+esc(L.name)+' থেকে উত্তর বরাবর <b>'+bd(b.toFixed(1))+'°</b></div>'+roseSvg(b)+'<div id="qst" style="font-size:17px;font-weight:700;margin:8px 0">কম্পাস চালু হচ্ছে…</div><div id="qdeg" class="empty"></div><button class="btn" data-h="qb">📡 কম্পাস চালু / আবার চালু</button><button class="btn" data-h="gps" style="background:var(--g2)">📍 আমার অবস্থান ব্যবহার করুন</button><div id="gpm" class="empty"></div></div>'
+ +'<div class="panel"><b>ঠিক করে নিন</b><small style="color:var(--mut);display:block;margin:4px 0 8px">১) ফোন সমতলে বা সোজা ধরুন, লোহা ও চুম্বক থেকে দূরে। ২) ফোনটিকে ইংরেজি ৮ আকারে কয়েকবার ঘুরান। ৩) মসজিদের মিহরাব বা জানা কিবলার সঙ্গে মিলিয়ে নিন। দিক ডানে-বামে থাকলে নিচের বাটনে সমন্বয় করুন। (এখন: '+bd(o)+'°)</small><div class="row3" style="flex-wrap:wrap"><button class="chip" data-h="qo:-5">−৫°</button><button class="chip" data-h="qo:-1">−১°</button><button class="chip" data-h="qo:r">০</button><button class="chip" data-h="qo:1">+১°</button><button class="chip" data-h="qo:5">+৫°</button></div><small style="color:var(--mut);display:block;margin-top:8px">কম্পাস ফোনের সেন্সরের ওপর নির্ভর করে, তাই সামান্য ভুল হতে পারে। জেলা ঠিক রাখলে (নামাজের সময় পাতায়) কিবলার কোণও আরও নির্ভুল হয়।</small></div>';
+}
+function qHead(e){
+ if(e.webkitCompassHeading!==undefined&&e.webkitCompassHeading!==null)return{h:e.webkitCompassHeading,bad:e.webkitCompassAccuracy<0||e.webkitCompassAccuracy>30};
+ if(!(e.absolute||e.type==='deviceorientationabsolute')||e.alpha===null||e.beta===null||e.gamma===null||e.alpha===undefined)return null;
+ var a=dr(e.alpha),b=dr(e.beta),g=dr(e.gamma),cA=Math.cos(a),sA=Math.sin(a),cB=Math.cos(b),sB=Math.sin(b),cG=Math.cos(g),sG=Math.sin(g);
+ var E=-sA*cB-(cA*sG+sA*sB*cG),N=cA*cB+(cA*sB*cG-sA*sG);
+ if(Math.abs(E)<1e-6&&Math.abs(N)<1e-6)return null;
+ return{h:fixA(rd(Math.atan2(E,N)))};
+}
+function qSmooth(h){var r=dr(h);if(!qs.ok){qs.x=Math.cos(r);qs.y=Math.sin(r);qs.ok=1}else{qs.x+=(Math.cos(r)-qs.x)*0.2;qs.y+=(Math.sin(r)-qs.y)*0.2}return fixA(rd(Math.atan2(qs.y,qs.x)))}
 function qOri(e){
- var h=null;if(e.webkitCompassHeading!==undefined&&e.webkitCompassHeading!==null)h=e.webkitCompassHeading;else if((e.absolute||e.type==='deviceorientationabsolute')&&e.alpha!==null)h=360-e.alpha;
- if(h===null)return;var a=$('qarrow'),s=$('qst');if(!a)return;
- var d=fixA(qBearing-h);a.style.transform='rotate('+d+'deg)';
- if(s)s.textContent=(d<5||d>355)?'✅ কিবলার দিকে আছেন':'ফোন ঘুরিয়ে 🕋 ওপরে আনুন';
+ var r=qHead(e);if(!r)return;
+ var h=fixA(qSmooth(r.h)+qOffC),ro=$('qrose');if(!ro)return;
+ ro.setAttribute('transform','rotate('+(-h).toFixed(1)+' 130 130)');
+ var d=((qBearing-h+540)%360)-180,s=$('qst'),g=$('qdeg'),ad=Math.abs(d);
+ if(s){if(ad<4){s.textContent='✅ কিবলার দিকে আছেন';s.style.color='var(--inc)'}else{s.textContent=(d>0?'↻ ডানে ':'↺ বামে ')+bd(Math.round(ad))+'° ঘুরান';s.style.color='var(--ink)'}}
+ if(g)g.textContent='ফোনের মুখ '+bd(Math.round(h))+'° · কিবলা '+bd(qBearing.toFixed(1))+'°'+(r.bad?' · ⚠️ কম্পাস ঠিক নেই, ৮ আকারে ঘুরান':'');
+ if(ad<4){if(!qAl&&navigator.vibrate)navigator.vibrate(60);qAl=1}else if(ad>8)qAl=0;
+}
+function qStop(){if(!qOn)return;qOn=0;window.removeEventListener('deviceorientationabsolute',qOri,true);window.removeEventListener('deviceorientation',qOri,true);if(qTimer){clearTimeout(qTimer);qTimer=null}}
+function qGo(){
+ if(qOn)return;qOn=1;qs.ok=0;qAl=0;qOffC=+(mfs().qoff||0);
+ if('ondeviceorientationabsolute' in window)window.addEventListener('deviceorientationabsolute',qOri,true);else window.addEventListener('deviceorientation',qOri,true);
+ var s=$('qst');if(s)s.textContent='ফোন ঘুরান…';
+ qTimer=setTimeout(function(){if(!qs.ok){var t=$('qst');if(t)t.textContent='কম্পাস সেন্সর পাওয়া যায়নি। Chrome বা Safari-তে ফোনে খুলুন এবং অনুমতি দিন।'}},4000);
 }
 function qStart(){
  var L=locInfo();qBearing=qiblaB(L.lat,L.lng);
- var go=function(){window.addEventListener('deviceorientationabsolute',qOri,true);window.addEventListener('deviceorientation',qOri,true);var s=$('qst');if(s)s.textContent='কম্পাস চালু। ফোন ঘুরান…'};
- if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission){DeviceOrientationEvent.requestPermission().then(function(r){if(r==='granted')go();else{var s=$('qst');if(s)s.textContent='অনুমতি দেওয়া হয়নি'}})}else go();
+ if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){DeviceOrientationEvent.requestPermission().then(function(r){if(r==='granted')qGo();else{var s=$('qst');if(s)s.textContent='অনুমতি দেওয়া হয়নি'}}).catch(function(){})}
+ else{qStop();qGo()}
 }
+function qiblaInit(){var L=locInfo();qBearing=qiblaB(L.lat,L.lng);qOffC=+(mfs().qoff||0);if(!(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'))qGo()}
 /* ---------- তাসবিহ ---------- */
 var TBL=['সুবহানাল্লাহ','আলহামদুলিল্লাহ','আল্লাহু আকবার','আস্তাগফিরুল্লাহ','লা ইলাহা ইল্লাল্লাহ','দুরূদ শরীফ'];
 function tbS(){var s=mfs();s.tb=s.tb||{c:0,t:33,l:0,tot:{}};s.tb.tot=s.tb.tot||{};return s}
@@ -696,7 +726,7 @@ function surahRows(q){
 }
 function quranHtml(){
  var l=mfs().ql;
- return '<div class="panel"><input id="qs" placeholder="সূরার নাম বা নম্বর লিখুন">'+(l?'<button class="chip" data-h="sr:'+l+'" style="margin-top:8px">শেষ পড়া: সূরা '+SN[l-1]+'</button>':'')+'</div><div class="panel" id="qlist">'+surahRows('')+'</div><div class="panel"><small style="color:var(--mut)">আরবি: Al-Quran Cloud (উসমানি লিপি)। বাংলা অনুবাদ: মুহিউদ্দীন খান। কোনো অনুবাদ কুরআনের বিকল্প নয়। ইন্টারনেট থেকে প্রথমবার লোড হয়, পরে ফোনে জমা থাকে।</small></div>';
+ return (ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:quran">✏️ PDF/লিংক যোগ বা সম্পাদনা</button></div>':'')+'<div class="panel"><input id="qs" placeholder="সূরার নাম বা নম্বর লিখুন">'+(l?'<button class="chip" data-h="sr:'+l+'" style="margin-top:8px">শেষ পড়া: সূরা '+SN[l-1]+'</button>':'')+'</div><div class="panel" id="qlist">'+surahRows('')+'</div><div class="panel" id="qpp" style="display:none"><b>কুরআনের PDF ও লিংক</b><div id="qpf"></div></div><div class="panel"><small style="color:var(--mut)">আরবি: Al-Quran Cloud (উসমানি লিপি)। বাংলা অনুবাদ: মুহিউদ্দীন খান। কোনো অনুবাদ কুরআনের বিকল্প নয়। ইন্টারনেট থেকে প্রথমবার লোড হয়, পরে ফোনে জমা থাকে।</small></div>';
 }
 function surahHtml(){
  var n=curS;
@@ -724,13 +754,14 @@ var HNM={bukhari:'সহীহ বুখারী',muslim:'সহীহ মু�
 var HED=[];
 function hdLabel(n){var k=n.replace(/^[a-z]{3}-/,'');return (HNM[k]||k)+(/^ben-/.test(n)?'':(/^ara-/.test(n)?' (আরবি)':' (ইংরেজি)'))}
 function hadithHtml(){
- return '<div class="panel"><label style="margin:0">সংকলন</label><select id="hed"><option>লোড হচ্ছে…</option></select><label>হাদিস নম্বর</label><input id="hdn" type="number" min="1" inputmode="numeric" value="'+(mfs().hn||1)+'"><div class="row3" style="flex-wrap:wrap"><button class="chip" data-h="hd:p">← আগের</button><button class="chip" data-h="hd:g">দেখুন</button><button class="chip" data-h="hd:n">পরের →</button><button class="chip" data-h="hd:r">🎲 এলোমেলো</button></div></div><div id="hdb" class="panel"><div class="empty">সংকলন বেছে হাদিস নম্বর দিন</div></div><div id="hdc"></div><div class="panel"><small style="color:var(--mut)">উৎস: Hadith API (fawazahmed0)। কোনো হাদিসের মান বা মাসআলা নিয়ে সন্দেহ হলে নির্ভরযোগ্য আলেমের কাছে যাচাই করুন।</small></div>';
+ return (ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:hadiths">✏️ হাদিস যোগ বা সম্পাদনা</button></div>':'')+'<div id="hdt"></div><div class="panel"><label style="margin:0">সংকলন</label><select id="hed"><option>লোড হচ্ছে…</option></select><label>হাদিস নম্বর</label><input id="hdn" type="number" min="1" inputmode="numeric" value="'+(mfs().hn||1)+'"><div class="row3" style="flex-wrap:wrap"><button class="chip" data-h="hd:p">← আগের</button><button class="chip" data-h="hd:g">দেখুন</button><button class="chip" data-h="hd:n">পরের →</button><button class="chip" data-h="hd:r">🎲 এলোমেলো</button></div></div><div id="hdb" class="panel"><div class="empty">সংকলন বেছে হাদিস নম্বর দিন</div></div><div id="hdc"></div><div class="panel"><small style="color:var(--mut)">উৎস: Hadith API (fawazahmed0)। কোনো হাদিসের মান বা মাসআলা নিয়ে সন্দেহ হলে নির্ভরযোগ্য আলেমের কাছে যাচাই করুন।</small></div>';
 }
 function collectEd(o,out){
  if(Array.isArray(o)){o.forEach(function(x){collectEd(x,out)});return}
  if(o&&typeof o==='object'){if(typeof o.name==='string'&&/^[a-z]{3}-[a-z]+/.test(o.name)&&o.language)out.push(o);else for(var k in o)collectEd(o[k],out)}
 }
 function hadithInit(){
+ loadContent(function(c){var e=$('hdt');if(e)e.innerHTML=topicPanel('hadiths',c.hadiths||[],'বিষয় অনুযায়ী হাদিস')});
  var sel=$('hed');
  var done=function(list){
   HED=list;var s=mfs(),ben=list.filter(function(e){return /^ben-/.test(e.name)}),use=ben.length?ben:list.filter(function(e){return /^eng-/.test(e.name)}),h='';
@@ -738,7 +769,6 @@ function hadithInit(){
   if(!h)h='<option value="">সংকলন পাওয়া যায়নি</option>';
   if(sel)sel.innerHTML=h;
   if(!ben.length&&$('hdc'))$('hdc').innerHTML='<div class="panel"><small style="color:var(--mut)">বাংলা সংস্করণ পাওয়া যায়নি, তাই ইংরেজি দেখানো হচ্ছে।</small></div>';
-  loadContent(function(c){var x=c.hadiths||[],b='';x.forEach(function(it){b+='<details class="fi"><summary>'+esc(it.title||'হাদিস')+'</summary>'+(it.ar?'<div class="ar">'+esc(it.ar)+'</div>':'')+'<div class="tr">'+esc(it.bn||it.text||'')+'</div><small style="color:var(--mut)">'+esc(it.source||'')+'</small></details>'});if(b&&$('hdc'))$('hdc').innerHTML+='<div class="panel"><b>নির্বাচিত হাদিস</b>'+b+'</div>'});
  };
  jget(HB.map(function(b){return b+'editions.min.json'}).concat(HB.map(function(b){return b+'editions.json'}))).then(function(j){var o=[];collectEd(j,o);done(o)}).catch(function(){if(sel)sel.innerHTML='<option value="">লোড হয়নি</option>';var b=$('hdb');if(b)b.innerHTML=mfOff()});
 }
@@ -758,26 +788,22 @@ function hadithGo(n){
 }
 /* ---------- দোয়া ---------- */
 var QD=[['2:201','দুনিয়া ও আখিরাতের কল্যাণের দোয়া'],['2:286','ক্ষমা ও রহমত প্রার্থনা (সূরা বাকারার শেষ আয়াত)'],['3:8','হিদায়াতের পর অন্তর বক্র না করার দোয়া'],['7:23','আদম (আ.)-এর ক্ষমা প্রার্থনা'],['14:40','নামাজ কায়েমকারী হওয়ার দোয়া'],['14:41','নিজের, পিতামাতার ও মুমিনদের জন্য ক্ষমা'],['17:24','পিতামাতার জন্য রহমতের দোয়া'],['20:25','মূসা (আ.)-এর দোয়া'],['21:87','ইউনুস (আ.)-এর দোয়া'],['25:74','পরিবার ও সন্তানদের জন্য দোয়া'],['59:10','পূর্ববর্তী মুমিনদের জন্য ক্ষমার দোয়া']];
-function duaHtml(){return '<div class="panel"><b>কুরআনের দোয়া</b><small style="color:var(--mut);display:block">আয়াত সরাসরি কুরআনের উৎস থেকে আসে, আমরা নিজে লিখিনি।</small><div id="dqb">'+mfLd()+'</div></div><div id="dcb"></div>'}
+function duaHtml(){return (ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:duas">✏️ দোয়া যোগ বা সম্পাদনা</button></div>':'')+'<div id="dcb"></div><div class="panel"><b>কুরআনের দোয়া</b><small style="color:var(--mut);display:block">আয়াত সরাসরি কুরআনের উৎস থেকে আসে, আমরা নিজে লিখিনি।</small><div id="dqb">'+mfLd()+'</div></div>'}
 function duaInit(){
  var c=lsGet('mf-dua'),show=function(arr){var b=$('dqb');if(!b)return;var h='';arr.forEach(function(x,i){h+='<details class="fi"><summary>'+esc(QD[i][1])+' <small style="color:var(--mut)">('+bd(QD[i][0])+')</small></summary><div class="ar" style="font-size:'+(mfs().qfs||26)+'px">'+esc(x[0])+'</div><div class="tr">'+esc(x[1])+'</div></details>'});b.innerHTML=h};
  if(c){try{show(JSON.parse(c))}catch(e){}}else{
   Promise.all(QD.map(function(q){return Promise.all([jget([QAPI+'ayah/'+q[0]+'/quran-uthmani']),jget([QAPI+'ayah/'+q[0]+'/bn.bengali'])]).then(function(r){return [r[0].data.text,r[1].data.text]})})).then(function(arr){try{lsSet('mf-dua',JSON.stringify(arr))}catch(e){}show(arr)}).catch(function(){var b=$('dqb');if(b)b.innerHTML=mfOff()});
  }
- loadContent(function(c){var d=c.duas||[],h='';d.forEach(function(x){h+='<details class="fi"><summary>'+esc(x.title||'দোয়া')+'</summary>'+(x.ar?'<div class="ar">'+esc(x.ar)+'</div>':'')+(x.bn?'<div class="tr">'+esc(x.bn)+'</div>':'')+'<small style="color:var(--mut)">'+esc(x.source||'')+'</small></details>'});var b=$('dcb');if(b)b.innerHTML=h?'<div class="panel"><b>আরও দোয়া</b><input data-fl="1" placeholder="খুঁজুন">'+h+'</div>':''});
+ loadContent(function(c){var b=$('dcb');if(b)b.innerHTML=topicPanel('duas',c.duas||[],'বিষয় অনুযায়ী দোয়া')});
 }
 /* ---------- কিতাব, প্রবন্ধ, মাসায়েল, লাইভ ---------- */
 function okUrl(u){return /^(https?:\/\/|[\w\-\/\.%]+\.pdf$)/i.test(u||'')}
 function listPage(title,kind){return hdH(title)+(ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:'+kind+'">✏️ নতুন যোগ / সম্পাদনা</button></div>':'')+'<div class="panel"><input data-fl="1" placeholder="খুঁজুন"></div><div id="lst" class="panel">'+mfLd()+'</div>'}
 function listInit(kind){
  loadContent(function(c){
-  var a=c[kind]||[],h='',b=$('lst');if(!b)return;
-  a.forEach(function(x){
-   if(kind==='books'){h+='<div class="item fi"><div style="flex:1"><b>'+esc(x.title||'')+'</b><small>'+esc(x.author||'')+'</small></div>'+(okUrl(x.url)?'<a class="chip" href="'+esc(x.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">পড়ুন ↗</a>':'')+'</div>'}
-   else if(kind==='essays'){h+='<details class="fi"><summary>'+esc(x.title||'')+(x.author?' <small style="color:var(--mut)">— '+esc(x.author)+'</small>':'')+'</summary>'+(x.text?'<div class="note">'+esc(x.text)+'</div>':'')+(okUrl(x.url)?'<a class="chip" href="'+esc(x.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:inline-block;margin-top:6px">পুরোটা পড়ুন ↗</a>':'')+'</details>'}
-   else{h+='<details class="fi"><summary>'+esc(x.q||x.title||'')+'</summary><div class="note">'+esc(x.a||x.text||'')+'</div><small style="color:var(--mut)">'+esc(x.source||'')+'</small></details>'}
-  });
-  b.innerHTML=h||'<div class="empty">শীঘ্রই এখানে যোগ করা হবে, ইনশাআল্লাহ।</div>';
+  var a=c[kind]||[],b=$('lst');if(!b)return;
+  if(kind==='books'){var h='';a.forEach(function(x){h+='<div class="item fi"><div style="flex:1"><b>'+esc(x.title||'')+'</b><small>'+esc(x.author||'')+'</small></div>'+(okUrl(x.url)?'<a class="chip" href="'+esc(x.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">পড়ুন ↗</a>':'')+'</div>'});b.innerHTML=h||'<div class="empty">শীঘ্রই এখানে যোগ করা হবে, ইনশাআল্লাহ।</div>'}
+  else b.innerHTML=topicBtns(kind,a)||'<div class="empty">শীঘ্রই এখানে যোগ করা হবে, ইনশাআল্লাহ।</div>';
  });
 }
 function liveHtml(){
@@ -805,10 +831,12 @@ function hubHtml(){
   case 'tasbih':return hdH('তাসবিহ')+tasbihHtml();
   case 'amol':return hdH('আমল ট্র্যাকার')+amolHtml();
   case 'admin':return hdH('নির্মাতা মোড')+adminHtml();
+  case 'topic':return hdH(esc(tpN),TPB[tpK])+'<div class="panel"><input data-fl="1" placeholder="এই বিষয়ে খুঁজুন"></div><div class="panel" id="tpi">'+mfLd()+'</div>';
  }
  return '';
 }
 function hubAfter(){
+ if(view!=='qibla')qStop();
  if(tk1){clearInterval(tk1);tk1=null}
  if(tkc){clearInterval(tkc);tkc=null}
  if(view==='hub'||view==='salat')tk1=setInterval(function(){var e=$('nxt');if(e)e.innerHTML=nextHtml(view==='hub')},20000);
@@ -821,7 +849,9 @@ function hubAfter(){
  else if(view==='essay')listInit('essays');
  else if(view==='live')liveInit();
  else if(view==='admin')adminInit();
- else if(view==='qibla'){var L=locInfo();qBearing=qiblaB(L.lat,L.lng)}
+ else if(view==='topic')topicInit();
+ else if(view==='quran')quranInit();
+ else if(view==='qibla')qiblaInit();
 }
 function hubAct(a){
  var p=a.split(':'),c=p[0],s=mfs();
@@ -830,6 +860,7 @@ function hubAct(a){
  else if(c==='hj'){s.hj=+p[1];mfw(s);render()}
  else if(c==='gps'){var m=$('gpm');if(m)m.textContent='অবস্থান খোঁজা হচ্ছে…';if(!navigator.geolocation){if(m)m.textContent='এই ডিভাইসে অবস্থান পাওয়া যায় না';return}navigator.geolocation.getCurrentPosition(function(r){var z=mfs();z.gps=[r.coords.latitude,r.coords.longitude];mfw(z);render()},function(){var m2=$('gpm');if(m2)m2.textContent='অবস্থান পাওয়া যায়নি। অনুমতি দিয়েছেন কিনা দেখুন।'},{timeout:15000})}
  else if(c==='qb')qStart();
+ else if(c==='qo'){var qz=mfs();qz.qoff=p[1]==='r'?0:Math.max(-45,Math.min(45,(+qz.qoff||0)+(+p[1])));mfw(qz);qOffC=qz.qoff;render()}
  else if(c==='tb'){var z=tbS();if(p[1]==='+')tbTap();else if(p[1]==='r'){z.tb.c=0;mfw(z);render()}else if(p[1]==='t'){z.tb.t=+p[2];mfw(z);render()}else if(p[1]==='l'){z.tb.l=+p[2];z.tb.c=0;mfw(z);render()}}
  else if(c==='am'){
   normalize();var d=amd||(amd=dkey());
@@ -839,6 +870,7 @@ function hubAct(a){
   else if(p[1]==='d'){var id=+p[2];db.del.push(id);db.amolx=db.amolx.filter(function(x){return x.id!==id});save();render()}
  }
  else if(c==='ad')adminAct(p);
+ else if(c==='tp'){var tl=TPL[p[1]]||[];tpK=p[1];tpN=tl[+p[2]];if(tpN===undefined)return;view='topic';render();window.scrollTo(0,0)}
  else if(c==='hd'){var inp=$('hdn'),n2=inp?parseInt(inp.value)||1:1;if(p[1]==='p')n2=Math.max(1,n2-1);else if(p[1]==='n')n2++;else if(p[1]==='r')n2=1+Math.floor(Math.random()*500);hadithGo(n2)}
 }
 $('app').addEventListener('change',function(ev){
@@ -854,7 +886,7 @@ $('app').addEventListener('input',function(ev){
 });
 /* ===== নির্মাতা মোড: কিতাব, মাসায়েল, প্রবন্ধ ইত্যাদি যোগ ===== */
 var adT='books',adEd=-1,ADD=null,adMsg='',adTaps=0;
-var ADN={books:'কিতাব (PDF)',masail:'মাসায়েল',essays:'প্রবন্ধ',hadiths:'হাদিস',duas:'দোয়া',live:'লাইভ লিংক'};
+var ADN={quran:'কুরআনের PDF/লিংক',books:'কিতাব (PDF)',masail:'মাসায়েল',essays:'প্রবন্ধ',hadiths:'হাদিস',duas:'দোয়া',live:'লাইভ লিংক'};
 var FS={books:[['title','কিতাবের নাম'],['author','লেখক'],['file','PDF ফাইল (ফোন/কম্পিউটার থেকে)'],['url','অথবা PDF-এর লিংক (ঐচ্ছিক)']],masail:[['q','প্রশ্ন বা বিষয়'],['a','উত্তর','t'],['source','সূত্র (কিতাব/আলেমের নাম)']],essays:[['title','প্রবন্ধের শিরোনাম'],['author','লেখক'],['text','লেখা','t'],['url','লিংক (ঐচ্ছিক)']],hadiths:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অনুবাদ','t'],['source','সূত্র (গ্রন্থ ও নম্বর)']],duas:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অর্থ','t'],['source','সূত্র']],live:[['title','নাম'],['url','লিংক']]};
 function ghTok(){return lsGet('mf-gh')||''}
 function ghInfo(){var s=mfs().gh||{},h=location.hostname||'';return{o:s.o||h.split('.')[0],r:s.r||(location.pathname||'/').split('/')[1]||'',b:s.b||'main'}}
@@ -880,16 +912,18 @@ function adminHtml(){
  var cu=(adEd>=0&&ADD&&ADD.data[adT]&&ADD.data[adT][adEd])||{};
  FS[adT].forEach(function(f){
   if(f[0]==='file')h+='<label>'+f[1]+'</label><input type="file" id="af-file" accept="application/pdf">';
+  else if(f[0]==='topic')h+='<label>'+f[1]+'</label><input id="af-topic" list="adtp" value="'+esc(cu.topic||'')+'"><datalist id="adtp"></datalist>';
   else if(f[2]==='t')h+='<label>'+f[1]+'</label><textarea id="af-'+f[0]+'" rows="5">'+esc(cu[f[0]]||'')+'</textarea>';
   else h+='<label>'+f[1]+'</label><input id="af-'+f[0]+'" value="'+esc(cu[f[0]]||'')+'">';
  });
  h+='<button class="btn" data-h="ad:s">'+(adEd>=0?'আপডেট করুন':'সেভ করুন')+'</button>'+(adEd>=0?'<button class="btn" data-h="ad:c" style="background:var(--mut)">বাতিল</button>':'')+'<div id="adm" class="empty">'+esc(adMsg)+'</div></div><div class="panel"><b>বর্তমান তালিকা</b><div id="adl">'+mfLd()+'</div></div><div class="panel"><small style="color:var(--mut);display:block">সেভ করার ১–২ মিনিট পর সবার অ্যাপে নতুন লেখা দেখা যাবে। বড় PDF (২৫ এমবির বেশি) আপলোড না করে লিংক দিন।</small><button class="btn" data-h="ad:out" style="background:var(--red)">এই ফোন থেকে টোকেন মুছুন</button></div>';
  return h;
 }
-function adTitle(x){return x.title||x.q||x.name||'(নামহীন)'}
+function adTitle(x){return x.title||x.q||(x.bn||'').slice(0,30)||x.name||'(নামহীন)'}
 function adList(){
  var b=$('adl');if(!b)return;var a=(ADD&&ADD.data[adT])||[],h='';
- a.forEach(function(x,i){h+='<div class="item"><div style="flex:1"><b>'+esc(adTitle(x))+'</b><small>'+esc(x.author||x.source||'')+'</small></div><button class="x" style="color:var(--ink)" data-h="ad:e:'+i+'" aria-label="সম্পাদনা">✎</button><button class="x" data-h="ad:d:'+i+'" aria-label="মুছুন">✕</button></div>'});
+ a.forEach(function(x,i){h+='<div class="item"><div style="flex:1"><b>'+esc(adTitle(x))+'</b><small>'+esc((x.topic?x.topic+' · ':'')+(x.author||x.source||''))+'</small></div><button class="x" style="color:var(--ink)" data-h="ad:e:'+i+'" aria-label="সম্পাদনা">✎</button><button class="x" data-h="ad:d:'+i+'" aria-label="মুছুন">✕</button></div>'});
+ var dl=$('adtp');if(dl){var seen={};dl.innerHTML=a.map(function(x){return x.topic}).filter(function(t){if(!t||seen[t])return false;seen[t]=1;return true}).map(function(t){return '<option value="'+esc(t)+'">'}).join('')}
  b.innerHTML=h||'<div class="empty">এখনো কিছু নেই</div>';
 }
 function adminInit(){
@@ -920,10 +954,10 @@ function adminAct(p){
  else if(c==='s'){
   var it={},keys=FS[adT];
   keys.forEach(function(f){if(f[0]==='file')return;var e=$('af-'+f[0]);it[f[0]]=((e&&e.value)||'').trim()});
-  if(!it[keys[0][0]]){adSet('প্রথম ঘরটি পূরণ করুন');return}
+  var isB=(adT==='books'||adT==='quran');if(keys[0][0]==='topic'&&!it.topic){adSet('বিষয় লিখুন');return}if(isB&&!it.title){adSet('নাম লিখুন');return}if(!isB&&!Object.keys(it).some(function(k){return k!=='topic'&&it[k]})){adSet('লেখা পূরণ করুন');return}
   var fi=$('af-file'),file=fi&&fi.files&&fi.files[0],idx=adEd;
   var fin=function(){adCommit(function(d){var old=idx>=0?d[adT][idx]:{};var m=Object.assign({},old,it);if(idx>=0)d[adT][idx]=m;else d[adT].push(m)},(idx>=0?'update ':'add ')+adT)};
-  if(adT==='books'&&file){
+  if((adT==='books'||adT==='quran')&&file){
    if(file.size>25*1024*1024){adSet('ফাইল ২৫ এমবির বেশি। লিংক দিন।');return}
    adSet('PDF আপলোড হচ্ছে… একটু অপেক্ষা করুন');
    var r=new FileReader();
@@ -971,6 +1005,37 @@ function hubHome(){
  var h='<div class="hc"><div class="hcl">'+clockSvg()+'</div><div class="hcr"><div id="dig" class="dig"></div><div class="hd1">'+gdate()+'</div><div class="hd2">'+hijriS()+'</div><div id="nxt" class="hn">'+nextHtml(true)+'</div></div></div><div class="grid" style="margin-top:12px"><button class="tile wide" data-v="home" style="margin-top:0"><span>📒</span><b>হিসাবের খাতা</b></button></div><div class="g3">';
  HT.forEach(function(t){h+='<button class="tile" data-v="'+t[0]+'"><span>'+t[1]+'</span><b>'+t[2]+'</b></button>'});
  return h+'</div>';
+}
+/* ===== বিষয় অনুযায়ী তালিকা ও কুরআনের PDF ===== */
+var TPL={},tpK='',tpN='',TPB={hadiths:'hadith',masail:'masail',duas:'dua',essays:'essay'};
+FS.quran=FS.books;
+['hadiths','masail','duas','essays'].forEach(function(k){FS[k]=[['topic','বিষয় (যেমন: নামাজ, যাকাত)']].concat(FS[k])});
+function itemHtml(kind,x){
+ var src='<small style="color:var(--mut)">'+esc(x.source||'')+'</small>';
+ if(kind==='hadiths')return '<details class="fi"><summary>'+esc(x.title||(x.bn||x.text||'হাদিস').slice(0,60))+'</summary>'+(x.ar?'<div class="ar">'+esc(x.ar)+'</div>':'')+'<div class="tr">'+esc(x.bn||x.text||'')+'</div>'+src+'</details>';
+ if(kind==='duas')return '<details class="fi"><summary>'+esc(x.title||'দোয়া')+'</summary>'+(x.ar?'<div class="ar">'+esc(x.ar)+'</div>':'')+(x.bn?'<div class="tr">'+esc(x.bn)+'</div>':'')+src+'</details>';
+ if(kind==='essays')return '<details class="fi"><summary>'+esc(x.title||'')+(x.author?' <small style="color:var(--mut)">— '+esc(x.author)+'</small>':'')+'</summary>'+(x.text?'<div class="note">'+esc(x.text)+'</div>':'')+(okUrl(x.url)?'<a class="chip" href="'+esc(x.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:inline-block;margin-top:6px">পুরোটা পড়ুন ↗</a>':'')+'</details>';
+ return '<details class="fi"><summary>'+esc(x.q||x.title||'')+'</summary><div class="note">'+esc(x.a||x.text||'')+'</div>'+src+'</details>';
+}
+function topicBtns(kind,arr){
+ var g={},order=[];
+ arr.forEach(function(x){var t=(x.topic||'').trim()||'অন্যান্য';if(!g[t]){g[t]=0;order.push(t)}g[t]++});
+ order.sort(function(a,b){return a.localeCompare(b,'bn')});TPL[kind]=order;
+ return order.map(function(t,i){return '<button class="srb fi" data-h="tp:'+kind+':'+i+'"><span class="sno">'+bd(g[t])+'</span><span style="flex:1;text-align:left">'+esc(t)+'</span><span style="color:var(--mut)">›</span></button>'}).join('');
+}
+function topicPanel(kind,arr,title){return arr.length?'<div class="panel"><b>'+title+'</b><input data-fl="1" placeholder="বিষয় খুঁজুন" style="margin:8px 0">'+topicBtns(kind,arr)+'</div>':''}
+function topicInit(){
+ loadContent(function(c){
+  var a=(c[tpK]||[]).filter(function(x){return ((x.topic||'').trim()||'অন্যান্য')===tpN}),b=$('tpi');if(!b)return;
+  b.innerHTML=a.map(function(x){return itemHtml(tpK,x)}).join('')||'<div class="empty">এই বিষয়ে কিছু নেই</div>';
+ });
+}
+function quranInit(){
+ loadContent(function(c){
+  var a=c.quran||[],h='';
+  a.forEach(function(x){h+='<div class="item fi"><div style="flex:1"><b>'+esc(x.title||'')+'</b><small>'+esc(x.author||'')+'</small></div>'+(okUrl(x.url)?'<a class="chip" href="'+esc(x.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">পড়ুন ↗</a>':'')+'</div>'});
+  var p=$('qpp'),f=$('qpf');if(p&&f&&h){f.innerHTML=h;p.style.display=''}
+ });
 }
 function hd(t){return '<div class="top"><button class="back" data-v="'+((view==='set'||view==='acct')?'hub':'home')+'">← ফিরুন</button><h2>'+t+'</h2></div>'}
 $('app').addEventListener('click',function(ev){
