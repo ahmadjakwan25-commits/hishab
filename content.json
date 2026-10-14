@@ -1,6 +1,12 @@
 {
  "_নির্দেশনা": "এই ফাইলে নির্ভরযোগ্য উৎস থেকে নেওয়া লেখা যোগ করুন। books=কিতাব (url-এ PDF-এর লিংক বা books/নাম.pdf), hadiths, duas, masail, essays, live।",
- "books": [],
+ "books": [
+  {
+   "title": "কোরআন মাজিদ",
+   "author": "",
+   "url": "books/b1791952070782.pdf"
+  }
+ ],
  "hadiths": [
   {
    "title": "ইখলাস",
