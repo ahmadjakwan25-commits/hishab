@@ -142,6 +142,7 @@ body.wg header,body.wg #fab,body.wg #calc,body.wg #drw{display:none!important}
 .wgb{margin-top:10px;padding:18px;border-radius:20px;background:linear-gradient(135deg,rgba(31,122,77,.16),rgba(43,108,176,.1));border:1px solid rgba(31,122,77,.3);text-align:center}
 .wgb .wbig{font-size:34px;font-weight:800;color:var(--g2);margin:4px 0 10px}.wgb .wbig.neg{color:var(--red)}
 .wgb .wr{display:flex;gap:10px}.wgb .wr div{flex:1;background:rgba(255,255,255,.7);border-radius:14px;padding:8px;font-size:13px;color:var(--mut)}.wgb .wr b{display:block;font-size:17px}
+.wgadd{display:block;width:100%;margin-top:12px;padding:14px;font-size:16px;font-weight:700;background:rgba(31,122,77,.14);border-color:rgba(31,122,77,.5)}
 .wgo{display:block;width:100%;margin-top:12px;padding:12px}
 .wgh{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(240,170,40,.18);font-size:13px;line-height:1.7}
 /* ---- দোয়া বিভাগ ---- */
@@ -984,7 +985,7 @@ function hubAct(a){
   else if(p[1]==='d'){var id=+p[2];db.del.push(id);db.amolx=db.amolx.filter(function(x){return x.id!==id});save();render()}
  }
  else if(c==='ad')adminAct(p);
- else if(c==='wg'){if(p[1]==='open'){location.href=location.pathname+'?w='+(+p[2]||1)}else if(p[1]==='app'){location.href=location.pathname}else if(p[1]==='x'){var e=$('wgh');if(e)e.remove()}}
+ else if(c==='wg'){if(p[1]==='open'){location.href=location.pathname+'?w='+(+p[2]||1)+'&add=1'}else if(p[1]==='app'){location.href=location.pathname}else if(p[1]==='add')wgAdd()}
  else if(c==='dc'){duaK=DC[p[1]]?p[1]:'hadith';view='duac';render();window.scrollTo(0,0)}
  else if(c==='tp'){var tl=TPL[p[1]]||[];tpK=p[1];tpN=tl[+p[2]];if(tpN===undefined)return;view='topic';render();window.scrollTo(0,0)}
  else if(c==='hd'){var inp=$('hdn'),n2=inp?parseInt(inp.value)||1:1;if(p[1]==='p')n2=Math.max(1,n2-1);else if(p[1]==='n')n2++;else if(p[1]==='r')n2=1+Math.floor(Math.random()*500);hadithGo(n2)}
@@ -1548,7 +1549,7 @@ function wgTop(){return mosque()+'<div class="hc"><div class="hcr"><div id="nxt"
 function widgetHtml(){
  var h='<div class="wgp">';
  if(WK===1)h+=wgTop();else if(WK===2)h+=wgBal();else h+=wgTop()+wgBal();
- return h+'<button class="chip wgo" data-h="wg:app">📱 আল-মিফতাহ অ্যাপ খুলুন</button><div class="wgh" id="wgh">💡 হোম স্ক্রিনে যোগ করতে ব্রাউজারের ⋮ মেনু → <b>হোম স্ক্রিনে যোগ করুন</b> → <b>শর্টকাট তৈরি করুন</b>। <button class="chip" data-h="wg:x">ঠিক আছে</button></div></div>';
+ return h+'<button class="chip wgo" data-h="wg:app">📱 আল-মিফতাহ অ্যাপ খুলুন</button><button class="chip wgadd" data-h="wg:add">📲 এই উইজেট হোম স্ক্রিনে যোগ করুন</button><div class="wgh" id="wgh" style="display:none"></div></div>';
 }
 function widMenuHtml(){
  var h=hdH('📲 হোম স্ক্রিন উইজেট')+'<div class="panel"><small style="color:var(--mut)">নিচ থেকে একটি বেছে নিন। সেটি আলাদা ছোট পাতায় খুলবে, তারপর ব্রাউজারের মেনু থেকে হোম স্ক্রিনে যোগ করুন।</small></div><div class="dcg">';
@@ -1557,6 +1558,19 @@ function widMenuHtml(){
  return h+'</div><div class="panel"><b>ধাপ</b><ol style="margin:6px 0 0 18px;padding:0;line-height:1.8"><li>একটি বেছে নিন, পাতাটি খুলবে</li><li>Chrome-এর ⋮ মেনুতে ট্যাপ করুন</li><li>"হোম স্ক্রিনে যোগ করুন" → "শর্টকাট তৈরি করুন"</li><li>নাম দিয়ে যোগ করুন</li></ol><small style="color:var(--mut);display:block;margin-top:6px">এগুলো শর্টকাট-ধরনের উইজেট: ট্যাপ করলে খোলে, আপনাআপনি হালনাগাদ হয় না।</small></div>';
 }
 (function(){var m=/[?&]w=([123])/.exec(location.search);if(m){WK=+m[1];view='wid';document.body.classList.add('wg')}})();
+var wgDip=null;
+function wgManifest(){
+ try{var b=location.href.split('?')[0],o=location.origin,ic=function(x){return new URL(x,b).href};
+  var m={name:'আল-মিফতাহ · '+WN[WK],short_name:WN[WK].slice(0,12),id:b+'?w='+WK,start_url:b+'?w='+WK,scope:b.replace(/[^\/]*$/,''),display:'standalone',background_color:'#f1f5f2',theme_color:'#17603c',lang:'bn',icons:[{src:ic('icon-192.png'),sizes:'192x192',type:'image/png',purpose:'any'},{src:ic('icon-192.png'),sizes:'512x512',type:'image/png',purpose:'any'}]};
+  var l=document.querySelector('link[rel=manifest]');if(l)l.remove();
+  l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));document.head.appendChild(l)}catch(e){}
+}
+function wgAdd(){
+ var h=$('wgh');
+ if(wgDip){wgDip.prompt();wgDip.userChoice.then(function(r){if(h){h.style.display='';h.textContent=r.outcome==='accepted'?'✅ হোম স্ক্রিনে যোগ হয়েছে।':'বাতিল করা হয়েছে।'}wgDip=null}).catch(function(){});return}
+ if(h){h.style.display='';h.innerHTML='💡 সরাসরি যোগ করা গেল না। Chrome-এর ⋮ মেনু → <b>হোম স্ক্রিনে যোগ করুন</b> (বা <b>অ্যাপ ইনস্টল করুন</b>) বেছে নিন।'}
+}
+if(view==='wid'){wgManifest();window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();wgDip=e;if(/[?&]add=1/.test(location.search)){var b=document.querySelector('.wgadd');if(b){b.style.boxShadow='0 0 0 3px rgba(31,122,77,.35)'}}})}
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&view==='wid')render()});
 
 render();
@@ -1663,11 +1677,23 @@ function duaCatInit(){
 
 function nbUpdate(){var e=$('nbadge');if(!e)return;var seen=+lsGet('mf-nseen')||0,n=((CT&&CT.notifs)||[]).filter(function(x){return (x.id||0)>seen}).length;e.textContent=n?bd(n>99?99:n):'';e.style.display=n?'flex':'none'}
 function notifHtml(){return (ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:notifs">✏️ নোটিফিকেশন লিখুন / সম্পাদনা</button></div>':'')+'<div id="nlst" class="panel">'+mfLd()+'</div>'}
+/* কতজন দেখেছে: বিনামূল্যের কাউন্টার সার্ভিস, প্রতি ডিভাইস থেকে প্রতি নোটিফিকেশনে একবার */
+var NVU='https://abacus.jasoncameron.dev',NVS='almiftah-notif-v1';
+function nvRun(a){
+ a.forEach(function(x){
+  var id=x.id||0,k=NVU+'/%s/'+NVS+'/n'+id;
+  if(ghTok()){
+   fetch(k.replace('%s','get')).then(function(r){return r.ok?r.json():{value:0}}).then(function(j){var e=document.querySelector('.nvc[data-nid="'+id+'"]');if(e)e.textContent='👁 '+bd(j.value||0)+' জন দেখেছেন'}).catch(function(){var e=document.querySelector('.nvc[data-nid="'+id+'"]');if(e)e.textContent='👁 সংখ্যা আনা যায়নি (ইন্টারনেট দেখুন)'});
+   return}
+  if(lsGet('mf-nv'+id)||!id)return;
+  fetch(k.replace('%s','hit')).then(function(r){if(r.ok)lsSet('mf-nv'+id,'1')}).catch(function(){});
+ });
+}
 function notifInit(){loadContent(function(c){
  var a=(c.notifs||[]).slice().sort(function(x,y){return (y.id||0)-(x.id||0)}),seen=+lsGet('mf-nseen')||0,b=$('nlst'),h='';
- a.forEach(function(x){var nw=(x.id||0)>seen;h+='<div class="item'+(nw?' nw':'')+'" style="align-items:flex-start"><div style="flex:1"><b>'+(nw?'🔴 ':'')+esc(x.title||'')+'</b><small>'+esc(x.date||'')+'</small>'+(x.text?'<div class="note">'+esc(x.text)+'</div>':'')+'</div></div>'});
+ a.forEach(function(x){var nw=(x.id||0)>seen;h+='<div class="item'+(nw?' nw':'')+'" style="align-items:flex-start"><div style="flex:1"><b>'+(nw?'🔴 ':'')+esc(x.title||'')+'</b><small>'+esc(x.date||'')+'</small>'+(ghTok()?'<small class="nvc" data-nid="'+(x.id||0)+'" style="display:block;color:var(--g2);font-weight:600">👁 গণনা হচ্ছে…</small>':'')+(x.text?'<div class="note">'+esc(x.text)+'</div>':'')+'</div></div>'});
  if(view!=='notif')return;
- if(b)b.innerHTML=h||'<div class="empty">এখনো কোনো নোটিফিকেশন নেই</div>';
+ if(b)b.innerHTML=h||'<div class="empty">এখনো কোনো নোটিফিকেশন নেই</div>';nvRun(a);
  var mx=a.reduce(function(m,x){return Math.max(m,x.id||0)},0);if(mx>seen)lsSet('mf-nseen',String(mx));nbUpdate();
 })}
 $('nb').onclick=function(){dopen(false);view='notif';render();window.scrollTo(0,0)};
