@@ -168,7 +168,7 @@ body.wg header,body.wg #fab,body.wg #calc,body.wg #drw{display:none!important}
 .tvsh1{display:flex;align-items:center;gap:6px;margin-bottom:8px}.tvsh1 b{font-size:18px}.tvsh1 small{color:var(--mut)}.tvsh1 .x{margin-left:auto}
 .tvth{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.tvth .empty{grid-column:span 3}
 .tvt{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--bg)}.tvt img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}.tvt .x{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:26px;height:26px;padding:0;font-size:13px}
-.tvadd{display:block;text-align:center}
+.tvadd{display:block;text-align:center;position:relative}
 .tvlmw{overflow:auto;height:320px;border:1px solid var(--line);border-radius:12px;margin:10px 0;background:#e8e4da}
 .tvlm{position:relative}.tvlm img{position:absolute;width:256px;height:256px;max-width:none}
 .tvmk{position:absolute;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:#1f7a4d;color:#fff;border:2px solid #fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.4)}
@@ -1001,7 +1001,7 @@ function tvSheetHtml(){
  if(tvSel<0)return '';var d=TVD.ds[tvSel],on=tvGet().indexOf(tvSel)>=0;
  return '<div class="tvsc"><div class="tvsh1"><b>'+d.n+'</b><small>· '+d.dv+' বিভাগ</small><button class="x" data-tx="close" aria-label="বন্ধ করুন">✕</button></div>'+
  '<button class="chip'+(on?' on':'')+'" data-tx="t:'+tvSel+'">'+(on?'✅ সবুজ করা আছে (সরাতে ট্যাপ করুন)':'⬜ জেলাটি সবুজ করুন')+'</button>'+
- '<label class="btn tvadd">📷 ছবি যোগ করুন (একসাথে একাধিক)<input type="file" id="tvfile" accept="image/*" multiple hidden></label>'+
+ '<label class="btn tvadd">📷 ছবি যোগ করুন (একসাথে একাধিক)<input type="file" id="tvfile" accept="image/*" multiple style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none"></label>'+
  '<div class="tvth" id="tvth"><div class="empty">লোড হচ্ছে…</div></div></div>'}
 function travelHtml(){
  return '<div class="panel"><b id="tvstat">'+tvStat()+'</b><small style="display:block;color:var(--mut)">জেলার নামে ট্যাপ করলে ম্যাপে সেই জেলা সবুজ হবে</small><div id="tvch">'+tvChips()+'</div></div>'+
@@ -1019,19 +1019,25 @@ function tvRef(){
 /* ছবি সংরক্ষণ (IndexedDB) */
 function tvDb(){if(tvDbP)return tvDbP;tvDbP=new Promise(function(res,rej){try{var r=indexedDB.open('mf-travel',1);r.onupgradeneeded=function(){var s=r.result.createObjectStore('p',{keyPath:'id',autoIncrement:true});s.createIndex('d','d')};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}}catch(e){rej(e)}});return tvDbP}
 function tvReq(mode,fn){return tvDb().then(function(db){return new Promise(function(res,rej){var t=db.transaction('p',mode),q=fn(t.objectStore('p'));t.oncomplete=function(){res(q&&q.result)};t.onerror=function(){rej(t.error)};t.onabort=function(){rej(t.error)}})})}
-function tvCounts(){return tvDb().then(function(db){return new Promise(function(res){var o={},t=db.transaction('p'),ix=t.objectStore('p').index('d');TVD.ds.forEach(function(d){ix.count(d.id).onsuccess=function(e){if(e.target.result)o[d.id]=e.target.result}});t.oncomplete=function(){res(o)};t.onerror=function(){res(o)}})})}
-function tvShrink(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var m=1280,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.82))};im.onerror=function(){URL.revokeObjectURL(u);rej(new Error('img'))};im.src=u})}
+function tvLs(){try{return JSON.parse(lsGet('mf-tvp')||'[]')}catch(e){return[]}}
+function tvLsPut(a){try{localStorage.setItem('mf-tvp',JSON.stringify(a));return true}catch(e){return false}}
+function tvIdList(id){return tvReq('readonly',function(s){return s.index('d').getAll(id)}).catch(function(){return[]})}
+function tvListP(id){return tvIdList(id).then(function(a){return a.concat(tvLs().filter(function(p){return p.d===id}))})}
+function tvAddP(id,u){return tvReq('readwrite',function(s){return s.add({d:id,u:u,t:Date.now()})}).catch(function(){var a=tvLs();a.push({id:'l'+Date.now()+Math.random().toString(36).slice(2,6),d:id,u:u});if(!tvLsPut(a))throw new Error('জায়গা শেষ — ছবির সংখ্যা কমান')})}
+function tvDelP(pid){if(/^\d+$/.test(String(pid)))return tvReq('readwrite',function(s){return s.delete(+pid)}).catch(function(){});tvLsPut(tvLs().filter(function(p){return p.id!==pid}));return Promise.resolve()}
+function tvCounts(){var o={};tvLs().forEach(function(p){o[p.d]=(o[p.d]||0)+1});return tvDb().then(function(db){return new Promise(function(res){var t=db.transaction('p'),ix=t.objectStore('p').index('d');TVD.ds.forEach(function(d){ix.count(d.id).onsuccess=function(e){if(e.target.result)o[d.id]=(o[d.id]||0)+e.target.result}});t.oncomplete=function(){res(o)};t.onerror=function(){res(o)}})}).catch(function(){return o})}
+function tvShrink(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var m=1024,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.75))};im.onerror=function(){URL.revokeObjectURL(u);rej(new Error('img'))};im.src=u})}
 function tvThumbs(){
  if(tvSel<0)return;var id=tvSel;
- tvReq('readonly',function(s){return s.index('d').getAll(id)}).then(function(arr){
+ tvListP(id).then(function(arr){
   tvCnt[id]=arr.length;var c=$('tvch');if(c)c.innerHTML=tvChips();
   if(tvSel!==id)return;var el=$('tvth');if(!el)return;
   el.innerHTML=arr.length?arr.map(function(p){return '<div class="tvt"><img src="'+p.u+'" data-tp="'+p.id+'" alt=""><button class="x" data-tpd="'+p.id+'" aria-label="মুছুন">✕</button></div>'}).join(''):'<div class="empty">এখনো কোনো ছবি নেই</div>'
- }).catch(function(){var el=$('tvth');if(el)el.innerHTML='<div class="empty">এই ডিভাইসে ছবি সংরক্ষণ করা যাচ্ছে না</div>'})}
+ }).catch(function(e){var el=$('tvth');if(el)el.innerHTML='<div class="empty">ছবি লোড করা যায়নি</div>'})}
 function tvAddFiles(files){
- var id=tvSel,arr=[].slice.call(files),el=$('tvth');if(el)el.innerHTML='<div class="empty">ছবি যোগ হচ্ছে…</div>';
- arr.reduce(function(p,f){return p.then(function(){return tvShrink(f)}).then(function(u){return tvReq('readwrite',function(s){return s.add({d:id,u:u,t:Date.now()})})})},Promise.resolve())
- .then(function(){tvTog(id,true);tvRef()}).catch(function(){alert('ছবি সংরক্ষণ করা যায়নি');tvRef()})}
+ var id=tvSel,arr=[].slice.call(files),el=$('tvth'),err='';if(el)el.innerHTML='<div class="empty">ছবি যোগ হচ্ছে…</div>';
+ arr.reduce(function(p,f){return p.then(function(){return tvShrink(f).then(function(u){return tvAddP(id,u)}).catch(function(e){err=(e&&e.message&&e.message!=='img')?e.message:'কিছু ছবি পড়া যায়নি (JPG/PNG ছবি দিন)'})})},Promise.resolve())
+ .then(function(){tvTog(id,true);tvRef();if(err){var e2=$('tvth');if(e2)e2.insertAdjacentHTML('afterbegin','<div class="empty" style="color:var(--red)">'+esc(err)+'</div>')}})}
 function tvLb(src){var d=document.createElement('div');d.className='tvlb';d.innerHTML='<img src="'+src+'" alt="">';d.onclick=function(){d.remove()};document.body.appendChild(d)}
 function tvInit(){tvCounts().then(function(o){tvCnt=o;var c=$('tvch');if(c)c.innerHTML=tvChips()}).catch(function(){});tvThumbs()}
 /* কাছের মসজিদ */
@@ -1093,7 +1099,7 @@ $('app').addEventListener('click',function(ev){
  var p=ev.target.closest('[data-td]');if(p){tvSel=+p.getAttribute('data-td');tvRef();return}
  var im=ev.target.closest('img[data-tp]');if(im){tvLb(im.src);return}
  var b=ev.target.closest('button');if(!b)return;
- if(b.dataset.tpd){if(confirm('এই ছবিটি মুছে ফেলবেন?'))tvReq('readwrite',function(s){return s.delete(+b.dataset.tpd)}).then(tvThumbs);return}
+ if(b.dataset.tpd){if(confirm('এই ছবিটি মুছে ফেলবেন?'))tvDelP(b.dataset.tpd).then(function(){tvThumbs()});return}
  var a=b.dataset.tx;if(!a)return;var q=a.split(':');
  if(q[0]==='t'){tvTog(+q[1]);tvRef()}
  else if(q[0]==='close'){tvSel=-1;tvRef()}
