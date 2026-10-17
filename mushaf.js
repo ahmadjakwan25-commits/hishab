@@ -359,7 +359,7 @@
   }
   btn.onclick = openIt;
 
-  // হোম পাতার ওপরে বড় কার্ড (অ্যাপ প্রতিবার পাতা নতুন আঁকে, তাই লক্ষ রাখা হয়)
+  // কুরআন ফিচারের ভেতরে কার্ড (অ্যাপ প্রতিবার পাতা নতুন আঁকে, তাই লক্ষ রাখা হয়)
   function cardHtml() {
     var last = parseInt(ls("mfm-page"), 10);
     return '<span class="ci">📖</span><span class="ct"><b>পৃষ্ঠা অনুযায়ী কুরআন</b><small>৬০৪ পৃষ্ঠা · কারী বেছে তেলাওয়াত শুনুন' +
@@ -368,31 +368,17 @@
   function mountCard() {
     var app = document.getElementById("app");
     if (!app || app.querySelector("#mfm-card")) return;
-    var anchor = app.querySelector(".hc");
-    if (!anchor || !app.querySelector("#nxt")) return; // শুধু মূল (হাব) পাতায়
+    var anchor = app.querySelector(".qtabs"); // আপনার অ্যাপের কুরআন ফিচারের ট্যাব-সারি
+    if (!anchor) return;
     var c = document.createElement("button");
     c.id = "mfm-card";
     c.innerHTML = cardHtml();
     c.onclick = openIt;
-    anchor.parentNode.insertBefore(c, anchor);
-  }
-  function mountMenu() {
-    var drw = document.getElementById("drw");
-    if (!drw || drw.querySelector("#mfm-mi")) return;
-    var m = document.createElement("button");
-    m.className = "mi"; m.id = "mfm-mi";
-    m.textContent = "📖 পৃষ্ঠা অনুযায়ী কুরআন";
-    m.onclick = function () {
-      var d = document.getElementById("dov");
-      if (d) { try { d.click(); } catch (e) {} }
-      openIt();
-    };
-    var first = drw.querySelector(".mi");
-    if (first && first.nextSibling) drw.insertBefore(m, first.nextSibling); else drw.appendChild(m);
+    anchor.parentNode.insertBefore(c, anchor.nextSibling);
   }
   function watch() {
     var app = document.getElementById("app");
-    mountCard(); mountMenu();
+    mountCard();
     if (app && window.MutationObserver) new MutationObserver(function () { mountCard(); }).observe(app, { childList: true });
   }
   $("x").onclick = function () {
