@@ -37,6 +37,7 @@
     '<h3 style="margin:0 0 6px">অফলাইনের জন্য ডাউনলোড</h3>' +
     '<p style="margin:0 0 10px;color:var(--mut,#5d7066);font-size:13px">ওয়াইফাই বা ভালো নেট চালু রেখে একবার ডাউনলোড করুন। এরপর ইন্টারনেট ছাড়াই চলবে।</p>' +
     '<label style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="of-q" checked> সম্পূর্ণ কুরআন (আরবি + বাংলা)</label>' +
+    '<label style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="of-p" checked> আমার যোগ করা PDF ও ফাইল (কুরআন/হাদিস/দোয়ার PDF-লিংক পাতা)</label>' +
     '<div style="margin:8px 0 4px"><b>হাদিস</b> <small id="of-hs" style="color:var(--mut,#5d7066)">সংকলনের তালিকা আনা হচ্ছে…</small></div>' +
     '<div id="of-hl"></div>' +
     '<div style="height:10px;background:var(--line,#dbe5de);border-radius:6px;margin:12px 0 4px;overflow:hidden"><div id="of-bar" style="height:100%;width:0;background:#1f7a4d"></div></div>' +
@@ -118,6 +119,35 @@
         jobs.push({ t: "সূরা " + n, u: [QAPI + "surah/" + n + "/bn.bengali"] });
       }
     }
+    if (q("of-p").checked) {
+      try {
+        status("আপনার যোগ করা PDF/ফাইলের তালিকা আনা হচ্ছে…");
+        var cr = await fetch("content.json?" + Date.now());
+        if (cr.ok) {
+          var cc = await caches.open(DATA);
+          await cc.put(new URL("content.json", location.href).href, cr.clone());
+          var cj = await cr.json();
+          var seen = {};
+          (function walk(v) {
+            if (Array.isArray(v)) { v.forEach(walk); return; }
+            if (v && typeof v === "object") {
+              for (var k in v) {
+                if (k === "url" && typeof v[k] === "string") {
+                  try {
+                    var uu = new URL(v[k], location.href);
+                    var same = uu.origin === location.origin;
+                    if ((same || /\.pdf($|\?)/i.test(uu.pathname)) && !seen[uu.href]) {
+                      seen[uu.href] = 1;
+                      jobs.push({ t: decodeURIComponent(uu.pathname.split("/").pop() || "ফাইল"), u: [uu.href], soft: !same });
+                    }
+                  } catch (e) {}
+                } else walk(v[k]);
+              }
+            }
+          })(cj);
+        }
+      } catch (e) {}
+    }
     var picks = [].slice.call(box.querySelectorAll(".of-ed:checked")).map(function (x) { return x.value; });
     picks.forEach(function (name) {
       var k = name.replace(/^[a-z]{3}-/, "");
@@ -139,7 +169,7 @@
         var j = jobs[idx++];
         status("ডাউনলোড হচ্ছে: " + j.t + " (" + done + "/" + jobs.length + ")");
         var ok = await grab(j.u);
-        if (!ok) fail.push(j.t);
+        if (!ok && !j.soft) fail.push(j.t);
         done++; bar(done / jobs.length);
       }
     }

@@ -1,4 +1,4 @@
-const CACHE = "almiftah-v3";
+const CACHE = "almiftah-v4";
 const DATA = "almiftah-data"; // অফলাইন ডাউনলোড করা কুরআন-হাদিস, এটা কখনো মোছা হয় না
 const CORE = ["./", "./index.html", "./offline.js", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 const KEEP = [
@@ -58,10 +58,14 @@ self.addEventListener("fetch", e => {
   if (url.origin === location.origin) {
     e.respondWith(
       fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(req, copy));
+        if (res && res.ok && res.status === 200) {
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+        }
         return res;
-      }).catch(() => caches.match(req).then(r => r || caches.match("./index.html")))
+      }).catch(() =>
+        caches.match(req, { ignoreSearch: true }).then(r => r || (req.mode === "navigate" ? caches.match("./index.html") : Response.error()))
+      )
     );
     return;
   }
