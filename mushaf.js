@@ -58,32 +58,57 @@
   /* ---------- ডিজাইন ---------- */
   var st = document.createElement("style");
   st.textContent =
-    "#mfm{position:fixed;inset:0;z-index:10000;display:none;flex-direction:column;background:#ece6d3;color:#1c1a14;font-family:inherit}" +
+    "#mfm{position:fixed;inset:0;z-index:10000;display:none;flex-direction:column;background:#e9e1c8;background-image:radial-gradient(circle at 50% 0,#f4eed9,#e4dbbd);color:#1c1a14;font-family:inherit}" +
     "#mfm *{box-sizing:border-box}" +
-    "#mfm .bar{display:flex;gap:6px;align-items:center;padding:8px 10px;background:#17603c;color:#fff;padding-top:max(8px,env(safe-area-inset-top,0px))}" +
-    "#mfm .bar button,#mfm .bar select,#mfm .bar input{font:inherit;border:0;border-radius:8px;padding:7px 10px;background:rgba(255,255,255,.18);color:#fff}" +
-    "#mfm .bar select option{color:#000}" +
-    "#mfm .bar input{width:64px;text-align:center}" +
+    "#mfm .bar{display:flex;gap:6px;align-items:center;padding:8px 10px;background:linear-gradient(#1b6e45,#145132);color:#fff;padding-top:max(8px,env(safe-area-inset-top,0px));box-shadow:0 2px 6px rgba(0,0,0,.25)}" +
+    "#mfm .bar button,#mfm .bar select,#mfm .bar input{font:inherit;border:0;border-radius:10px;padding:8px 11px;background:rgba(255,255,255,.18);color:#fff}" +
+    "#mfm .bar input{width:66px;text-align:center;font-weight:700}" +
     "#mfm .info{flex:1;text-align:center;font-size:13px;line-height:1.25;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}" +
-    "#mfm .set{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px;background:#dcd5bd;font-size:13px}" +
-    "#mfm .set button,#mfm .set select{font:inherit;border:1px solid #b9b08f;border-radius:8px;padding:5px 9px;background:#f6f1e1;color:#1c1a14}" +
-    "#mfm .pwrap{flex:1;overflow:auto;padding:12px 10px 20px;-webkit-overflow-scrolling:touch}" +
-    "#mfm .pg{max-width:640px;margin:0 auto;background:#fdf8ea;border:3px double #b79b3e;border-radius:10px;padding:16px 14px;box-shadow:0 2px 10px rgba(0,0,0,.15)}" +
-    "#mfm .tx{direction:rtl;text-align:justify;text-align-last:center;font-family:'Amiri Quran','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif;line-height:2.2}" +
-    "#mfm .ay{cursor:pointer;border-radius:6px;padding:0 1px}" +
-    "#mfm .ay.on{background:rgba(23,96,60,.22)}" +
-    "#mfm .no{color:#9a7b12;font-size:.75em;white-space:nowrap}" +
-    "#mfm .sh{direction:rtl;text-align:center;margin:10px 0 6px;padding:6px;border:2px solid #b79b3e;border-radius:8px;background:#f1e7c2;font-family:'Amiri Quran','Noto Naskh Arabic',serif;font-size:1.35em}" +
-    "#mfm .bs{direction:rtl;text-align:center;font-family:'Amiri Quran','Noto Naskh Arabic',serif;margin:6px 0;line-height:2}" +
-    "#mfm .trs{max-width:640px;margin:12px auto 0;font-size:15px;line-height:1.7}" +
-    "#mfm .trs div{padding:6px 2px;border-bottom:1px dashed #cdc4a3}" +
-    "#mfm .msg{padding:30px 10px;text-align:center;color:#6b6448}" +
-    "#mfm .pl{display:flex;gap:6px;align-items:center;padding:8px 10px;background:#17603c;color:#fff;padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}" +
-    "#mfm .pl button,#mfm .pl select{font:inherit;border:0;border-radius:10px;padding:9px 12px;background:rgba(255,255,255,.2);color:#fff}" +
+    "#mfm .set{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px;background:#d8cfb0;font-size:13px}" +
+    "#mfm .set button,#mfm .set select{font:inherit;border:1px solid #b9b08f;border-radius:9px;padding:5px 9px;background:#f8f3e3;color:#1c1a14}" +
+    "#mfm .pwrap{flex:1;overflow:auto;padding:14px 10px 22px;-webkit-overflow-scrolling:touch}" +
+    /* পৃষ্ঠা: সোনালি জোড়া বর্ডার, কোণায় নকশা */
+    "#mfm .pg{position:relative;max-width:640px;margin:0 auto;background:linear-gradient(#fffaf0,#fbf3dc);border:3px solid #b8932f;border-radius:14px;padding:10px;box-shadow:0 4px 16px rgba(60,40,0,.28)}" +
+    "#mfm .pg:before{content:'';position:absolute;inset:6px;border:1.5px solid #d5b85c;border-radius:9px;pointer-events:none}" +
+    "#mfm .pg .mcn{position:absolute;width:26px;height:26px;border:3px solid #b8932f;background:#fbf3dc;border-radius:50%;z-index:1}" +
+    "#mfm .pg .mcn:after{content:'✦';position:absolute;inset:0;text-align:center;line-height:20px;font-size:14px;color:#b8932f}" +
+    "#mfm .pg .mc1{top:-12px;left:-12px}#mfm .pg .mc2{top:-12px;right:-12px}#mfm .pg .mc3{bottom:-12px;left:-12px}#mfm .pg .mc4{bottom:-12px;right:-12px}" +
+    "#mfm .pin{position:relative;padding:12px 10px 8px}" +
+    "#mfm .mph{display:flex;justify-content:space-between;align-items:center;direction:rtl;padding:2px 4px 8px;margin-bottom:6px;border-bottom:1.5px solid #d5b85c;color:#7a5f10;font-size:14px;font-family:'Amiri Quran','Noto Naskh Arabic',serif}" +
+    "#mfm .mph b{font-weight:600}" +
+    "#mfm .tx{direction:rtl;text-align:justify;text-align-last:center;font-family:'Amiri Quran','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif;line-height:2.25}" +
+    "#mfm .ay{cursor:pointer;border-radius:6px;padding:0 1px;transition:background .2s}" +
+    "#mfm .ay.on{background:rgba(23,96,60,.24);box-shadow:0 0 0 2px rgba(23,96,60,.12)}" +
+    "#mfm .no{display:inline-block;min-width:1.7em;height:1.7em;line-height:1.55em;margin:0 3px;text-align:center;border:1.5px solid #b8932f;border-radius:50%;color:#8a6a0c;font-size:.55em;vertical-align:middle;background:#fff8df;font-family:'Amiri Quran','Noto Naskh Arabic',serif}" +
+    "#mfm .msh{direction:rtl;text-align:center;margin:12px 0 8px;padding:8px 6px;border-radius:10px;background:linear-gradient(90deg,#e8d58f,#f7ecc0 50%,#e8d58f);border:2px solid #b8932f;box-shadow:inset 0 0 0 2px #fbf3dc;color:#5a430a;font-family:'Amiri Quran','Noto Naskh Arabic',serif;font-size:1.4em}" +
+    "#mfm .msh:before,#mfm .msh:after{content:'❖';color:#b8932f;font-size:.7em;margin:0 10px}" +
+    "#mfm .bs{direction:rtl;text-align:center;font-family:'Amiri Quran','Noto Naskh Arabic',serif;margin:8px 0;line-height:2;color:#2b2410}" +
+    "#mfm .pf{text-align:center;margin-top:10px;padding-top:6px;border-top:1.5px solid #d5b85c}" +
+    "#mfm .pf span{display:inline-block;min-width:44px;padding:3px 14px;border:2px solid #b8932f;border-radius:20px;background:#fff8df;color:#7a5f10;font-weight:700}" +
+    "#mfm .trs{max-width:640px;margin:14px auto 0;font-size:15px;line-height:1.75;background:#fbf6e6;border-radius:10px;padding:4px 10px;border:1px solid #d5c89a}" +
+    "#mfm .trs div{padding:7px 2px;border-bottom:1px dashed #cdc4a3}" +
+    "#mfm .trs div:last-child{border-bottom:0}" +
+    "#mfm .msg{padding:36px 10px;text-align:center;color:#6b6448}" +
+    "#mfm .pl{display:flex;gap:6px;align-items:center;padding:8px 10px;background:linear-gradient(#1b6e45,#145132);color:#fff;padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}" +
+    "#mfm .pl button,#mfm .pl select{font:inherit;border:0;border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.2);color:#fff}" +
+    "#mfm .pl #mfm-pp{background:#f4c542;color:#1c1a14;font-size:18px;min-width:50px}" +
     "#mfm .pl select{flex:1;min-width:0}" +
-    "#mfm .pl select option{color:#000}" +
     "#mfm .pl button.on{background:#f4c542;color:#1c1a14}" +
-    "#mfm .pst{padding:3px 10px;font-size:12px;color:#6b6448;text-align:center;min-height:20px;background:#ece6d3}";
+    "#mfm .pst{padding:3px 10px;font-size:12px;color:#6b6448;text-align:center;min-height:20px;background:#e9e1c8}" +
+    "#mfm select option{color:#000}" +
+    "#mfm input,#mfm select{width:auto;margin:0}" +
+    "#mfm input[type=checkbox]{width:18px;height:18px;padding:0}" +
+    "#mfm label{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:13px;color:inherit}" +
+    "#mfm .bar input{width:66px}" +
+    "#mfm .set select{max-width:120px;padding:5px 8px}" +
+    "#mfm .pl select{width:auto;flex:1;min-width:0}" +
+    /* হোম পাতার বড় কার্ড */
+    "#mfm-card{display:flex;align-items:center;gap:12px;width:100%;margin:12px 0;padding:14px 16px;border:2px solid #d8b64a;border-radius:16px;background:linear-gradient(135deg,#145132,#1f7d4e 60%,#2a8f5c);color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(20,81,50,.35)}" +
+    "#mfm-card .ci{font-size:38px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}" +
+    "#mfm-card .ct{flex:1;min-width:0}" +
+    "#mfm-card b{display:block;font-size:18px;color:#fff1b8}" +
+    "#mfm-card small{display:block;margin-top:2px;font-size:13px;opacity:.92}" +
+    "#mfm-card .cg{font-size:22px;color:#f4c542}";
   document.head.appendChild(st);
   var fl = document.createElement("link");
   fl.rel = "stylesheet";
@@ -111,7 +136,7 @@
     '<select id="mfm-juz"></select>' +
     '<button id="mfm-dl">⬇ অফলাইনে নামান</button>' +
     '</div>' +
-    '<div class="pwrap" id="mfm-w"><div class="pg"><div id="mfm-t"></div></div><div class="trs" id="mfm-trs"></div></div>' +
+    '<div class="pwrap" id="mfm-w"><div class="pg"><i class="mcn mc1"></i><i class="mcn mc2"></i><i class="mcn mc3"></i><i class="mcn mc4"></i><div class="pin"><div class="mph" id="mfm-ph"></div><div id="mfm-t"></div><div class="pf"><span id="mfm-pf"></span></div></div></div><div class="trs" id="mfm-trs"></div></div>' +
     '<div class="pst" id="mfm-st"></div>' +
     '<div class="pl">' +
     '<button id="mfm-pp" aria-label="চালান">▶</button>' +
@@ -130,11 +155,11 @@
     var a = PG.ayahs, h = '<div class="tx">';
     a.forEach(function (x, i) {
       if (x.numberInSurah === 1) {
-        h += '</div><div class="sh">' + esc(x.surah.name) + "</div>";
+        h += '</div><div class="msh">' + esc(x.surah.name) + "</div>";
         if (x.surah.number !== 1 && x.surah.number !== 9) h += '<div class="bs">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>';
         h += '<div class="tx">';
       }
-      h += '<span class="ay" data-i="' + i + '">' + esc(clean(x)) + ' <span class="no">﴿' + ad(x.numberInSurah) + "﴾</span></span> ";
+      h += '<span class="ay" data-i="' + i + '">' + esc(clean(x)) + ' <span class="no">' + ad(x.numberInSurah) + "</span></span> ";
     });
     h += "</div>";
     var t = $("t");
@@ -142,6 +167,8 @@
     t.style.fontSize = S.fs + "px";
     var f = a[0];
     $("info").textContent = "পারা " + bd(f.juz) + " · " + f.surah.name + " · পৃষ্ঠা " + bd(PG.n);
+    $("ph").innerHTML = "<b>" + esc(f.surah.name) + "</b><span>الجزء " + ad(f.juz) + "</span>";
+    $("pf").textContent = bd(PG.n);
     var trs = $("trs");
     if (S.tr) {
       trs.innerHTML = a.map(function (x) {
@@ -331,6 +358,43 @@
     stopAudio();
   }
   btn.onclick = openIt;
+
+  // হোম পাতার ওপরে বড় কার্ড (অ্যাপ প্রতিবার পাতা নতুন আঁকে, তাই লক্ষ রাখা হয়)
+  function cardHtml() {
+    var last = parseInt(ls("mfm-page"), 10);
+    return '<span class="ci">📖</span><span class="ct"><b>পৃষ্ঠা অনুযায়ী কুরআন</b><small>৬০৪ পৃষ্ঠা · কারী বেছে তেলাওয়াত শুনুন' +
+      (last > 1 ? " · চালিয়ে যান: পৃষ্ঠা " + bd(last) : "") + '</small></span><span class="cg">◀</span>';
+  }
+  function mountCard() {
+    var app = document.getElementById("app");
+    if (!app || app.querySelector("#mfm-card")) return;
+    var anchor = app.querySelector(".hc");
+    if (!anchor || !app.querySelector("#nxt")) return; // শুধু মূল (হাব) পাতায়
+    var c = document.createElement("button");
+    c.id = "mfm-card";
+    c.innerHTML = cardHtml();
+    c.onclick = openIt;
+    anchor.parentNode.insertBefore(c, anchor);
+  }
+  function mountMenu() {
+    var drw = document.getElementById("drw");
+    if (!drw || drw.querySelector("#mfm-mi")) return;
+    var m = document.createElement("button");
+    m.className = "mi"; m.id = "mfm-mi";
+    m.textContent = "📖 পৃষ্ঠা অনুযায়ী কুরআন";
+    m.onclick = function () {
+      var d = document.getElementById("dov");
+      if (d) { try { d.click(); } catch (e) {} }
+      openIt();
+    };
+    var first = drw.querySelector(".mi");
+    if (first && first.nextSibling) drw.insertBefore(m, first.nextSibling); else drw.appendChild(m);
+  }
+  function watch() {
+    var app = document.getElementById("app");
+    mountCard(); mountMenu();
+    if (app && window.MutationObserver) new MutationObserver(function () { mountCard(); }).observe(app, { childList: true });
+  }
   $("x").onclick = function () {
     var had = false;
     try { had = history.state && history.state.mfm; } catch (e) {}
@@ -383,8 +447,8 @@
 
   au.addEventListener("pause", function () { if (!playing && !paused) say(""); });
 
-  function mount() { document.body.appendChild(btn); document.body.appendChild(ov); }
+  function mount() { document.body.appendChild(ov); watch(); }
   if (document.body) mount(); else document.addEventListener("DOMContentLoaded", mount);
 
-  window.__mfm = { go: go, S: S }; // পরীক্ষার সুবিধার জন্য
+  window.__mfm = { go: go, S: S, open: openIt }; // পরীক্ষার সুবিধার জন্য
 })();
