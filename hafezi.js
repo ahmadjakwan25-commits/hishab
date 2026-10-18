@@ -548,25 +548,27 @@
   });
   window.addEventListener("resize", function () { if (opened && PAGES) go(S.page); });
 
-  /* ---------- কুরআন ফিচারের ভেতরে কার্ড (সবার ওপরে) ---------- */
-  function cardHtml() {
-    var p = parseInt(ls("hfz-page"), 10);
-    return '<span class="ci">🕌</span><span class="ct"><b>তেলাওয়াত</b><small>হাফেজী ধাঁচের ১৪ লাইনের কুরআন · আঙুলে পাতা উল্টান · তেলাওয়াত শুনুন' +
-      (p > 1 ? " · চালিয়ে যান: পৃষ্ঠা " + bd(p) : "") + '</small></span><span class="cg">◀</span>';
-  }
-  function mountCard() {
+  /* ---------- মূল পাতায়, "কুরআন" ঘরের ঠিক পাশে "তেলাওয়াত" ঘর ---------- */
+  function mountTile() {
     var app = document.getElementById("app");
     if (!app) return;
-    var anchor = app.querySelector(".qtabs");
-    if (!anchor) return;
-    var c = app.querySelector("#hz-card");
-    if (!c) { c = document.createElement("button"); c.id = "hz-card"; c.innerHTML = cardHtml(); c.onclick = openIt; }
-    if (anchor.nextSibling !== c) anchor.parentNode.insertBefore(c, anchor.nextSibling);
+    var q = app.querySelector('.g3 .tile[data-v="quran"]');
+    if (!q) return;
+    var t = app.querySelector("#hz-tile");
+    if (!t) {
+      t = document.createElement("button");
+      t.className = "tile";
+      t.id = "hz-tile";
+      t.innerHTML = "<span>🕌</span><b>১৪ লাইনের কুরআন</b>";
+      t.onclick = openIt;
+    }
+    var anchor = app.querySelector("#mfm-tile") || q;      // "তেলাওয়াত" ঘরের পরেই বসে
+    if (anchor.nextSibling !== t) anchor.parentNode.insertBefore(t, anchor.nextSibling);
   }
   function watch() {
     var app = document.getElementById("app");
-    mountCard();
-    if (app && window.MutationObserver) new MutationObserver(function () { mountCard(); }).observe(app, { childList: true });
+    mountTile();
+    if (app && window.MutationObserver) new MutationObserver(function () { mountTile(); }).observe(app, { childList: true });
   }
   function mount() { document.body.appendChild(ov); watch(); }
   if (document.body) mount(); else document.addEventListener("DOMContentLoaded", mount);
