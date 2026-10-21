@@ -449,6 +449,90 @@ html[data-dn="cozy"] :is(.panel,.tile){padding:19px!important;margin-bottom:16px
 .thx input[type=range]{width:100%}
 .thx .prv{display:flex;gap:8px;align-items:center;margin-top:6px}
 </style>
+<style id="x-wq">
+/* ===== মসজিদের নিচের কার্ড: চলমান ওয়াক্ত + লাঠি-প্রগ্রেস ===== */
+.hc .hcr{min-width:0;width:100%;flex:1 1 100%}
+.hc .hn{padding:12px 14px 10px;text-align:left;border-radius:20px}
+.hc .ws{padding:2px 0 8px;--w1:#1a86b8;--w2:#5fe0ff}
+.hc .ws+.ws{border-top:1px dashed rgba(255,224,138,.38);padding-top:12px;margin-top:4px}
+.hc .ws.t-nafl{--w1:#0f9d6a;--w2:#7dedb0}
+.hc .ws.t-ban{--w1:#e0562f;--w2:#ffb347;background:linear-gradient(90deg,rgba(255,90,60,.24),transparent 85%);border-radius:14px;padding-left:8px;padding-right:8px}
+.hc .wsh{display:flex;align-items:center;gap:10px}
+.hc .wi{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.42),rgba(255,255,255,.08));box-shadow:0 0 0 2px rgba(217,179,74,.8)}
+.hc .t-ban .wi{box-shadow:0 0 0 2px #ff8a65}
+.hc .wn{flex:1;min-width:0;line-height:1.3}
+.hc .wn b{display:block;font-size:18px;color:#ffe08a}
+.hc .t-ban .wn b{color:#ffd9cc}
+.hc .wn small{display:block;color:rgba(255,255,255,.85);font-size:12px}
+.hc .wr{text-align:right;line-height:1.25}
+.hc .hn .wr b{display:block;font-size:15px;color:#fff}
+.hc .wr small{font-size:11px;color:rgba(255,255,255,.78)}
+.hc .wb{position:relative;height:24px;margin:11px 6px 8px 2px;border-radius:13px;border:2px solid rgba(217,179,74,.85);background:linear-gradient(180deg,rgba(0,12,35,.65),rgba(0,35,80,.4));box-shadow:inset 0 3px 7px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.18)}
+.hc .wb::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),rgba(255,255,255,.2) calc(10% - 1px) 10%)}
+.hc .wf{position:relative;height:100%;min-width:16px;max-width:100%;border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.4),rgba(255,255,255,0) 55%),linear-gradient(90deg,var(--w1),var(--w2));box-shadow:0 0 14px var(--w2);transition:width 1s linear}
+.hc .wf::before{content:"";position:absolute;inset:0;border-radius:inherit;background:repeating-linear-gradient(115deg,rgba(255,255,255,.22) 0 7px,transparent 7px 14px);background-size:28px 100%;animation:wfm 1.6s linear infinite}
+.hc .wf::after{content:"";position:absolute;right:-8px;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:50%;z-index:2;background:radial-gradient(circle at 35% 30%,#fff,#ffe08a 55%,#d9a21f);box-shadow:0 0 0 3px rgba(255,224,138,.35),0 0 14px rgba(255,224,138,.95)}
+@keyframes wfm{to{background-position:28px 0}}
+.hc .wt{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.9)}
+.hc .wt em{font-style:normal;font-weight:700;color:#ffe08a;background:rgba(0,22,55,.45);padding:1px 11px;border-radius:999px}
+.hc .wloc{text-align:center;font-size:11.5px;color:rgba(255,255,255,.78);margin-top:4px}
+@media(prefers-reduced-motion:reduce){.hc .wf::before{animation:none}.hc .wf{transition:none}}
+</style>
+<style id="x-wq2">
+/* ===== কার্ড ছোট করা ও ট্যাপ করা যায় ===== */
+.hc[data-go]{cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.hc[data-go]:active{transform:scale(.985)}
+.hc{padding:8px;border-radius:20px}
+.hc .hn{padding:8px 11px 6px;border-radius:15px}
+.hc .ws{padding:0 0 4px}
+.hc .ws+.ws{padding-top:8px;margin-top:2px}
+.hc .ws.t-ban{padding-left:6px;padding-right:6px}
+.hc .wsh{gap:8px}
+.hc .wi{width:32px;height:32px;font-size:17px;box-shadow:0 0 0 1.5px rgba(217,179,74,.8)}
+.hc .wn b{font-size:15.5px}
+.hc .wn small{font-size:11px}
+.hc .hn .wr b{font-size:13.5px}
+.hc .wr small{font-size:10px}
+.hc .wb{height:15px;margin:7px 7px 5px 2px;border-radius:9px;border-width:1.5px}
+.hc .wf{border-radius:9px;min-width:12px}
+.hc .wf::after{width:15px;height:15px;margin-top:-7.5px;right:-7px}
+.hc .wt{font-size:11px}
+.hc .wt em{padding:0 9px;font-size:11px}
+.hc .wloc{font-size:10.5px;margin-top:0}
+
+/* ===== হিসাবের খাতা ও মুসাফির বাটন ===== */
+.tile.hk{position:relative;overflow:hidden;flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;padding:12px 10px;text-align:left;color:#fff;border-radius:20px;border:1.5px solid #d9b34a;box-shadow:0 12px 22px -14px rgba(0,0,0,.65);-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.tile.hk:active{transform:scale(.97)}
+.tile.hk.hk1{background:repeating-linear-gradient(0deg,transparent 0 17px,rgba(255,255,255,.1) 17px 18px),radial-gradient(circle at 100% 0,rgba(246,221,140,.4),transparent 55%),linear-gradient(135deg,#0b5a3c,#14845a 60%,#35b57e)}
+.tile.hk.hk2{background:radial-gradient(circle at 88% 120%,transparent 0 22px,rgba(255,255,255,.14) 22px 23px,transparent 23px 36px,rgba(255,255,255,.12) 36px 37px,transparent 37px 50px,rgba(255,255,255,.1) 50px 51px,transparent 51px),radial-gradient(circle at 100% 0,rgba(255,224,138,.45),transparent 55%),linear-gradient(135deg,#0d5b91,#1a86b8 60%,#4fb0d6)}
+.tile.hk>span{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.5),rgba(255,255,255,.12));box-shadow:0 0 0 2px rgba(246,221,140,.85),0 5px 10px -4px rgba(0,0,0,.5)}
+.tile.hk>div{min-width:0;line-height:1.3}
+.tile.hk b{display:block;font-size:15.5px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.tile.hk small{display:block;font-size:11px;color:rgba(255,255,255,.88);margin-top:1px}
+</style>
+<style id="x-slim">
+/* ===== আরও চিকন: সময়ের কার্ড, হিসাবের খাতা, মুসাফির ===== */
+.hc{padding:5px;border-radius:17px}
+.hc .hn{padding:5px 10px 3px;border-radius:13px}
+.hc .ws{padding:0 0 2px}
+.hc .ws+.ws{padding-top:5px;margin-top:1px}
+.hc .wsh{gap:7px}
+.hc .wi{width:27px;height:27px;font-size:14px}
+.hc .wn b{font-size:14.5px;line-height:1.2}
+.hc .wn small{font-size:10.5px;line-height:1.2}
+.hc .hn .wr b{font-size:12.5px}
+.hc .wr small{font-size:9.5px}
+.hc .wb{height:10px;margin:5px 6px 3px 2px;border-radius:6px;border-width:1px}
+.hc .wf{border-radius:6px;min-width:9px}
+.hc .wf::after{width:12px;height:12px;margin-top:-6px;right:-6px}
+.hc .wt{font-size:10.5px}
+.hc .wt em{padding:0 8px;font-size:10.5px}
+.hc .wloc{font-size:10px;margin-top:0;line-height:1.2}
+.tile.hk{padding:6px 10px;gap:9px;border-radius:16px;min-height:0}
+.tile.hk>span{width:32px;height:32px;font-size:17px}
+.tile.hk b{font-size:14.5px;line-height:1.2}
+.tile.hk small{font-size:10.5px;margin-top:0;line-height:1.2}
+</style>
 </head>
 <body>
 <header><button id="mb" aria-label="মেনু">☰</button><button id="nb" aria-label="নোটিফিকেশন">🔔<span id="nbadge"></span></button><h1>আল-মিফতাহ</h1><p id="hsub">ইবাদত ও হিসাব এক জায়গায়</p></header>
@@ -1538,6 +1622,8 @@ function tvDl(f){
   }catch(e){if(m)m.textContent='ডাউনলোড করা যায়নি'}};
  im.onerror=function(){URL.revokeObjectURL(u);if(m)m.textContent='ডাউনলোড করা যায়নি'};
  im.src=u}
+document.addEventListener('click',function(ev){var c=ev.target.closest&&ev.target.closest('.hc[data-go]');if(!c||view!=='hub')return;view='salat';pendingPic='';lmid=0;render();window.scrollTo(0,0)});
+document.addEventListener('keydown',function(ev){if(ev.key!=='Enter'&&ev.key!==' ')return;var c=ev.target.closest&&ev.target.closest('.hc[data-go]');if(!c||view!=='hub')return;ev.preventDefault();view='salat';pendingPic='';lmid=0;render();window.scrollTo(0,0)});
 $('app').addEventListener('click',function(ev){
  if(view!=='travel')return;
  var p=ev.target.closest('[data-td]');if(p){var nid=+p.getAttribute('data-td');if(nid!==tvSel){tvPend=[];tvMsg=''}tvSel=nid;tvRef();return}
@@ -1565,7 +1651,7 @@ function hubAfter(){
  if(view!=='qibla')qStop();
  if(tk1){clearInterval(tk1);tk1=null}
  if(tkc){clearInterval(tkc);tkc=null}
- if(view==='hub'||view==='salat'||(view==='wid'&&WK!==2))tk1=setInterval(function(){var e=$('nxt');if(e)e.innerHTML=nextHtml(view==='hub')},20000);
+ if(view==='hub'||view==='salat'||(view==='wid'&&WK!==2))tk1=setInterval(nxtPaint,10000);
  if(view==='hub'||(view==='wid'&&WK!==2)){clockTick();tkc=setInterval(clockTick,1000)}
  if(view==='surah')loadSurah();
  else if(view==='hadith')hadithInit();
@@ -1750,7 +1836,31 @@ function clockTick(){skyTick();
  var n=nowTz(locInfo().tz),hh=n.getUTCHours(),mm=n.getUTCMinutes(),ss=n.getUTCSeconds();
  d.textContent=bd(('0'+(hh%12||12)).slice(-2)+':'+('0'+mm).slice(-2)+':'+('0'+ss).slice(-2))+' '+pPeriod(hh);
 }
-function nextHtml(w){var p=nextP(),c=curW(),m=w?'color:rgba(255,255,255,.88)':'color:var(--mut)';return '<b style="font-size:17px">'+pName(p.k)+' · '+mfFmt(p.at)+'</b><br><small style="'+m+'">'+mfLeft(p.left)+' বাকি · '+esc(locInfo().name)+'</small>'+(c?'<br><small style="'+m+'">চলছে: '+pName(c.k)+' · শেষ '+mfFmt(c.e)+'</small>':'')}
+function wsItems(){
+ var t=todayTimes(),nf=tmrFajr(),dl=t.maghrib-t.sunrise,zs=t.dhuhr-6/60,ch=t.sunrise+dl/4,n=nowTz(locInfo().tz),h=n.getUTCHours()+n.getUTCMinutes()/60+n.getUTCSeconds()/3600,r=[];
+ var WI={fajr:'🌄',dhuhr:'☀️',asr:'🌤️',maghrib:'🌇',isha:'🌙'};
+ function add(id,ty,ic,nm,tag,a,b){var x=h;if(!(x>=a&&x<b)){x=h+24;if(!(x>=a&&x<b))return}r.push({id:id,ty:ty,ic:ic,nm:nm,tag:tag,a:a,b:b,p:(x-a)/(b-a),left:b-x})}
+ waqtList().forEach(function(w){add('f'+w.k,'fard',WI[w.k],pName(w.k)+' ওয়াক্ত','ফরজ নামাজের সময়',w.s,w.e)});
+ add('n1','nafl','🌙','তাহাজ্জুদ','নফল নামাজের সময়',t.maghrib+(nf-t.maghrib)*2/3,nf);
+ add('n2','nafl','🌅','ইশরাক','নফল নামাজের সময়',t.sunrise+15/60,ch);
+ add('n3','nafl','⛅','চাশত','নফল নামাজের সময়',ch,zs);
+ add('n4','nafl','🌆','আওয়াবীন','নফল নামাজের সময়',t.maghrib,t.isha);
+ add('b1','ban','🌄','সূর্যোদয়','নামাজ পড়া নিষিদ্ধ সময়',t.sunrise,t.sunrise+15/60);
+ add('b2','ban','🔆','দ্বিপ্রহর','নামাজ পড়া নিষিদ্ধ সময়',zs,t.dhuhr);
+ add('b3','ban','🌇','সূর্যাস্ত','নামাজ পড়া নিষিদ্ধ সময়',t.maghrib-15/60,t.maghrib);
+ return r;
+}
+function wsRow(k){var p=Math.max(0,Math.min(100,k.p*100));return '<div class="ws t-'+k.ty+'"><div class="wsh"><span class="wi">'+k.ic+'</span><div class="wn"><b>'+k.nm+'</b><small>'+k.tag+'</small></div><div class="wr"><b>'+mfLeft(k.left)+'</b><small>বাকি</small></div></div><div class="wb"><div class="wf" style="width:'+p.toFixed(1)+'%"></div></div><div class="wt"><span>শুরু '+mfFmt(k.a)+'</span><em>'+bd(Math.round(p))+'%</em><span>শেষ '+mfFmt(k.b)+'</span></div></div>'}
+function nextHtml(w){
+ var it=wsItems(),loc='<div class="wloc">📍 '+esc(locInfo().name)+'</div>';
+ if(!it.length){var p=nextP();return '<div class="wsw" data-sig="none"><div class="ws t-fard"><div class="wsh"><span class="wi">🕌</span><div class="wn"><b>পরের ওয়াক্ত: '+pName(p.k)+'</b><small>'+mfFmt(p.at)+'</small></div><div class="wr"><b>'+mfLeft(p.left)+'</b><small>বাকি</small></div></div></div></div>'+loc}
+ return '<div class="wsw" data-sig="'+it.map(function(k){return k.id}).join('|')+'">'+it.map(wsRow).join('')+'</div>'+loc;
+}
+function nxtPaint(){
+ var e=$('nxt');if(!e)return;var it=wsItems(),sig=it.map(function(k){return k.id}).join('|')||'none',w=e.firstElementChild;
+ if(it.length&&w&&w.getAttribute('data-sig')===sig){var rows=w.querySelectorAll('.ws');it.forEach(function(k,i){var r=rows[i];if(!r)return;var p=Math.max(0,Math.min(100,k.p*100));r.querySelector('.wf').style.width=p.toFixed(1)+'%';r.querySelector('.wr b').textContent=mfLeft(k.left);r.querySelector('.wt em').textContent=bd(Math.round(p))+'%'})}
+ else e.innerHTML=nextHtml(true);
+}
 var NMB=`আব্দুল্লাহ:আল্লাহর বান্দা
 আব্দুর রহমান:পরম দয়ালুর বান্দা
 আব্দুল কাদির:ক্ষমতাবানের বান্দা
@@ -2638,7 +2748,7 @@ $('app').addEventListener('click',function(ev){var b=ev.target.closest&&ev.targe
  else if(c==='ct'){CA=null;render()}});
 $('app').addEventListener('input',function(ev){var t=ev.target;if(t.id==='nmq'){NM.q=t.value;var l=$('nml');if(l)l.innerHTML=nmList()}else if(t.id==='asq'){AQ=t.value;var s=$('asl');if(s)s.innerHTML=asList()}});
 function hubHome(){
- var h=mosque()+'<div class="hc"><div class="hcr"><div id="nxt" class="hn">'+nextHtml(true)+'</div></div></div><div class="grid" style="margin-top:12px"><button class="tile hk" data-v="home" style="margin-top:0"><span>📒</span><b>হিসাবের খাতা</b></button><button class="tile hk" data-v="travel" style="margin-top:0"><span>🗺️</span><b>মুসাফির</b></button></div><div class="g3">';
+ var h=mosque()+'<div class="hc" data-go="salat" role="button" tabindex="0" aria-label="নামাজের সময়সূচি দেখুন"><div class="hcr"><div id="nxt" class="hn">'+nextHtml(true)+'</div></div></div><div class="grid" style="margin-top:12px"><button class="tile hk hk1" data-v="home" style="margin-top:0"><span>📒</span><div><b>হিসাবের খাতা</b><small>আয়, ব্যয়, দেনা-পাওনা</small></div></button><button class="tile hk hk2" data-v="travel" style="margin-top:0"><span>🗺️</span><div><b>মুসাফির</b><small>জেলা ভ্রমণ ও ছবি</small></div></button></div><div class="g3">';
  HT.forEach(function(t){h+='<button class="tile" data-v="'+t[0]+'"><span>'+t[1]+'</span><b>'+t[2]+'</b></button>'});
  return h+'<button class="tile" data-v="widm"><span>📲</span><b>হোম স্ক্রিন উইজেট</b></button></div>'+illus();
 }
