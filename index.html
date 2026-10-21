@@ -699,7 +699,7 @@ var RDS=[['sq','তীক্ষ্ণ'],['','স্বাভাবিক'],['rd'
 var CSS_=[['','সাধারণ'],['shadow','ছায়া'],['glass','কাচ'],['flat','সমতল'],['line','শুধু রেখা']];
 var HDS=[['','সলিড'],['grad','গ্রেডিয়েন্ট'],['slim','ছোট'],['light','হালকা']];
 var DNS=[['tight','ঘন'],['','স্বাভাবিক'],['cozy','খোলামেলা']];
-var THK=['ac','cu','md','amo','bgc','pt','ff','fs','rd','cs','hd','dn'];
+var THK=['ac','cu','md','amo','bgc','pt','fs','rd','cs','hd','dn'];
 function hsl2hex(h,s,l){s/=100;l/=100;var a=s*Math.min(l,1-l),f=function(n){var k=(n+h/30)%12,c=l-a*Math.max(-1,Math.min(k-3,9-k,1));return Math.round(255*c).toString(16).padStart(2,'0')};return '#'+f(0)+f(8)+f(4)}
 function hex2hsl(x){var r=parseInt(x.slice(1,3),16)/255,g=parseInt(x.slice(3,5),16)/255,b=parseInt(x.slice(5,7),16)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,h=0,s=0,d=mx-mn;if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h=Math.round(h*60);if(h<0)h+=360}return [h,Math.round(s*100),Math.round(l*100)]}
 function lumOf(x){var c=[1,3,5].map(function(i){var v=parseInt(x.substr(i,2),16)/255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2]}
@@ -724,8 +724,8 @@ function applySet(){
  if(s.md==='light'||s.md==='dark')r.setAttribute('data-theme',s.md);else if(T0)r.setAttribute('data-theme',T0);else r.removeAttribute('data-theme');
  var set=function(a,val){if(val)r.setAttribute('data-'+a,val);else r.removeAttribute('data-'+a)};
  ['pt','rd','cs','hd','dn'].forEach(function(a){set(a,s[a])});
- var f=FF.filter(function(x){return x[0]&&x[0]===s.ff})[0];
- if(f){r.setAttribute('data-ff',f[0]);r.style.setProperty('--ffm',"'Baloo Da 2',"+f[2]+",'Hind Siliguri','Noto Sans Bengali',sans-serif")}else r.removeAttribute('data-ff');
+ var ct=CT;if(!ct){try{ct=JSON.parse(lsGet('mf-ct'))}catch(e){}}var fk=ct&&ct.font,f=FF.filter(function(x){return x[0]&&x[0]===fk})[0];
+ if(f){r.setAttribute('data-ff',f[0]);r.style.setProperty('--ffm',f[2]+",'Hind Siliguri','Noto Sans Bengali',sans-serif")}else r.removeAttribute('data-ff');
  var z=+s.fs;if(z&&z!==100&&z>=80&&z<=140){r.setAttribute('data-fs','1');r.style.setProperty('--fsz',(z/100).toString())}else r.removeAttribute('data-fs');
  var m=document.querySelector('meta[name="theme-color"]');if(m){var g2=v['--g2'];m.setAttribute('content',g2?(/^hsl/.test(g2)?(function(){var a=g2.match(/[\d.]+/g);return hsl2hex(+a[0],+a[1],+a[2])})():g2):'#17603c')}
 }
@@ -744,7 +744,7 @@ function thHtml(){
  +'<div class="row3"><button class="chip'+(s.amo?' on':'')+'" data-th="amo:'+(s.amo?'':'1')+'">⚫ রাতে খাঁটি কালো (AMOLED)</button></div></div>';
  h+='<div class="panel thx"><b>🖼️ পেছনের দৃশ্য</b><label>পেছনের নকশা</label>'+thChips('pt',PT,s.pt)
  +'<div class="prv"><label style="margin:0">পেছনের রং</label><input type="color" id="thbg" value="'+(s.bgc||'#f1f5f2')+'">'+(s.bgc?'<button class="chip" data-th="bgc:">✕ বাদ</button>':'')+'</div></div>';
- h+='<div class="panel thx"><b>🔤 লেখা</b><label>ফন্ট</label>'+thChips('ff',FF,s.ff)
+ h+='<div class="panel thx"><b>🔤 লেখা</b><small style="color:var(--mut);display:block">ফন্ট শুধু পরিচালক (অ্যাপ নির্মাতা) ঠিক করেন।</small>'
  +'<label>লেখার আকার: <span id="thfsv">'+(+s.fs||100)+'%</span></label><input type="range" id="thfs" min="85" max="135" step="5" value="'+(+s.fs||100)+'"></div>';
  h+='<div class="panel thx"><b>🧩 আকৃতি ও সাজ</b><label>কোণা</label>'+thChips('rd',RDS,s.rd)+'<label>কার্ডের ধরন</label>'+thChips('cs',CSS_,s.cs)+'<label>মাথার অংশ (হেডার)</label>'+thChips('hd',HDS,s.hd)+'<label>ফাঁকা জায়গা</label>'+thChips('dn',DNS,s.dn)+'</div>';
  h+='<div class="panel thx"><b>🔁 থিম ব্যাকআপ</b><div class="row3"><button class="chip" id="thcp">📋 কপি করুন</button><button class="chip" id="thps">📥 বসান</button><button class="chip" id="thrs" style="color:var(--red)">↺ সব আগের মতো</button></div><small style="color:var(--mut)">থিমের কোড কপি করে অন্য ফোনে বসিয়ে একই সাজ পাবেন।</small></div>';
@@ -1028,7 +1028,7 @@ function mfOff(){return '<div class="empty">ইন্টারনেট থে�
 function jget(urls){var i=0;return new Promise(function(res,rej){(function nx(){if(i>=urls.length)return rej();fetch(urls[i++]).then(function(r){if(!r.ok)throw 0;return r.json()}).then(res,nx)})()})}
 function dkey(d){d=d||new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
 function loadContent(cb){
- fetch('content.json?'+Date.now()).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){CT=j;lsSet('mf-ct',JSON.stringify(j));cb(j)}).catch(function(){var c={};try{c=JSON.parse(lsGet('mf-ct'))||{}}catch(e){}CT=c;cb(c)});
+ fetch('content.json?'+Date.now()).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){CT=j;lsSet('mf-ct',JSON.stringify(j));applySet();cb(j)}).catch(function(){var c={};try{c=JSON.parse(lsGet('mf-ct'))||{}}catch(e){}CT=c;cb(c)});
 }
 /* ---------- জেলা ও নামাজের সময় ---------- */
 var DIST=[['ঢাকা',23.8103,90.4125],['গাজীপুর',24.0023,90.4264],['নারায়ণগঞ্জ',23.6238,90.5],['নরসিংদী',23.9322,90.7151],['মানিকগঞ্জ',23.8644,90.0047],['মুন্সিগঞ্জ',23.5422,90.5305],['টাঙ্গাইল',24.2513,89.9167],['কিশোরগঞ্জ',24.4449,90.7766],['ফরিদপুর',23.607,89.8429],['রাজবাড়ী',23.7574,89.6444],['গোপালগঞ্জ',23.005,89.8266],['মাদারীপুর',23.1641,90.1896],['শরীয়তপুর',23.2423,90.4348],['চট্টগ্রাম',22.3569,91.7832],['কক্সবাজার',21.4272,92.0058],['কুমিল্লা',23.4607,91.1809],['ব্রাহ্মণবাড়িয়া',23.9608,91.1115],['চাঁদপুর',23.2332,90.6712],['লক্ষ্মীপুর',22.9425,90.8412],['নোয়াখালী',22.8696,91.0995],['ফেনী',23.0159,91.3976],['খাগড়াছড়ি',23.1193,91.9847],['রাঙ্গামাটি',22.6372,92.2],['বান্দরবান',22.1953,92.2184],['সিলেট',24.8949,91.8687],['মৌলভীবাজার',24.4829,91.7774],['হবিগঞ্জ',24.3745,91.4155],['সুনামগঞ্জ',25.0658,91.4073],['রাজশাহী',24.3745,88.6042],['চাঁপাইনবাবগঞ্জ',24.5965,88.2775],['নওগাঁ',24.7936,88.9318],['নাটোর',24.4206,89.0003],['বগুড়া',24.8465,89.3777],['জয়পুরহাট',25.0968,89.0227],['পাবনা',24.0064,89.2372],['সিরাজগঞ্জ',24.4534,89.7006],['রংপুর',25.7439,89.2752],['দিনাজপুর',25.6217,88.6354],['গাইবান্ধা',25.3297,89.543],['কুড়িগ্রাম',25.8054,89.6361],['লালমনিরহাট',25.9923,89.2847],['নীলফামারী',25.9318,88.856],['পঞ্চগড়',26.3411,88.5541],['ঠাকুরগাঁও',26.0337,88.4616],['খুলনা',22.8456,89.5403],['বাগেরহাট',22.6602,89.7859],['সাতক্ষীরা',22.7185,89.0705],['যশোর',23.1665,89.2081],['নড়াইল',23.1725,89.5126],['মাগুরা',23.4873,89.4199],['ঝিনাইদহ',23.5448,89.1539],['কুষ্টিয়া',23.9013,89.12],['চুয়াডাঙ্গা',23.6402,88.8418],['মেহেরপুর',23.7622,88.6318],['বরিশাল',22.701,90.3535],['ভোলা',22.6859,90.6482],['পটুয়াখালী',22.3596,90.3299],['পিরোজপুর',22.5791,89.9759],['ঝালকাঠি',22.6406,90.1987],['বরগুনা',22.0953,90.1121],['ময়মনসিংহ',24.7471,90.4203],['জামালপুর',24.9375,89.9372],['শেরপুর',25.0204,90.0152],['নেত্রকোনা',24.8703,90.7279]];
@@ -1646,8 +1646,9 @@ function adminHtml(){
   else h+='<label>'+f[1]+'</label><input id="af-'+f[0]+'" value="'+esc(cu[f[0]]||'')+'">';
  });
  h+='<button class="btn" data-h="ad:s">'+(adEd>=0?'আপডেট করুন':'সেভ করুন')+'</button>'+(adEd>=0?'<button class="btn" data-h="ad:c" style="background:var(--mut)">বাতিল</button>':'')+'<div id="adm" class="empty">'+esc(adMsg)+'</div></div><div class="panel"><b>বর্তমান তালিকা</b><div id="adl">'+mfLd()+'</div></div><div class="panel"><small style="color:var(--mut);display:block">সেভ করার ১–২ মিনিট পর সবার অ্যাপে নতুন লেখা দেখা যাবে। বড় PDF (২৫ এমবির বেশি) আপলোড না করে লিংক দিন।</small><button class="btn" data-h="ad:out" style="background:var(--red)">এই ফোন থেকে টোকেন মুছুন</button></div>';
- return h;
+ return h+adFontHtml();
 }
+function adFontHtml(){var f=(CT&&CT.font)||'';return '<div class="panel"><b>ফন্ট (সবার জন্য)</b><div class="row3" style="flex-wrap:wrap">'+FF.map(function(x){return '<button class="chip'+(f===x[0]?' on':'')+'" data-h="ad:ft:'+(x[0]||'def')+'">'+x[1]+'</button>'}).join('')+'</div><small style="color:var(--mut);display:block">সংখ্যাসহ সব লেখা এই ফন্টে হবে। ১–২ মিনিট পর সবার অ্যাপে বদলাবে।</small></div>'}
 function adTitle(x){return x.title||x.q||(x.bn||'').slice(0,30)||x.name||'(নামহীন)'}
 function adList(){
  var b=$('adl');if(!b)return;var a=(ADD&&ADD.data[adT])||[],h='';
@@ -1662,7 +1663,7 @@ function adminInit(){
 function adCommit(mut,msg){
  adSet('সেভ হচ্ছে…');
  return ghLoad().then(function(x){var d=x.data;Object.keys(ADN).forEach(function(k){d[k]=d[k]||[]});mut(d);
-  return ghSave(d,x.sha,msg).then(function(r){ADD={sha:r.content&&r.content.sha,data:d};CT=d;lsSet('mf-ct',JSON.stringify(d));adEd=-1;adMsg='✅ সেভ হয়েছে। ১–২ মিনিট পর সবার অ্যাপে দেখা যাবে।';if(view==='admin')render()})
+  return ghSave(d,x.sha,msg).then(function(r){ADD={sha:r.content&&r.content.sha,data:d};CT=d;lsSet('mf-ct',JSON.stringify(d));applySet();adEd=-1;adMsg='✅ সেভ হয়েছে। ১–২ মিনিট পর সবার অ্যাপে দেখা যাবে।';if(view==='admin')render()})
  }).catch(function(e){adSet('⚠️ সমস্যা: '+e.message)});
 }
 function adminAct(p){
@@ -1675,6 +1676,7 @@ function adminAct(p){
  }
  else if(c==='out'){lsDel('mf-gh');ADD=null;adMsg='';render()}
  else if(c==='hj'){adCommit(function(d){d.hj=+p[2]},'hijri adjust '+p[2])}
+ else if(c==='ft'){adCommit(function(d){if(p[2]&&p[2]!=='def')d.font=p[2];else delete d.font},'font '+p[2])}
  else if(c==='c'){adEd=-1;render()}
  else if(c==='e'){adEd=+p[2];render();window.scrollTo(0,0)}
  else if(c==='d'){
