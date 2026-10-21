@@ -343,15 +343,54 @@ body.wg header,body.wg #fab,body.wg #calc,body.wg #drw{display:none!important}
 #app[data-v="names"] #nml .item small{margin-top:2px}
 
 /* ---------- তাসবিহ ---------- */
-#app[data-v="tasbih"] .panel{position:relative;overflow:hidden;border:0;border-radius:28px;padding:18px 14px 20px;color:#fff;background:radial-gradient(circle at 50% 0,#1d8a63 0,#0f5a41 48%,#082f24 100%);box-shadow:0 18px 34px -18px rgba(8,47,36,.95)}
-#app[data-v="tasbih"] #tbl{color:#f6dd8c!important;font-size:24px!important;padding:6px 20px;border-radius:999px;display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(246,221,140,.4)}
-#app[data-v="tasbih"] #tbc{font-size:78px!important;line-height:1.1;margin:10px auto 2px!important;min-width:170px;border-radius:22px;background:rgba(0,0,0,.22);box-shadow:inset 0 3px 10px rgba(0,0,0,.4);padding:4px 16px;display:inline-block}
-#app[data-v="tasbih"] .empty{color:rgba(255,255,255,.82)}
-#app[data-v="tasbih"] button[data-h="tb:+"]{width:210px!important;height:210px!important;border:12px solid transparent!important;background:radial-gradient(circle at 34% 26%,#6ae6ac 0,#18a164 38%,#0b5a3c 72%,#073a28 100%) padding-box,conic-gradient(#f6dd8c var(--p,0deg),rgba(255,255,255,.16) 0) border-box!important;color:#fff!important;font-size:24px!important;box-shadow:0 16px 30px -8px rgba(0,0,0,.65),inset 0 -12px 20px rgba(0,0,0,.3),inset 0 7px 14px rgba(255,255,255,.3)!important;filter:drop-shadow(0 0 14px rgba(246,221,140,.3));transition:transform .08s;-webkit-tap-highlight-color:transparent;margin:10px 0 16px!important}
-#app[data-v="tasbih"] button[data-h="tb:+"]:active{transform:scale(.95)}
-#app[data-v="tasbih"] .chip{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3);padding:6px 14px;font-size:13px}
-#app[data-v="tasbih"] .row3{margin-top:8px}
-#app[data-v="tasbih"] .btn[data-h="tb:r"]{background:transparent!important;border:1.5px solid rgba(246,221,140,.7);color:#f6dd8c;border-radius:999px;margin-top:16px}
+#app[data-v="tasbih"]{--gold:#f6dd8c}
+.tbx{--t1:color-mix(in srgb,var(--g) 78%,#fff);--t2:var(--g);--t3:color-mix(in srgb,var(--g2) 62%,#000);position:relative;overflow:hidden;text-align:center;color:#fff;border-radius:32px;padding:18px 12px 16px;margin-bottom:12px;background:radial-gradient(120% 80% at 50% -8%,var(--t1) 0,var(--t2) 40%,var(--t3) 100%);box-shadow:0 22px 40px -20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.25)}
+.tbx[data-bg="night"]{--t1:#4a63d6;--t2:#1d2c78;--t3:#060a22}
+.tbx[data-bg="black"]{--t1:#333;--t2:#121212;--t3:#000}
+.tbx[data-bg="dusk"]{--t1:#f08a62;--t2:#8e3a6b;--t3:#220f33}
+.tbx::before{content:"";position:absolute;inset:0;opacity:.1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70'%3E%3Cpath d='M35 5l7 16 16-7-7 16 16 7-16 7 7 16-16-7-7 16-7-16-16 7 7-16-16-7 16-7-7-16 16 7z' fill='none' stroke='%23fff' stroke-width='1.2'/%3E%3C/svg%3E")}
+.tbx>*{position:relative}
+.tbx .tb-ar{font-family:'Amiri','Aref Ruqaa','Noto Naskh Arabic',serif;direction:rtl;text-align:center;font-size:34px;line-height:1.7;margin:0;color:var(--gold);text-shadow:0 0 18px rgba(246,221,140,.55),0 2px 4px rgba(0,0,0,.4)}
+.tbx .tb-tr{font-weight:700;font-size:19px;display:inline-block;padding:3px 18px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(246,221,140,.4)}
+.tbx .tb-mn{font-size:13px;opacity:.82;margin:6px 8px 0}
+.tb-ring{position:relative;width:min(310px,84vw);aspect-ratio:1;margin:6px auto 2px}
+.tb-ring svg{width:100%;height:100%;display:block;overflow:visible}
+.tbb{opacity:.28;transition:opacity .25s,transform .25s;transform-box:fill-box;transform-origin:center}
+.tbb.on{opacity:1;filter:drop-shadow(0 0 4px rgba(255,240,170,.85))}
+.tbb.cur{transform:scale(1.45);animation:tbpulse 1.4s ease-in-out infinite}
+@keyframes tbpulse{50%{transform:scale(1.75)}}
+.tb-arc{transition:stroke-dashoffset .35s ease;filter:drop-shadow(0 0 6px rgba(246,221,140,.8))}
+.tb-btn{position:absolute;left:19%;top:19%;width:62%;height:62%;border-radius:50%;border:2px solid rgba(246,221,140,.6);color:#fff;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;-webkit-tap-highlight-color:transparent;background:radial-gradient(circle at 34% 24%,rgba(255,255,255,.4) 0,rgba(255,255,255,.08) 45%,rgba(0,0,0,.18) 100%),radial-gradient(circle,var(--t2),var(--t3));box-shadow:0 14px 26px -8px rgba(0,0,0,.7),inset 0 -10px 18px rgba(0,0,0,.35),inset 0 4px 10px rgba(255,255,255,.25),0 0 30px -4px rgba(246,221,140,.35);transition:transform .08s}
+.tb-btn:active{transform:scale(.94)}
+.tb-btn span{font-size:clamp(44px,17vw,68px);font-weight:700;line-height:1.05;text-shadow:0 3px 8px rgba(0,0,0,.5)}
+.tb-btn small{font-size:12px;opacity:.8;letter-spacing:.5px}
+.tb-btn.pop span{animation:tbpop .22s}
+@keyframes tbpop{40%{transform:scale(1.18)}}
+.tbx.done{animation:tbglow 1.3s}
+@keyframes tbglow{30%{box-shadow:0 0 0 6px rgba(246,221,140,.7),0 0 60px 10px rgba(246,221,140,.6)}}
+.tb-sp{position:absolute;left:50%;top:50%;color:var(--gold);font-size:18px;pointer-events:none;animation:tbsp 1.1s ease-out forwards}
+@keyframes tbsp{to{transform:translate(var(--dx),var(--dy)) scale(.3) rotate(240deg);opacity:0}}
+.tb-st{display:flex;gap:8px;justify-content:center;margin:8px 0 4px}
+.tb-st>div{flex:1;max-width:105px;background:rgba(0,0,0,.24);border-radius:16px;padding:6px 4px;box-shadow:inset 0 2px 6px rgba(0,0,0,.3)}
+.tb-st b{display:block;font-size:20px;line-height:1.2}
+.tb-st small{font-size:11px;opacity:.75}
+.tbx .empty{color:rgba(255,255,255,.82);padding:4px}
+.tb-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.tbx .chip,.tbo .chip{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 13px;font-size:13px}
+.tbx .chip.on{background:var(--gold);color:#3a2a00;border-color:var(--gold);font-weight:700}
+.tb-dk{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.tb-dk button{flex:none;scroll-snap-align:start;min-width:132px;max-width:170px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:16px;color:#fff;font:inherit;font-size:12px;padding:6px 8px;cursor:pointer;text-align:center}
+.tb-dk button.on{background:rgba(246,221,140,.22);border-color:var(--gold)}
+.tb-dk .ar{font-size:19px;line-height:1.6;margin:0;text-align:center;color:var(--gold);font-family:'Amiri',serif}
+.tb-dk b{display:block;font-size:12px}
+.tb-dk i{font-style:normal;font-size:11px;opacity:.75}
+.tb-wk{display:flex;gap:6px;align-items:flex-end;justify-content:center;height:62px;margin-top:6px}
+.tb-wk div{width:30px;text-align:center;font-size:10px;opacity:.9}
+.tb-wk i{display:block;border-radius:6px 6px 2px 2px;background:linear-gradient(var(--gold),rgba(246,221,140,.35));min-height:3px;margin-bottom:2px}
+.tbo .dot{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:4px}
+.tbo .chip{color:var(--ink);background:none;border:1px solid var(--line)}
+.tbo .chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+@media(prefers-reduced-motion:reduce){.tbb.cur,.tbx.done,.tb-sp{animation:none}}
 
 /* ---------- আসমাউল হুসনা ---------- */
 #app[data-v="asma"] .panel:has(#asq){border-radius:22px;border-top:4px solid var(--gold);background:linear-gradient(180deg,color-mix(in srgb,var(--inc) 10%,var(--card)),var(--card))}
@@ -369,6 +408,46 @@ body.wg header,body.wg #fab,body.wg #calc,body.wg #drw{display:none!important}
 #app[data-v="asma"] #asl .item b{font-size:16px;display:block}
 #app[data-v="asma"] #asl .item small{font-size:12.5px;line-height:1.45;margin-top:2px}
 @media(max-width:340px){#app[data-v="asma"] #asl{grid-template-columns:1fr}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600;700&family=Tiro+Bangla&family=Anek+Bangla:wght@400;600;700&display=swap" rel="stylesheet">
+<style id="thx">/* লেখা: ডান-বাম সমান */
+:where(#app,#drw) :where(p,li,small,.tr,.mn,.item>div,.item small){text-align:justify;text-justify:inter-word;hyphens:auto;overflow-wrap:anywhere}
+:where(#app) :where(.empty,.chip,.btn,button,.tb-st small,.tb-dk b,.tb-dk i,.tb-wk div,.tb-btn small) {text-align:center}
+.tbx .tb-mn{text-align:center}
+html[data-ff] body{font-family:var(--ffm)}
+html[data-ff] button,html[data-ff] input,html[data-ff] select,html[data-ff] textarea{font-family:inherit}
+html[data-fs] #app,html[data-fs] header{zoom:var(--fsz)}
+html[data-pt="dots"] body{background-image:radial-gradient(color-mix(in srgb,var(--ink) 16%,transparent) 1.3px,transparent 1.6px);background-size:18px 18px;background-attachment:fixed}
+html[data-pt="grid"] body{background-image:linear-gradient(color-mix(in srgb,var(--ink) 7%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 7%,transparent) 1px,transparent 1px);background-size:22px 22px;background-attachment:fixed}
+html[data-pt="lines"] body{background-image:repeating-linear-gradient(45deg,color-mix(in srgb,var(--ink) 6%,transparent) 0 1px,transparent 1px 13px);background-attachment:fixed}
+html[data-pt="star"] body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cpath d='M32 5l6.5 15 15-6.5-6.5 15 15 6.5-15 6.5 6.5 15-15-6.5-6.5 15-6.5-15-15 6.5 6.5-15-15-6.5 15-6.5-6.5-15 15 6.5z' fill='%23888' fill-opacity='.11'/%3E%3C/svg%3E");background-attachment:fixed}
+html[data-pt="glow"] body{background-image:radial-gradient(circle at 12% 0,color-mix(in srgb,var(--g) 30%,transparent),transparent 45%),radial-gradient(circle at 95% 55%,color-mix(in srgb,var(--g2) 26%,transparent),transparent 42%);background-attachment:fixed}
+html[data-rd="sq"] :is(.panel,.tile,.item,.btn,input,select,textarea,.chip,details){border-radius:4px!important}
+html[data-rd="rd"] :is(.panel,.tile,.item){border-radius:26px!important}
+html[data-rd="rd"] :is(.btn,input,select){border-radius:16px!important}
+html[data-rd="pill"] :is(.panel,.tile,.item){border-radius:34px!important}
+html[data-rd="pill"] :is(.btn,.chip,input,select){border-radius:999px!important}
+html[data-rd="pill"] textarea{border-radius:20px!important}
+html[data-cs="shadow"] :is(.panel,.tile){border-color:transparent!important;box-shadow:0 10px 24px -12px rgba(0,0,0,.4)!important}
+html[data-cs="glass"] :is(.panel,.tile){background:color-mix(in srgb,var(--card) 58%,transparent)!important;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border:1px solid color-mix(in srgb,var(--ink) 13%,transparent)!important}
+html[data-cs="glass"] body:not([style*="background-image"]){background-image:radial-gradient(circle at 12% 0,color-mix(in srgb,var(--g) 30%,transparent),transparent 45%),radial-gradient(circle at 95% 55%,color-mix(in srgb,var(--g2) 26%,transparent),transparent 42%);background-attachment:fixed}
+html[data-cs="flat"] :is(.panel,.tile){border:0!important;box-shadow:none!important;background:color-mix(in srgb,var(--card) 72%,var(--bg))!important}
+html[data-cs="line"] :is(.panel,.tile){background:transparent!important;border:2px solid var(--line)!important;box-shadow:none!important}
+html[data-hd="grad"] header{background:linear-gradient(135deg,var(--g),var(--g2))}
+html[data-hd="slim"] header{padding:9px 14px 16px}
+html[data-hd="slim"] header h1{font-size:18px}
+html[data-hd="slim"] header p{display:none}
+html[data-hd="light"] header{background:transparent;color:var(--ink);border-bottom:2px solid var(--g)}
+html[data-dn="tight"] :is(.panel,.tile){padding:9px!important;margin-bottom:7px!important}
+html[data-dn="cozy"] :is(.panel,.tile){padding:19px!important;margin-bottom:16px!important}
+.thx .sw{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.thx .swb{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;box-shadow:0 0 0 1px var(--line)}
+.thx .swb.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--g)}
+.thx .row3{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.thx .chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.thx input[type=color]{width:56px;height:38px;padding:2px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.thx input[type=range]{width:100%}
+.thx .prv{display:flex;gap:8px;align-items:center;margin-top:6px}
 </style>
 </head>
 <body>
@@ -611,13 +690,81 @@ function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
 function getSet(){try{return JSON.parse(lsGet('hishab-set'))||{}}catch(e){return {}}}
+var THV=['--g','--g2','--inc','--bg','--card','--ink','--mut','--line'];
+var LEG=['green','blue','purple','orange','rose'];
+var PR=[['teal','সবুজাভ নীল',178,65],['gold','সোনালি',42,78],['maroon','মেরুন',350,62],['indigo','ইন্ডিগো',235,55],['brown','কফি',25,38],['slate','ছাই',215,16],['lime','কচি পাতা',92,52],['sky','আকাশি',196,80],['plum','বরই',300,40]];
+var FF=[['','ডিফল্ট',''],['hs','হিন্দ সিলিগুড়ি',"'Hind Siliguri'"],['ns','নোটো সান্স',"'Noto Sans Bengali'"],['nf','নোটো সেরিফ',"'Noto Serif Bengali'"],['tb','টিরো বাংলা',"'Tiro Bangla'"],['an','আনেক বাংলা',"'Anek Bangla'"]];
+var PT=[['','নেই'],['dots','বিন্দু'],['grid','ঘর'],['lines','তির্যক রেখা'],['star','ইসলামি তারা'],['glow','আভা']];
+var RDS=[['sq','তীক্ষ্ণ'],['','স্বাভাবিক'],['rd','গোল'],['pill','অতি গোল']];
+var CSS_=[['','সাধারণ'],['shadow','ছায়া'],['glass','কাচ'],['flat','সমতল'],['line','শুধু রেখা']];
+var HDS=[['','সলিড'],['grad','গ্রেডিয়েন্ট'],['slim','ছোট'],['light','হালকা']];
+var DNS=[['tight','ঘন'],['','স্বাভাবিক'],['cozy','খোলামেলা']];
+var THK=['ac','cu','md','amo','bgc','pt','ff','fs','rd','cs','hd','dn'];
+function hsl2hex(h,s,l){s/=100;l/=100;var a=s*Math.min(l,1-l),f=function(n){var k=(n+h/30)%12,c=l-a*Math.max(-1,Math.min(k-3,9-k,1));return Math.round(255*c).toString(16).padStart(2,'0')};return '#'+f(0)+f(8)+f(4)}
+function hex2hsl(x){var r=parseInt(x.slice(1,3),16)/255,g=parseInt(x.slice(3,5),16)/255,b=parseInt(x.slice(5,7),16)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,h=0,s=0,d=mx-mn;if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h=Math.round(h*60);if(h<0)h+=360}return [h,Math.round(s*100),Math.round(l*100)]}
+function lumOf(x){var c=[1,3,5].map(function(i){var v=parseInt(x.substr(i,2),16)/255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2]}
+function isDk(s){var m=s.md;if(m==='dark')return true;if(m==='light')return false;if(T0==='dark')return true;if(T0==='light')return false;return !!(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches)}
+function thPal(h,sa,dk){
+ var H=function(a,b,c){return 'hsl('+a+','+Math.round(b)+'%,'+c+'%)'};
+ if(dk)return {'--bg':H(h,Math.min(sa,30),8),'--card':H(h,Math.min(sa,26),13),'--ink':H(h,25,92),'--mut':H(h,12,68),'--line':H(h,18,22),'--g':H(h,sa,58),'--g2':H(h,sa,45),'--inc':H(h,sa,58)};
+ var l=(h>35&&h<70)?33:(h>70&&h<110)?29:32;
+ return {'--bg':H(h,Math.min(sa,30)*.8,95),'--card':'#fff','--ink':H(h,30,12),'--mut':H(h,10,38),'--line':H(h,18,87),'--g':H(h,sa,l),'--g2':H(h,sa,l-8),'--inc':H(h,sa,l)}}
 function applySet(){
- var s=getSet(),r=document.documentElement;
- if(s.ac&&s.ac!=='green')r.setAttribute('data-accent',s.ac);else r.removeAttribute('data-accent');
+ var s=getSet(),r=document.documentElement,dk=isDk(s),i;
+ THV.concat(['--ffm','--fsz']).forEach(function(k){r.style.removeProperty(k)});
+ var hs=null,leg=LEG.indexOf(s.ac||'green')>=0;
+ if(s.cu&&/^#[0-9a-f]{6}$/i.test(s.cu)){var q=hex2hsl(s.cu);hs=[q[0],Math.max(q[1],8)]}
+ else if(s.ac&&!leg){PR.forEach(function(p){if(p[0]===s.ac)hs=[p[2],p[3]]})}
+ var v={};
+ if(hs)v=thPal(hs[0],hs[1],dk);
+ if(!hs&&s.ac&&s.ac!=='green'&&leg)r.setAttribute('data-accent',s.ac);else r.removeAttribute('data-accent');
+ if(s.bgc&&/^#[0-9a-f]{6}$/i.test(s.bgc)){v['--bg']=s.bgc;if(lumOf(s.bgc)<.35){v['--card']='color-mix(in srgb,'+s.bgc+' 86%,#fff)';v['--ink']='#f2f2f2';v['--mut']='#b8b8b8';v['--line']='color-mix(in srgb,'+s.bgc+' 78%,#fff)'}else{v['--ink']=dk?'#14181a':'';v['--card']='#fff'}}
+ if(s.amo&&dk&&!s.bgc){v['--bg']='#000';v['--card']='#0b0b0b';v['--line']='#242424'}
+ for(var k in v){if(v[k])r.style.setProperty(k,v[k])}
  if(s.md==='light'||s.md==='dark')r.setAttribute('data-theme',s.md);else if(T0)r.setAttribute('data-theme',T0);else r.removeAttribute('data-theme');
+ var set=function(a,val){if(val)r.setAttribute('data-'+a,val);else r.removeAttribute('data-'+a)};
+ ['pt','rd','cs','hd','dn'].forEach(function(a){set(a,s[a])});
+ var f=FF.filter(function(x){return x[0]&&x[0]===s.ff})[0];
+ if(f){r.setAttribute('data-ff',f[0]);r.style.setProperty('--ffm',"'Baloo Da 2',"+f[2]+",'Hind Siliguri','Noto Sans Bengali',sans-serif")}else r.removeAttribute('data-ff');
+ var z=+s.fs;if(z&&z!==100&&z>=80&&z<=140){r.setAttribute('data-fs','1');r.style.setProperty('--fsz',(z/100).toString())}else r.removeAttribute('data-fs');
+ var m=document.querySelector('meta[name="theme-color"]');if(m){var g2=v['--g2'];m.setAttribute('content',g2?(/^hsl/.test(g2)?(function(){var a=g2.match(/[\d.]+/g);return hsl2hex(+a[0],+a[1],+a[2])})():g2):'#17603c')}
 }
-function setAc(a){var s=getSet();s.ac=a;lsSet('hishab-set',JSON.stringify(s));applySet();render()}
-function setMd(m){var s=getSet();s.md=m;lsSet('hishab-set',JSON.stringify(s));applySet()}
+if(window.matchMedia)try{matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(){applySet()})}catch(e){}
+function thSave(s){lsSet('hishab-set',JSON.stringify(s));applySet()}
+function thSet(k,v){var s=getSet();if(v===''||v==null)delete s[k];else s[k]=v;if(k==='ac')delete s.cu;thSave(s)}
+function thRefresh(){var y=window.scrollY;render();window.scrollTo(0,y)}
+function setAc(a){thSet('ac',a);thRefresh()}
+function setMd(m){thSet('md',m);thRefresh()}
+function thChips(key,list,cur){return '<div class="row3">'+list.map(function(x){return '<button class="chip'+((cur||'')===x[0]?' on':'')+'" data-th="'+key+':'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>'}
+function thHtml(){
+ var s=getSet(),md=s.md||'auto',cur=s.cu?'':(s.ac||'green'),all=AC.map(function(a){return [a[0],a[1],a[2]]}).concat(PR.map(function(p){return [p[0],p[1],hsl2hex(p[2],p[3],36)]}));
+ var h='<div class="panel thx"><b>🎨 রঙের থিম</b><div class="sw">'+all.map(function(a){return '<button class="swb'+(cur===a[0]?' on':'')+'" data-th="ac:'+a[0]+'" style="background:'+a[2]+'" aria-label="'+a[1]+'" title="'+a[1]+'"></button>'}).join('')+'</div>'
+ +'<div class="prv"><label style="margin:0">নিজের পছন্দের রং</label><input type="color" id="thc" value="'+(s.cu||'#1f7a4d')+'">'+(s.cu?'<button class="chip" data-th="cu:">✕ বাদ</button>':'')+'</div>'
+ +'<label>মোড</label><select id="md"><option value="auto"'+(md==='auto'?' selected':'')+'>অটো (ফোনের মতো)</option><option value="light"'+(md==='light'?' selected':'')+'>দিন (হালকা)</option><option value="dark"'+(md==='dark'?' selected':'')+'>রাত (গাঢ়)</option></select>'
+ +'<div class="row3"><button class="chip'+(s.amo?' on':'')+'" data-th="amo:'+(s.amo?'':'1')+'">⚫ রাতে খাঁটি কালো (AMOLED)</button></div></div>';
+ h+='<div class="panel thx"><b>🖼️ পেছনের দৃশ্য</b><label>পেছনের নকশা</label>'+thChips('pt',PT,s.pt)
+ +'<div class="prv"><label style="margin:0">পেছনের রং</label><input type="color" id="thbg" value="'+(s.bgc||'#f1f5f2')+'">'+(s.bgc?'<button class="chip" data-th="bgc:">✕ বাদ</button>':'')+'</div></div>';
+ h+='<div class="panel thx"><b>🔤 লেখা</b><label>ফন্ট</label>'+thChips('ff',FF,s.ff)
+ +'<label>লেখার আকার: <span id="thfsv">'+(+s.fs||100)+'%</span></label><input type="range" id="thfs" min="85" max="135" step="5" value="'+(+s.fs||100)+'"></div>';
+ h+='<div class="panel thx"><b>🧩 আকৃতি ও সাজ</b><label>কোণা</label>'+thChips('rd',RDS,s.rd)+'<label>কার্ডের ধরন</label>'+thChips('cs',CSS_,s.cs)+'<label>মাথার অংশ (হেডার)</label>'+thChips('hd',HDS,s.hd)+'<label>ফাঁকা জায়গা</label>'+thChips('dn',DNS,s.dn)+'</div>';
+ h+='<div class="panel thx"><b>🔁 থিম ব্যাকআপ</b><div class="row3"><button class="chip" id="thcp">📋 কপি করুন</button><button class="chip" id="thps">📥 বসান</button><button class="chip" id="thrs" style="color:var(--red)">↺ সব আগের মতো</button></div><small style="color:var(--mut)">থিমের কোড কপি করে অন্য ফোনে বসিয়ে একই সাজ পাবেন।</small></div>';
+ return h}
+document.addEventListener('click',function(ev){
+ var t=ev.target.closest&&ev.target.closest('[data-th]');
+ if(t){var p=t.getAttribute('data-th'),i=p.indexOf(':'),k=p.slice(0,i),v=p.slice(i+1);thSet(k,v);thRefresh();return}
+ var b=ev.target.closest&&ev.target.closest('#thcp,#thps,#thrs');if(!b)return;
+ if(b.id==='thcp'){var s=getSet(),o={};THK.forEach(function(k){if(s[k]!=null)o[k]=s[k]});var tx='MIFTAH-THEME:'+JSON.stringify(o);if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(tx).then(function(){toast('থিমের কোড কপি হয়েছে')},function(){prompt('কোডটি কপি করুন',tx)});else prompt('কোডটি কপি করুন',tx)}
+ else if(b.id==='thps'){var c=prompt('থিমের কোড বসান');if(!c)return;try{var o=JSON.parse(c.replace(/^\s*MIFTAH-THEME:/,'')),s=getSet();THK.forEach(function(k){if(o[k]!=null)s[k]=o[k]});thSave(s);thRefresh();toast('থিম বসানো হয়েছে')}catch(e){toast('কোডটি ঠিক নেই')}}
+ else if(b.id==='thrs'){if(confirm('সব থিম আগের মতো করবেন?')){var s=getSet();THK.forEach(function(k){delete s[k]});thSave(s);thRefresh()}}
+});
+document.addEventListener('input',function(ev){
+ var t=ev.target;if(!t.id)return;
+ if(t.id==='thc'){var s=getSet();s.cu=t.value;thSave(s)}
+ else if(t.id==='thbg'){var s2=getSet();s2.bgc=t.value;thSave(s2)}
+ else if(t.id==='thfs'){var s3=getSet();s3.fs=+t.value;thSave(s3);var e=$('thfsv');if(e)e.textContent=t.value+'%'}
+});
+document.addEventListener('change',function(ev){var t=ev.target;if(t.id==='thc'||t.id==='thbg')thRefresh()});
+
 function hashPw(p){
  var salt='hishab:'+p;
  if(window.crypto&&crypto.subtle&&window.TextEncoder)return crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')});
@@ -638,8 +785,7 @@ function pwOff(){
 }
 function setHtml(){
  var st=getSet(),has=!!lsGet('hishab-pw'),md=st.md||'auto';
- var h='<div class="panel"><b>স্ক্রিনের রং</b><div class="sw">'+AC.map(function(a){return '<button class="swb'+((st.ac||'green')===a[0]?' on':'')+'" data-ac="'+a[0]+'" style="background:'+a[2]+'" aria-label="'+a[1]+'"></button>'}).join('')+'</div>'
- +'<label>মোড</label><select id="md"><option value="auto"'+(md==='auto'?' selected':'')+'>অটো (ফোনের মতো)</option><option value="light"'+(md==='light'?' selected':'')+'>দিন (হালকা)</option><option value="dark"'+(md==='dark'?' selected':'')+'>রাত (গাঢ়)</option></select></div>';
+ var h=thHtml();
  h+='<div class="panel"><b>পাসওয়ার্ড লক</b><div class="empty">'+(has?'চালু আছে 🔒':'বন্ধ আছে')+'</div>'
  +(has?'<label>বর্তমান পাসওয়ার্ড</label><input type="password" id="pw0" autocomplete="off">':'')
  +'<label>'+(has?'নতুন পাসওয়ার্ড (বদলাতে চাইলে)':'নতুন পাসওয়ার্ড')+'</label><input type="password" id="pw1" autocomplete="new-password"><label>আবার লিখুন</label><input type="password" id="pw2" autocomplete="new-password">'
@@ -996,23 +1142,74 @@ function qStart(){
 }
 function qiblaInit(){var L=locInfo();qBearing=qiblaB(L.lat,L.lng);qOffC=+(mfs().qoff||0);if(!(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'))qGo()}
 /* ---------- তাসবিহ ---------- */
-var TBL=['সুবহানাল্লাহ','আলহামদুলিল্লাহ','আল্লাহু আকবার','আস্তাগফিরুল্লাহ','লা ইলাহা ইল্লাল্লাহ','দুরূদ শরীফ'];
-function tbS(){var s=mfs();s.tb=s.tb||{c:0,t:33,l:0,tot:{}};s.tb.tot=s.tb.tot||{};return s}
-function tbInfo(tb){return 'লক্ষ্য: '+bd(tb.t)+' · আজ মোট: '+bd(tb.tot[dkey()]||0)+(tb.c>=tb.t?' · ✅ লক্ষ্য পূর্ণ':'')}
+var DK=[['سُبْحَانَ اللّٰهِ','সুবহানাল্লাহ','আল্লাহ পবিত্র ও মহান'],['اَلْحَمْدُ لِلّٰهِ','আলহামদুলিল্লাহ','সমস্ত প্রশংসা আল্লাহর'],['اَللّٰهُ أَكْبَرُ','আল্লাহু আকবার','আল্লাহ সর্বমহান'],['أَسْتَغْفِرُ اللّٰهَ','আস্তাগফিরুল্লাহ','আমি আল্লাহর কাছে ক্ষমা চাই'],['لَا إِلٰهَ إِلَّا اللّٰهُ','লা ইলাহা ইল্লাল্লাহ','আল্লাহ ছাড়া কোনো ইলাহ নেই'],['اَللّٰهُمَّ صَلِّ عَلٰى مُحَمَّدٍ','দুরূদ শরীফ','হে আল্লাহ, মুহাম্মাদ ﷺ-এর ওপর রহমত বর্ষণ করুন'],['سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ','সুবহানাল্লাহি ওয়া বিহামদিহি','আল্লাহ পবিত্র, তাঁরই প্রশংসা'],['سُبْحَانَ اللّٰهِ الْعَظِيمِ','সুবহানাল্লাহিল আযীম','মহান আল্লাহ পবিত্র'],['لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهِ','লা হাওলা ওয়ালা কুওওয়াতা ইল্লা বিল্লাহ','আল্লাহর সাহায্য ছাড়া কোনো শক্তি ও ক্ষমতা নেই'],['حَسْبُنَا اللّٰهُ وَنِعْمَ الْوَكِيلُ','হাসবুনাল্লাহু ওয়া নিমাল ওয়াকিল','আল্লাহই আমাদের জন্য যথেষ্ট, তিনিই উত্তম কর্মবিধায়ক'],['يَا حَيُّ يَا قَيُّومُ','ইয়া হাইয়্যু ইয়া কাইয়্যূম','হে চিরঞ্জীব, হে সবকিছুর ধারক'],['رَبِّ اغْفِرْ لِي','রাব্বিগফিরলী','হে আমার রব, আমাকে ক্ষমা করুন']];
+var TBL=DK.map(function(x){return x[1]});
+var TBS={pearl:['#ffffff','#e8e2d2','#8f8672'],gold:['#fff3b0','#f0b92b','#8a5a00'],wood:['#e6b883','#a0642a','#4d2a0e'],ruby:['#ffa3b1','#d6193f','#5a0016'],emerald:['#a4ffd5','#10b070','#04472d'],sapphire:['#b0d4ff','#2f6fe0','#0d2a6b']};
+var TBSN={pearl:'মুক্তা',gold:'সোনা',wood:'কাঠ',ruby:'চুনি',emerald:'পান্না',sapphire:'নীলা'};
+var TBBG={th:'থিমের রং',night:'মধ্যরাত',black:'কালো',dusk:'গোধূলি'};
+var TBN=33,TBA=null;
+function tbS(){var s=mfs();s.tb=s.tb||{};var tb=s.tb;if(tb.c==null)tb.c=0;if(!tb.t)tb.t=33;if(tb.l==null||!DK[tb.l])tb.l=0;tb.tot=tb.tot||{};tb.cs=tb.cs||{};tb.bs=TBS[tb.bs]?tb.bs:'pearl';tb.bg=TBBG[tb.bg]?tb.bg:'th';if(tb.vib==null)tb.vib=1;if(tb.snd==null)tb.snd=0;return s}
+function tbAll(tb){var n=0,k;for(k in tb.tot)n+=tb.tot[k]||0;return n}
+function tbInfo(tb){var m=tb.c%tb.t,left=tb.c>0&&m===0?0:tb.t-m;return 'লক্ষ্য '+bd(tb.t)+' · বাকি '+bd(left)+(tb.c>=tb.t?' · ✅ লক্ষ্য পূর্ণ, মাশাআল্লাহ':'')}
+function tbBeads(tb){
+ var st=TBS[tb.bs],cx=150,cy=150,R=124,h='<svg viewBox="0 0 300 300" aria-hidden="true"><defs><radialGradient id="tbgr" cx="34%" cy="28%" r="75%"><stop offset="0" stop-color="'+st[0]+'"/><stop offset=".55" stop-color="'+st[1]+'"/><stop offset="1" stop-color="'+st[2]+'"/></radialGradient></defs>';
+ h+='<circle cx="150" cy="150" r="143" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="6"/><circle class="tb-arc" id="tbarc" cx="150" cy="150" r="143" fill="none" stroke="#f6dd8c" stroke-width="6" stroke-linecap="round" transform="rotate(-90 150 150)" stroke-dasharray="898.5" stroke-dashoffset="898.5"/>';
+ h+='<circle cx="150" cy="150" r="'+R+'" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>';
+ for(var i=0;i<TBN;i++){var a=i/TBN*Math.PI*2-Math.PI/2;h+='<circle class="tbb" cx="'+(cx+R*Math.cos(a)).toFixed(1)+'" cy="'+(cy+R*Math.sin(a)).toFixed(1)+'" r="8.6" fill="url(#tbgr)"/>'}
+ return h+'<path d="M150 6l6 9-6 9-6-9z" fill="#f6dd8c" transform="translate(0 -10)"/></svg>';
+}
+function tbWk(){
+ var tb=tbS().tb,a=[],mx=1,i,d,h='',D=['রবি','সোম','মঙ্গল','বুধ','বৃহ','শুক্র','শনি'];
+ for(i=6;i>=0;i--){d=new Date();d.setDate(d.getDate()-i);var v=tb.tot[dkey(d)]||0;a.push([D[d.getDay()],v]);if(v>mx)mx=v}
+ a.forEach(function(x){h+='<div title="'+bd(x[1])+'"><i style="height:'+Math.round(x[1]/mx*40)+'px"></i>'+x[0]+'</div>'});
+ return h}
 function tasbihHtml(){
- var tb=tbS().tb;
- var h='<div class="panel" style="text-align:center"><div id="tbl" style="font-size:20px;font-weight:700;color:var(--g)">'+TBL[tb.l]+'</div><div id="tbc" style="font-size:64px;font-weight:700;margin:4px 0">'+bd(tb.c)+'</div><div class="empty" id="tbt">'+tbInfo(tb)+'</div><button data-h="tb:+" style="width:170px;height:170px;border-radius:50%;border:0;background:var(--g);color:#fff;font:inherit;font-size:22px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25);margin:6px 0 12px">ট্যাপ করুন</button><div class="row3" style="flex-wrap:wrap;justify-content:center">';
- [33,99,100,1000].forEach(function(t){h+='<button class="chip" data-h="tb:t:'+t+'">'+(tb.t===t?'✓ ':'')+'লক্ষ্য '+bd(t)+'</button>'});
- h+='</div><div class="row3" style="flex-wrap:wrap;justify-content:center">';
- TBL.forEach(function(x,i){h+='<button class="chip" data-h="tb:l:'+i+'">'+(tb.l===i?'✓ ':'')+x+'</button>'});
- return h+'</div><button class="btn" data-h="tb:r" style="background:var(--mut)">০ থেকে শুরু</button></div>';
-}
-function tbRing(){var b=document.querySelector('#app [data-h="tb:+"]');if(!b)return;var tb=tbS().tb,t=tb.t||33,m=tb.c%t,p=(tb.c>0&&m===0)?1:m/t;b.style.setProperty('--p',(p*360)+'deg')}
+ var tb=tbS().tb,k=DK[tb.l],h;
+ h='<div class="tbx" id="tbx" data-bg="'+tb.bg+'"><div class="tb-ar">'+k[0]+'</div><div id="tbl" class="tb-tr">'+esc(k[1])+'</div><div class="tb-mn">'+esc(k[2])+'</div>'
+ +'<div class="tb-ring">'+tbBeads(tb)+'<button class="tb-btn" data-h="tb:+" aria-label="গণনা করুন"><span id="tbc">'+bd(tb.c)+'</span><small>ট্যাপ করুন</small></button></div>'
+ +'<div class="tb-st"><div><b id="tbr">'+bd(Math.floor(tb.c/tb.t))+'</b><small>চক্র</small></div><div><b id="tbd">'+bd(tb.tot[dkey()]||0)+'</b><small>আজ</small></div><div><b id="tba">'+bd(tbAll(tb))+'</b><small>সর্বমোট</small></div></div>'
+ +'<div class="empty" id="tbt">'+tbInfo(tb)+'</div><div class="tb-row">';
+ [33,99,100,1000].forEach(function(t){h+='<button class="chip'+(tb.t===t?' on':'')+'" data-h="tb:t:'+t+'">'+bd(t)+'</button>'});
+ h+='<button class="chip'+([33,99,100,1000].indexOf(tb.t)<0?' on':'')+'" data-h="tb:tc">✎ নিজের'+([33,99,100,1000].indexOf(tb.t)<0?' ('+bd(tb.t)+')':'')+'</button><button class="chip" data-h="tb:-">↩ −১</button><button class="chip" data-h="tb:r">⟲ ০ থেকে</button></div><div class="tb-dk">';
+ DK.forEach(function(x,i){h+='<button class="'+(tb.l===i?'on':'')+'" data-h="tb:l:'+i+'"><div class="ar">'+x[0]+'</div><b>'+esc(x[1])+'</b>'+(tb.cs[i]&&tb.l!==i?'<i>বাকি আছে: '+bd(tb.cs[i])+'</i>':'')+'</button>'});
+ h+='</div><div class="tb-wk" id="tbw">'+tbWk()+'</div><small style="opacity:.7;font-size:11px">গত ৭ দিনের গণনা</small></div>';
+ h+='<div class="panel tbo"><b>🎨 তাসবিহ সাজান</b><label>দানার ধরন</label><div class="row3" style="flex-wrap:wrap">';
+ Object.keys(TBS).forEach(function(b){h+='<button class="chip'+(tb.bs===b?' on':'')+'" data-h="tb:bs:'+b+'"><span class="dot" style="background:'+TBS[b][1]+'"></span>'+TBSN[b]+'</button>'});
+ h+='</div><label>পেছনের রং</label><div class="row3" style="flex-wrap:wrap">';
+ Object.keys(TBBG).forEach(function(b){h+='<button class="chip'+(tb.bg===b?' on':'')+'" data-h="tb:bg:'+b+'">'+TBBG[b]+'</button>'});
+ h+='</div><label>অনুভূতি</label><div class="row3" style="flex-wrap:wrap"><button class="chip'+(tb.vib?' on':'')+'" data-h="tb:vib">📳 কম্পন '+(tb.vib?'চালু':'বন্ধ')+'</button><button class="chip'+(tb.snd?' on':'')+'" data-h="tb:snd">🔔 টিক শব্দ '+(tb.snd?'চালু':'বন্ধ')+'</button></div></div>';
+ return h}
+function tbRing(){
+ var tb=tbS().tb,t=tb.t||33,m=tb.c%TBN,full=tb.c>0&&m===0,n=full?TBN:m,bs=document.querySelectorAll('#app .tbb');if(!bs.length)return;
+ for(var i=0;i<bs.length;i++){bs[i].classList.toggle('on',i<n);bs[i].classList.toggle('cur',n>0&&i===n-1)}
+ var p=(tb.c>0&&tb.c%t===0)?1:(tb.c%t)/t,a=$('tbarc');if(a)a.style.strokeDashoffset=(898.5*(1-p)).toFixed(1)}
+function tbPaint(tb){
+ var c=$('tbc');if(c)c.textContent=bd(tb.c);var o={tbt:tbInfo(tb),tbr:bd(Math.floor(tb.c/tb.t)),tbd:bd(tb.tot[dkey()]||0),tba:bd(tbAll(tb))};
+ for(var k in o){var e=$(k);if(e)e.textContent=o[k]}
+ var w=$('tbw');if(w)w.innerHTML=tbWk();tbRing()}
+function tbBeep(big){try{var A=window.AudioContext||window.webkitAudioContext;if(!A)return;TBA=TBA||new A();if(TBA.state==='suspended')TBA.resume();var o=TBA.createOscillator(),g=TBA.createGain(),t=TBA.currentTime;o.type=big?'triangle':'sine';o.frequency.setValueAtTime(big?740:1250,t);o.frequency.exponentialRampToValueAtTime(big?1480:700,t+.06);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(big?.3:.16,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+(big?.5:.09));o.connect(g);g.connect(TBA.destination);o.start(t);o.stop(t+(big?.55:.1))}catch(e){}}
+function tbBurst(){var r=document.querySelector('#app .tb-ring');if(!r)return;for(var i=0;i<14;i++){var s=document.createElement('span'),a=Math.random()*6.283,d=90+Math.random()*80;s.className='tb-sp';s.textContent=['✦','✧','★','✺'][i%4];s.style.setProperty('--dx',Math.cos(a)*d+'px');s.style.setProperty('--dy',Math.sin(a)*d+'px');r.appendChild(s);setTimeout(function(x){x.remove()}.bind(null,s),1200)}}
 function tbTap(){
- var s=tbS(),tb=s.tb,d=dkey();tb.c++;tb.tot[d]=(tb.tot[d]||0)+1;mfw(s);
- var c=$('tbc');if(c)c.textContent=bd(tb.c);var t=$('tbt');if(t)t.textContent=tbInfo(tb);
- tbRing();if(navigator.vibrate)navigator.vibrate(tb.c%tb.t===0?[80,60,80]:12);
-}
+ var s=tbS(),tb=s.tb,d=dkey();tb.c++;tb.tot[d]=(tb.tot[d]||0)+1;tb.cs[tb.l]=tb.c;mfw(s);tbPaint(tb);
+ var b=document.querySelector('#app .tb-btn');if(b){b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}
+ var done=tb.c%tb.t===0,rnd=tb.c%TBN===0;
+ if(done){var x=$('tbx');if(x){x.classList.remove('done');void x.offsetWidth;x.classList.add('done')}tbBurst();toast('মাশাআল্লাহ! '+bd(tb.t)+' পূর্ণ হয়েছে')}
+ if(tb.vib&&navigator.vibrate)navigator.vibrate(done?[90,60,90,60,160]:rnd?[40,30,40]:12);
+ if(tb.snd)tbBeep(done||rnd)}
+function tbAct(p){
+ var s=tbS(),tb=s.tb,a=p[1],d;
+ if(a==='+'){tbTap();return}
+ if(a==='-'){if(tb.c>0){tb.c--;d=dkey();tb.tot[d]=Math.max(0,(tb.tot[d]||0)-1);tb.cs[tb.l]=tb.c;mfw(s);tbPaint(tb)}return}
+ if(a==='r'){tb.c=0;tb.cs[tb.l]=0}
+ else if(a==='t'){tb.t=+p[2]}
+ else if(a==='tc'){var v=prompt('নিজের লক্ষ্য সংখ্যা লিখুন (যেমন ৫০০)');if(v==null)return;v=parseInt(String(v).replace(/[০-৯]/g,function(x){return '০১২৩৪৫৬৭৮৯'.indexOf(x)}),10);if(!(v>0&&v<=1000000)){toast('সঠিক সংখ্যা লিখুন');return}tb.t=v}
+ else if(a==='l'){tb.cs[tb.l]=tb.c;tb.l=+p[2];tb.c=tb.cs[tb.l]||0}
+ else if(a==='bs'){tb.bs=p[2]}
+ else if(a==='bg'){tb.bg=p[2]}
+ else if(a==='vib'){tb.vib=tb.vib?0:1;if(tb.vib&&navigator.vibrate)navigator.vibrate(30)}
+ else if(a==='snd'){tb.snd=tb.snd?0:1;if(tb.snd)tbBeep(0)}
+ mfw(s);render()}
+
 /* ---------- আমল ট্র্যাকার ---------- */
 var AM=[['fajr','ফজরের নামাজ'],['dhuhr','যোহরের নামাজ'],['asr','আসরের নামাজ'],['maghrib','মাগরিবের নামাজ'],['isha','ইশার নামাজ'],['quran','কুরআন তিলাওয়াত'],['zikr','সকাল-সন্ধ্যার যিকির'],['istig','ইস্তিগফার'],['durood','দুরূদ পাঠ'],['duha','সালাতুদ দুহা (চাশত)'],['tahaj','তাহাজ্জুদ'],['sadaqa','সদকা'],['roza','নফল রোজা']];
 function amItems(){return AM.concat((db.amolx||[]).map(function(x){return ['x'+x.id,x.name]}))}
@@ -1391,7 +1588,7 @@ function hubAct(a){
  else if(c==='gps'){var m=$('gpm');if(m)m.textContent='অবস্থান খোঁজা হচ্ছে…';if(!navigator.geolocation){if(m)m.textContent='এই ডিভাইসে অবস্থান পাওয়া যায় না';return}navigator.geolocation.getCurrentPosition(function(r){var z=mfs();z.gps=[r.coords.latitude,r.coords.longitude];mfw(z);render()},function(){var m2=$('gpm');if(m2)m2.textContent='অবস্থান পাওয়া যায়নি। অনুমতি দিয়েছেন কিনা দেখুন।'},{timeout:15000})}
  else if(c==='qb')qStart();
  else if(c==='qo'){var qz=mfs();qz.qoff=p[1]==='r'?0:Math.max(-45,Math.min(45,(+qz.qoff||0)+(+p[1])));mfw(qz);qOffC=qz.qoff;render()}
- else if(c==='tb'){var z=tbS();if(p[1]==='+')tbTap();else if(p[1]==='r'){z.tb.c=0;mfw(z);render()}else if(p[1]==='t'){z.tb.t=+p[2];mfw(z);render()}else if(p[1]==='l'){z.tb.l=+p[2];z.tb.c=0;mfw(z);render()}}
+ else if(c==='tb'){tbAct(p)}
  else if(c==='am'){
   normalize();var d=amd||(amd=dkey());
   if(p[1]==='p'){amd=amShift(d,-1);render()}else if(p[1]==='n'){amd=amShift(d,1);render()}
@@ -1718,6 +1915,580 @@ NMG=`আয়েশা:প্রাণবন্ত, জীবন্ত
 ওয়াফা:বিশ্বস্ততা
 সাইমা:রোজাদার
 সামিহা:ক্ষমাশীলা`;
+var NMB2=`আবান:স্পষ্ট, প্রকাশিত
+আবিদ:ইবাদতকারী
+আবিদীন:ইবাদতকারীগণ
+আব্দুল আজিজ:মহাপরাক্রমশালীর বান্দা
+আব্দুল গফুর:পরম ক্ষমাশীলের বান্দা
+আব্দুল গাফফার:মহা ক্ষমাকারীর বান্দা
+আব্দুল জব্বার:প্রতাপশালীর বান্দা
+আব্দুল বাসিত:প্রসারণকারীর বান্দা
+আব্দুল মালিক:অধিপতির বান্দা
+আব্দুল মান্নান:মহা দানশীলের বান্দা
+আব্দুল মুমিন:বিশ্বাসদাতার বান্দা
+আব্দুল ওয়াহাব:মহা দাতার বান্দা
+আব্দুস সালাম:শান্তিদাতার বান্দা
+আব্দুস সামাদ:অমুখাপেক্ষীর বান্দা
+আব্দুস সাত্তার:দোষ গোপনকারীর বান্দা
+আব্দুল হাদী:পথপ্রদর্শকের বান্দা
+আব্দুল হাকীম:প্রজ্ঞাময়ের বান্দা
+আব্দুল হালিম:সহনশীলের বান্দা
+আব্দুল হামিদ:প্রশংসিতের বান্দা
+আব্দুল হান্নান:দয়াময়ের বান্দা
+আব্দুল কারীম:মহানুভবের বান্দা
+আব্দুল লতিফ:সূক্ষ্মদর্শী দয়ালুর বান্দা
+আব্দুল মতিন:দৃঢ়তম সত্তার বান্দা
+আব্দুল মাজিদ:মহিমান্বিতের বান্দা
+আব্দুল মুঈদ:পুনঃসৃষ্টিকারীর বান্দা
+আব্দুল মুহাইমিন:তত্ত্বাবধায়কের বান্দা
+আব্দুন নূর:আলোর উৎসের বান্দা
+আব্দুর রউফ:অতি স্নেহশীলের বান্দা
+আব্দুর রাজ্জাক:রিযিকদাতার বান্দা
+আব্দুর রশিদ:সঠিক পথপ্রদর্শকের বান্দা
+আব্দুল্লাহ আল মামুন:বিশ্বস্ত আল্লাহর বান্দা
+আদনান:স্থায়ী বসতি
+আদিল:ন্যায়পরায়ণ
+আদিব:ভদ্র, সুসভ্য
+আফনান:ঘন শাখাবিশিষ্ট গাছ
+আফিফ:পবিত্র, সচ্চরিত্র
+আহনাফ:সত্যের পথে অবিচল
+আজলান:দ্রুতগামী
+আকরাম:অধিক সম্মানিত
+আকিফ:ইবাদতে নিবেদিত
+আকিল:বুদ্ধিমান
+আকিব:অনুসরণকারী
+আলাউদ্দিন:দ্বীনের মহত্ত্ব
+আলিফ:বন্ধু, বর্ণমালার প্রথম অক্ষর
+আমজাদ:অধিক মহিমান্বিত
+আমানুল্লাহ:আল্লাহর নিরাপত্তা
+আমির:নেতা, শাসক
+আম্মার:দীর্ঘজীবী, নির্মাতা
+আনওয়ার:অধিক আলোকিত
+আনিস:অন্তরঙ্গ বন্ধু
+আনিক:মার্জিত, রুচিশীল
+আরাফ:উঁচু স্থান
+আরহাম:অধিক দয়ালু
+আরমান:আশা, আকাঙ্ক্ষা
+আসাদ:সিংহ
+আসগর:ছোট, কনিষ্ঠ
+আসিফ:দৃঢ়, ক্ষমাশীল
+আশফাক:দয়া, স্নেহ
+আশরাফ:অধিক সম্মানিত
+আসলাম:অধিক নিরাপদ
+আসীম:রক্ষাকারী
+আতিয়া:উপহার, দান
+আতহার:অধিক পবিত্র
+আওফ:ওয়াদা পূরণকারী
+আওয়াব:আল্লাহমুখী
+আয়াজ:সম্মানিত, দানশীল
+আয়মান:সৌভাগ্যবান, ডানপন্থী
+আয়ান:আল্লাহর দান
+আযহার:ফুলের মতো উজ্জ্বল
+আজিম:মহান, বিশাল
+আযীযুর রহমান:দয়াময়ের প্রিয়
+বাকির:জ্ঞানের গভীরে প্রবেশকারী
+বাশির:সুসংবাদদাতা
+বাসিত:প্রশস্ত, উদার
+বাহাউদ্দিন:দ্বীনের সৌন্দর্য
+বাহির:উজ্জ্বল, সুস্পষ্ট
+বেলাল:সজীবতা, পানি
+বদরুদ্দিন:দ্বীনের পূর্ণিমা
+বদরুল:পূর্ণিমার চাঁদ
+বুরহান:দলিল, প্রমাণ
+দানিয়াল:আল্লাহ আমার বিচারক, নবীর নাম
+দিলাওয়ার:সাহসী, বীর
+দুররুল:মুক্তা
+ফাদি:মুক্তিদাতা
+ফারদীন:অনন্য, অতুলনীয়
+ফারহান:আনন্দিত, খুশি
+ফারিস:অশ্বারোহী, বীর
+ফাতিন:বুদ্ধিমান, তীক্ষ্ণ
+ফাতিহ:বিজয়ী
+ফাউজান:সফলতা
+ফাজিল:গুণী, মর্যাদাবান
+ফাহাদ:চিতাবাঘ
+ফাখরুদ্দিন:দ্বীনের গর্ব
+ফিরোজ:বিজয়ী, নীলকান্তমণি
+ফুয়াদ:হৃদয়, অন্তর
+ফুরকান:সত্যাসত্যের পার্থক্য
+গাজী:ধর্মযোদ্ধা
+গিয়াসউদ্দিন:দ্বীনের সাহায্যকারী
+হাদী:পথপ্রদর্শক
+হাফিজুর রহমান:দয়াময়ের সংরক্ষিত
+হালিম:সহনশীল
+হামদান:প্রশংসাকারী
+হাম্মাদ:অধিক প্রশংসাকারী
+হানজালা:একজন সাহাবীর নাম
+হানিফ:একনিষ্ঠ মুসলিম
+হারুন:একজন নবীর নাম
+হারিস:কৃষক, রক্ষক
+হাসিব:হিসাবরক্ষক, সম্ভ্রান্ত
+হাশিম:দানশীল, রুটি ভেঙে দানকারী
+হাতিম:দানশীল
+হাযিম:দৃঢ়চেতা, বিচক্ষণ
+হুসাইন:ছোট্ট সুন্দর
+হুযাইফা:একজন সাহাবীর নাম
+ইবরাহিম:একজন নবীর নাম
+ইফতেখার:গৌরব, সম্মান
+ইহসান:সদাচরণ, দয়া
+ইকবাল:সৌভাগ্য, উন্নতি
+ইমতিয়াজ:বৈশিষ্ট্য, শ্রেষ্ঠত্ব
+ইমরান:সমৃদ্ধি, মরিয়মের পিতার নাম
+ইনান:মেঘ
+ইনসান:মানুষ
+ইরতিজা:সন্তুষ্ট
+ইরশাদ:পথনির্দেশ
+ইসতিয়াক:আগ্রহ, আকাঙ্ক্ষা
+ইয়াসির:সহজ, সচ্ছল
+ইয়ামিন:ডান হাত, সৌভাগ্য
+ইযযাত:সম্মান
+জহির:উজ্জ্বল, সাহায্যকারী
+জালাল:মহিমা, প্রতাপ
+জামাল:সৌন্দর্য
+জাওয়াদ:দানশীল
+জায়েদ:বৃদ্ধিপ্রাপ্ত
+জিবরীল:ফেরেশতার নাম
+জুনাইদ:সৈনিক, যোদ্ধা
+জুবায়ের:শক্তিশালী, একজন সাহাবীর নাম
+জুলকারনাইন:দুই শিংওয়ালা, একজন ন্যায়বান শাসক
+কাইফ:আনন্দ
+কালিম:বাকপটু
+কামরান:সফল, ভাগ্যবান
+কাউসার:প্রাচুর্য, জান্নাতের নহর
+কাশিফ:উন্মোচনকারী
+কবির:মহান, বড়
+খালিল:অন্তরঙ্গ বন্ধু
+খাত্তাব:বক্তা
+খাইরুল:উত্তম
+খায়ির:কল্যাণময়
+খুবাইব:একজন সাহাবীর নাম
+খুরশিদ:সূর্য
+লাবিব:বুদ্ধিমান, জ্ঞানী
+লায়েক:যোগ্য
+মাহতাব:পূর্ণিমার আলো
+মাহদী:হিদায়াতপ্রাপ্ত
+মাহফুজ:সংরক্ষিত
+মাহিন:মহান
+মাহির:দক্ষ, পারদর্শী
+মাজ:সাহসী
+মাজিদ:মহিমান্বিত
+মালিক:অধিপতি
+মামুন:বিশ্বস্ত
+মানসুর:সাহায্যপ্রাপ্ত
+মারওয়ান:পাথর, দৃঢ়
+মাসরুর:আনন্দিত
+মাতিন:দৃঢ়, শক্ত
+মাযহার:প্রকাশস্থল
+মিকদাদ:একজন সাহাবীর নাম
+মিনহাজ:পথ, কর্মপদ্ধতি
+মিরাজ:উর্ধ্বারোহণ
+মিযান:দাঁড়িপাল্লা, ন্যায়বিচার
+মুআয:আশ্রিত, একজন সাহাবীর নাম
+মুআবিয়া:একজন সাহাবীর নাম
+মুবাশশির:সুসংবাদদাতা
+মুবীন:সুস্পষ্ট
+মুহতাসিম:সংযমী
+মুহসিন:সৎকর্মশীল
+মুহিব:ভালোবাসাকারী
+মুহিউদ্দিন:দ্বীনের পুনর্জীবনদাতা
+মুজাম্মিল:চাদরাবৃত
+মুখতার:নির্বাচিত
+মুকবিল:গ্রহণযোগ্য
+মুকাররম:সম্মানিত
+মুনতাসির:বিজয়ী
+মুনীর:আলোকদাতা
+মুনিব:আল্লাহমুখী
+মুরসালীন:প্রেরিতগণ
+মুশফিক:স্নেহশীল
+মুসাদ্দিক:সত্যায়নকারী
+মুস্তাফিজ:উপকৃত
+মুতাসিম:দৃঢ়ভাবে আঁকড়ে ধরা
+মুযাম্মিল:আবৃত ব্যক্তি
+নাবিল:মহান, সম্ভ্রান্ত
+নাদিম:সঙ্গী, বন্ধু
+নাফিস:মূল্যবান
+নাজিম:শৃঙ্খলাবদ্ধকারী
+নাজমুল:তারকা
+নাসিম:মৃদু বাতাস
+নাসিম উদ্দিন:দ্বীনের সুবাতাস
+নাঈমুর রহমান:দয়াময়ের নেয়ামত
+নাওফল:উদার, সমুদ্র
+নাযিম:কবি
+নিযাম:শৃঙ্খলা
+নূরুল ইসলাম:ইসলামের আলো
+নূরুদ্দিন:দ্বীনের আলো
+নুমান:রক্ত, একজন সাহাবীর নাম
+নুসাইর:সাহায্যকারী
+ওয়াকিল:প্রতিনিধি
+ওয়ালী:বন্ধু
+ওয়াসিফ:গুণকীর্তনকারী
+ওয়াজিহ:সম্মানিত, সুস্পষ্ট
+ওমর ফারুক:সত্য-মিথ্যার পার্থক্যকারী
+কুতুবুদ্দিন:দ্বীনের কেন্দ্র
+রাকিব:পর্যবেক্ষক
+রাফিউদ্দিন:দ্বীনের উচ্চতা
+রাহাত:শান্তি
+রাহিম:দয়ালু
+রাইয়ান:জান্নাতের দরজা
+রাজিন:স্থির, গম্ভীর
+রামিজ:ইঙ্গিত
+রাশাদ:সঠিক পথ
+রাশিদ:সঠিক পথপ্রাপ্ত
+রাউফ:স্নেহশীল
+রুবাইয়ান:সবুজ
+রেজওয়ান:সন্তুষ্টি
+রিদওয়ান:সন্তুষ্টি, জান্নাতের রক্ষী
+রিফাত:উচ্চ মর্যাদা
+রিয়াদ:বাগান
+রুহুল আমীন:বিশ্বস্ত আত্মা
+রুকন:স্তম্ভ
+রুমান:ডালিম
+সাবির:ধৈর্যশীল
+সাদী:সৌভাগ্যবান
+সাদিক:সত্যবাদী
+সাফি:পবিত্র বন্ধু
+সাহল:সহজ, নম্র
+সাইদ:সুখী
+সাইফ:তরবারি
+সাইফুদ্দিন:দ্বীনের তরবারি
+সাজ্জাদ:অধিক সিজদাকারী
+সালাহউদ্দিন:দ্বীনের সংস্কারক
+সালিম:নিরাপদ, নিখুঁত
+সালিহ:সৎ, একজন নবীর নাম
+সামির:সঙ্গী, গল্পকার
+সামিউল:অধিক শ্রবণকারী
+সানি:দ্বিতীয়, উজ্জ্বল
+সাকিব:উজ্জ্বল তারা
+সাকীব:তীক্ষ্ণ
+সারওয়ার:নেতা
+সাত্তার:দোষ গোপনকারী
+সাউদ:সৌভাগ্য
+সায়েম:রোজাদার
+সুফিয়ান:নৌকার নাবিক
+সুহাইল:উজ্জ্বল তারা
+সুহাইব:একজন সাহাবীর নাম
+সুমাইর:সঙ্গী
+শাবাব:যুবক
+শাফিন:সুপারিশকারী
+শাফিউল:সুপারিশকারী
+শাকিল:সুদর্শন
+শামসুদ্দিন:দ্বীনের সূর্য
+শামসুল:সূর্য
+শারিক:অংশীদার
+শারিফ:সম্মানিত
+শাহরিয়ার:নগরের অধিপতি
+শাহিদ:সাক্ষী
+শাহির:প্রসিদ্ধ
+শায়খ:বয়োজ্যেষ্ঠ আলেম
+শিহাব:উল্কা, উজ্জ্বল তারা
+শুআইব:একজন নবীর নাম
+শুকুর:কৃতজ্ঞতা
+তাহির:পবিত্র
+তাহমিদ:প্রশংসা
+তাজুদ্দিন:দ্বীনের মুকুট
+তালিব:অন্বেষণকারী
+তামিম:পূর্ণ, নিখুঁত
+তানভীর:আলোকিত করা
+তানজিল:অবতীর্ণ
+তাসনিম:জান্নাতের ঝরনা
+তাশরিফ:সম্মান
+তাওফিক:সামর্থ্য
+তাযকির:স্মরণ
+তাকী:আল্লাহভীরু
+তাকিউদ্দিন:দ্বীনের তাকওয়া
+তামজীদ:গৌরব
+উসামা:সিংহ
+উমাইর:দীর্ঘজীবী
+উমায়ের:আবাদকারী
+উযাইর:একজন নবীর নাম
+ওয়াজদী:ভালোবাসা
+ওয়াকার:মর্যাদা, গাম্ভীর্য
+ওয়াসিউদ্দিন:দ্বীনের প্রশস্ততা
+ইয়াসিন:কুরআনের সূরার নাম
+ইয়াজিদ:বৃদ্ধিপ্রাপ্ত
+যাকওয়ান:উজ্জ্বল বুদ্ধিমান
+যাকারিয়া:একজন নবীর নাম
+যাইদ:বৃদ্ধি, কল্যাণ
+যামির:বিবেক, অন্তর
+যুবাইর:বুদ্ধিমান, শক্তিশালী`,
+NMG2=`আদিবা:ভদ্র, সুসভ্য
+আদিলা:ন্যায়পরায়ণা
+আফিফা:পবিত্র, সচ্চরিত্রা
+আফনান:ঘন শাখাবিশিষ্ট গাছ
+আফরা:মাটির মতো লালচে, হরিণী
+আফরোজা:উজ্জ্বল, আলোকিত
+আহলাম:স্বপ্ন
+আলিফা:বন্ধু, প্রিয়
+আমাতুল্লাহ:আল্লাহর বান্দী
+আমিরা:রাজকন্যা, নেত্রী
+আনিকা:সুন্দরী, মার্জিত
+আনজুম:তারকারাজি
+আনুশা:সুখী, সুমিষ্ট
+আরওয়া:পাহাড়ি ছাগী, সৌন্দর্য
+আরিশা:সুউচ্চ আসন
+আসিফা:দৃঢ়, ক্ষমাশীলা
+আসিয়া:সান্ত্বনাদাত্রী, ফেরাউনের পুণ্যবতী স্ত্রী
+আতিয়া:উপহার, দান
+আয়েশা সিদ্দিকা:সত্যবাদিনী আয়েশা
+আযরা:কুমারী, পবিত্র
+আজিজা:প্রিয়, সম্মানিতা
+বাদিয়া:অনন্য, সুস্পষ্ট
+বাহিজা:আনন্দদায়িনী
+বাতুল:নিবেদিতা, পবিত্রা
+বিলকিস:সাবার রানি
+বুশরা:সুসংবাদ
+বুরাইরা:সাহাবিয়ার নাম
+বাসিমা:হাস্যোজ্জ্বল
+বাসিরা:দূরদর্শী
+বায়ান:স্পষ্ট বর্ণনা
+দানিয়া:নিকটবর্তী
+দিলারা:হৃদয়ের শান্তি
+দিলরুবা:মনোহারিণী
+দুরাইয়া:মুক্তা
+ফাহিমা:বুদ্ধিমতী
+ফাখিরা:গর্বিতা, উৎকৃষ্ট
+ফারাহ:আনন্দ
+ফারিয়া:স্বর্ণাভ, উজ্জ্বল
+ফারিদা:অনন্য, অতুলনীয়
+ফাতিমা জোহরা:উজ্জ্বল ফাতিমা
+ফাতিহা:সূচনা, বিজয়
+ফাউজিয়া:সফল নারী
+ফিজা:বাতাস, সতেজতা
+ফিরোজা:নীলকান্তমণি, বিজয়িনী
+ফিজ্জা:রুপা
+ফুজাইলা:শ্রেষ্ঠ, গুণবতী
+গুলনার:ডালিম ফুল
+গুলশান:ফুলের বাগান
+গুলবদন:ফুলের মতো দেহ
+গাযালা:হরিণী
+গাজালা:হরিণী
+হাদিয়া:উপহার
+হাফিজা:সংরক্ষণকারিণী
+হাকিমা:প্রজ্ঞাবতী
+হামিদা:প্রশংসাকারিণী
+হানান:দয়া, মমতা
+হানিফা:একনিষ্ঠ মুসলিম নারী
+হারিসা:রক্ষাকারিণী
+হাসিনা:সুন্দরী
+হিবা:দান, উপহার
+হিনা:মেহেদী
+হুরিয়া:জান্নাতের হুর
+হুসনা:সৌন্দর্য
+হুদা:সঠিক পথ
+ইফফাত:পবিত্রতা, সতীত্ব
+ইলহাম:অনুপ্রেরণা
+ইমান:বিশ্বাস
+ইনারা:আলোকিত
+ইনশিরাহ:প্রশান্তি
+ইরাম:জান্নাতের বাগান
+ইরফানা:জ্ঞানবতী
+ইসমত:পবিত্রতা, সতীত্ব
+ইশরাত:আনন্দ
+ইয়াসমীন:জুঁই ফুল
+ইজাজ:মহিমা
+জান্নাতুল ফেরদৌস:জান্নাতের সর্বোচ্চ স্তর
+জাহানারা:বিশ্বের অলংকার
+জাকিয়া:পবিত্র, বুদ্ধিমতী
+জালিলা:মহীয়সী
+জারিন:সোনালি
+জাসিয়া:নতজানু
+জাওহারা:মণি, রত্ন
+জায়নাব:সুগন্ধি গাছ, নবীকন্যা
+জাইমা:সুন্দরী, নবীর স্ত্রীর নাম
+জেবা:সৌন্দর্য
+জেসমিন:জুঁই ফুল
+জিনাত:সৌন্দর্য
+জুহা:সকালের আলো
+জুবাইদা:মাখনের মতো কোমল
+জুলেখা:ইউসুফ (আ.)-এর স্ত্রীর নাম
+জুমানা:রুপার মুক্তা
+জুনাইনা:ছোট বাগান
+কাওসার:জান্নাতের নহর
+কাশফিয়া:উন্মোচনকারিণী
+কিরণ:আলোকরশ্মি
+কুলসুম:নবীকন্যা, গোলাপি গাল
+খালিদা:চিরস্থায়িনী
+খাওলা:হরিণী, একজন সাহাবিয়া
+খায়রুন:উত্তম নারী
+খায়রুন্নেসা:নারীদের মধ্যে উত্তম
+খুশনুদ:আনন্দিত
+লাবিবা:বুদ্ধিমতী
+লামিয়া:উজ্জ্বল, চকচকে
+লুবনা:সুগন্ধি গাছ
+লুবাবা:সারাংশ, বুদ্ধিমতী
+লুবাইনা:কোমল
+লুতফা:দয়া, কোমলতা
+লিজা:ঈশ্বরের শপথ
+লিনা:কোমল
+মাহবুবা:প্রিয়তমা
+মাহফুজা:সংরক্ষিতা
+মাহিয়া:চাঁদের মতো
+মাহজাবিন:চাঁদের মতো মুখ
+মাহমুদা:প্রশংসিতা
+মাহরুখ:চাঁদের মতো মুখ
+মাজেদা:মহিমান্বিতা
+মাকসুদা:উদ্দেশ্য
+মালিহা:সুন্দরী
+মালিকা:রানি
+মামুনা:বিশ্বস্ত
+মানসুরা:সাহায্যপ্রাপ্তা
+মারজান:প্রবাল, মুক্তা
+মারওয়া:সাফা-মারওয়ার পাহাড়
+মারিয়া:সর্বোচ্চ নারী, নবীর স্ত্রী
+মাসুদা:সৌভাগ্যবতী
+মেহজাবিন:চাঁদের মতো সুন্দর
+মেহেরুন্নেসা:নারীদের মধ্যে স্নেহশীলা
+মিনহা:দান
+মিমি:প্রিয়
+মিরা:সমৃদ্ধিশালিনী
+মুবাশশিরা:সুসংবাদদাত্রী
+মুনা:আকাঙ্ক্ষা
+মুনতাহা:সর্বশেষ সীমা
+মুসলিমা:আত্মসমর্পণকারিণী
+মুস্তারী:নক্ষত্র
+মুমতাজ:বিশিষ্ট, শ্রেষ্ঠ
+মুমিনা:বিশ্বাসী নারী
+মুনীফা:উঁচু, মহীয়সী
+নাদিরা:বিরল, অতুলনীয়
+নাহিদা:উন্নত, উদীয়মান
+নাঈমা:সুখী
+নাজনীন:আদরের, কোমল
+নাজমুন নাহার:নদীর তারা
+নাজিফা:পরিচ্ছন্ন
+নাওয়াল:দান, উপহার
+নাওমী:সুখময়
+নাসরীন:বুনো গোলাপ
+নাসিমা:মৃদু বাতাস
+নাসিরা:সাহায্যকারিণী
+নাযিয়া:পবিত্র
+নিদা:ডাক, আহ্বান
+নিলুফার:শাপলা
+নিগার:প্রিয়তমা, চিত্র
+নুজহাত:আনন্দ ভ্রমণ
+নূর:আলো
+নূরজাহান:বিশ্বের আলো
+নূরুন নাহার:নদীর আলো
+নূরিয়া:আলোকিত
+নূরীন:দুটি আলো
+নূর আফশান:আলো ছড়ানো
+নুহা:বুদ্ধিমত্তা
+নুমা:বৃদ্ধি
+নুদরাত:বিরলতা
+ওয়াহিদা:অনন্যা
+ওয়াফিয়া:বিশ্বস্ত
+ওয়াজিহা:সম্মানিতা
+ওয়াসিমা:সুদর্শনা
+ওয়ারদা:গোলাপ
+ওয়াসিলা:সংযোগকারিণী
+ওয়ালিদা:মাতা
+রাবিয়া:বসন্ত
+রাবীহা:লাভবান
+রাদিয়া:সন্তুষ্ট
+রাহিলা:ভ্রমণকারিণী
+রাহাত:শান্তি
+রাইসা:নেত্রী
+রাজিয়া:সন্তুষ্ট
+রাজিন:স্থির, গম্ভীর
+রামিসা:দৃঢ় সংকল্পের
+রাশিদা:সঠিক পথপ্রাপ্তা
+রাফিয়া:উচ্চ মর্যাদাশীলা
+রাফিদা:সহায়ক
+রুমাইসা:নবীর সাহাবিয়া
+রুবা:টিলা, পাহাড়ি স্থান
+রুবাইয়া:বসন্তকাল
+রুবিনা:উজ্জ্বল
+রুক্সানা:উজ্জ্বল, আলোকময়
+রিফা:সমৃদ্ধি
+রিদা:সন্তুষ্টি
+রিয়া:গান
+রুহী:আত্মা
+রুশদা:সঠিক পথ
+সাবা:সকালের বাতাস
+সাবিকা:অগ্রগামিনী
+সাবিনা:ধৈর্যশীলা
+সাবিরা:ধৈর্যশীলা
+সাবরিনা:ধৈর্যশীলা
+সাদিকা:সত্যবাদিনী
+সাফওয়া:বিশুদ্ধ, নির্মল
+সাফা:পবিত্রতা, স্বচ্ছতা
+সাফিনা:নৌকা
+সাহার:ভোরের আলো
+সাহিবা:সঙ্গিনী
+সাহিরা:জাগ্রত
+সাইদা:সুখী
+সাজিয়া:শান্ত, মার্জিত
+সাকিনা:প্রশান্তি
+সালসাবিল:জান্নাতের ঝরনা
+সালিহা:সৎকর্মশীলা
+সালিমা:নিরাপদ, নিখুঁত
+সামিয়া:উচ্চ মর্যাদাসম্পন্না
+সামিরা:গল্পের সঙ্গিনী
+সামীহা:উদার
+সামিনা:মূল্যবান
+সানা:উজ্জ্বলতা, প্রশংসা
+সানিয়া:উজ্জ্বল, মহিমান্বিত
+সারওয়াত:ধনসম্পদ
+সারিকা:একজন সাহাবিয়ার নাম
+সিদরাহ:সিদরাতুল মুনতাহার গাছ
+সিতারা:তারকা
+সিমরান:স্মরণ
+সুলতানা:রানি, শাসক
+সুমাইয়াহ:উচ্চ মর্যাদা
+সুমি:মিষ্টি
+সুরাইয়া:কৃত্তিকা তারা
+সুহাইলা:উজ্জ্বল তারা
+সুবহা:প্রভাত
+সুবাইহা:সুন্দর
+সুনাইনা:উজ্জ্বল
+শাবনম:শিশিরবিন্দু
+শাবনূর:ভোরের আলো
+শাফিয়া:সুস্থতাদানকারিণী
+শাফিকা:স্নেহশীলা
+শাহনাজ:রাজকীয় গর্ব
+শাহিনা:বাজপাখি
+শাহিদা:সাক্ষী নারী
+শামা:মোমবাতি
+শামীমা:সুগন্ধি
+শারমিন:লজ্জাবতী
+শারিফা:সম্ভ্রান্ত
+শায়লা:পাহাড়ি ঝরনা
+শিরীন:মিষ্টি
+শিউলি:শরতের ফুল
+শিরিন:সুমিষ্টভাষী
+শুকরিয়া:কৃতজ্ঞতা
+শুভা:আলোকিত
+তাহমিনা:শক্তিশালী
+তাহসিনা:সৌন্দর্যবর্ধন
+তালিয়া:সতেজ
+তামান্না:আকাঙ্ক্ষা
+তামান্নাহ:আশা
+তামিমা:পূর্ণ, নিখুঁত
+তানজিলা:অবতীর্ণ
+তানিয়া:রাজকন্যা
+তানহা:একাকী, অনন্যা
+তানভীরা:আলোকিত
+তাসমিয়া:নামকরণ
+তাসনীয়া:সুন্দর
+তাসফিয়া:বিশুদ্ধকরণ
+তাহিয়া:অভিবাদন
+তাকিয়া:আল্লাহভীরু নারী
+তাওহিদা:একত্ববাদে বিশ্বাসী
+তুবা:জান্নাতের গাছ
+তুহফা:উপহার
+তুবা তাসনিম:জান্নাতের গাছ ও ঝরনা
+উম্মে হাবিবা:নবীর স্ত্রী
+উম্মে সালমা:নবীর স্ত্রী
+উযমা:মহান
+উরওয়া:দৃঢ় অবলম্বন
+উনাইসা:ছোট বন্ধু
+ওয়ারিসা:উত্তরাধিকারী
+ইয়াসরা:সহজতা
+ইয়াসমিনা:ছোট জুঁই
+যাকিয়া:পবিত্র, বুদ্ধিমতী
+যাইনাব:সুগন্ধি গাছ
+যারিন:স্বর্ণ
+যুহরা:উজ্জ্বল, ফুলের মতো
+যুনাইরা:ছোট আলো`;
 var ASM=`الرحمن|আর-রাহমান|পরম করুণাময়
 الرحيم|আর-রাহীম|অতি দয়ালু
 الملك|আল-মালিক|সর্বময় অধিপতি
@@ -1820,7 +2591,7 @@ var ASM=`الرحمن|আর-রাহমান|পরম করুণাময�
 var IE=[[1,1,'হিজরি নববর্ষ','নতুন হিজরি বছরের শুরু'],[1,9,'তাসুআ (৯ মুহাররম)','আশুরার সাথে মিলিয়ে রোজা রাখা সুন্নাত'],[1,10,'আশুরা','আশুরার রোজা; মুসা (আ.)-এর নাজাতের দিন'],[3,12,'১২ রবিউল আউয়াল','নবীজি (সা.)-এর জন্ম ও ওফাত দিবস (ঈদে মিলাদুন্নবী)'],[7,27,'শবে মিরাজ','২৭ রজবের রাত (২৬ তারিখ সন্ধ্যা থেকে); নবীজি (সা.)-এর মিরাজ স্মরণ'],[8,15,'শবে বরাত','১৫ শাবানের রাত (১৪ তারিখ সন্ধ্যা থেকে); ১৫ শাবান নফল রোজা'],[9,1,'রমজানের প্রথম রোজা','সিয়ামের মাস শুরু'],[9,17,'বদর যুদ্ধ দিবস','দ্বিতীয় হিজরির ১৭ রমজান, হক-বাতিলের ফয়সালার দিন'],[9,21,'শবে কদরের সম্ভাব্য রাত','শেষ দশকের বেজোড় রাত (২১ রমজানের রাত)'],[9,23,'শবে কদরের সম্ভাব্য রাত','শেষ দশকের বেজোড় রাত (২৩ রমজানের রাত)'],[9,25,'শবে কদরের সম্ভাব্য রাত','শেষ দশকের বেজোড় রাত (২৫ রমজানের রাত)'],[9,27,'শবে কদর (প্রসিদ্ধ)','২৭ রমজানের রাত; হাজার মাসের চেয়ে উত্তম রাত'],[9,29,'শবে কদরের সম্ভাব্য রাত','শেষ দশকের বেজোড় রাত (২৯ রমজানের রাত)'],[10,1,'ঈদুল ফিতর','ঈদের নামাজ ও সাদাকাতুল ফিতর'],[10,2,'শাওয়ালের ছয় রোজা শুরু','ঈদের পর ছয়টি নফল রোজা'],[12,1,'জিলহজের প্রথম দশক শুরু','বছরের শ্রেষ্ঠ দশ দিন'],[12,8,'ইয়াওমুত তারবিয়া','হজের সূচনার দিন'],[12,9,'আরাফার দিন','হাজীদের আরাফায় অবস্থান; অন্যদের জন্য আরাফার রোজা'],[12,10,'ঈদুল আযহা','কুরবানি ও ঈদের নামাজ'],[12,11,'আইয়ামে তাশরিক','১১–১৩ জিলহজ; ফরজ নামাজের পর তাকবির']];
 var NM={g:'ছেলে',l:'',q:''},AQ='',CA=null,HF=null,ALPHA='অ আ ই ঈ উ ঊ এ ঐ ও ঔ ক খ গ ঘ চ ছ জ ঝ ট ঠ ড ঢ ত থ দ ধ ন প ফ ব ভ ম য র ল শ ষ স হ'.split(' ');
 function nmData(){var a=[],seen={},r=[];
- [[NMB,'ছেলে'],[NMG,'মেয়ে']].forEach(function(s){s[0].split('\n').forEach(function(l){var i=l.indexOf(':');if(i>0)a.push({n:l.slice(0,i).trim(),m:l.slice(i+1).trim(),g:s[1]})})});
+ [[NMB,'ছেলে'],[NMG,'মেয়ে'],[NMB2,'ছেলে'],[NMG2,'মেয়ে']].forEach(function(s){s[0].split('\n').forEach(function(l){var i=l.indexOf(':');if(i>0)a.push({n:l.slice(0,i).trim(),m:l.slice(i+1).trim(),g:s[1]})})});
  ((CT&&CT.names)||[]).forEach(function(x){if(x&&x.name)a.push({n:String(x.name).trim(),m:x.meaning||'',a:x.ar||'',g:x.gender==='মেয়ে'?'মেয়ে':'ছেলে'})});
  a.forEach(function(x){var k=x.g+x.n;if(!seen[k]){seen[k]=1;r.push(x)}});
  r.sort(function(p,q){return p.n.localeCompare(q.n,'bn')});return r}
