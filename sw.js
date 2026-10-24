@@ -1,7 +1,7 @@
 /* আল-মিফতাহ: অ্যাপ খোলার সাথে সাথে খোলার জন্য দ্রুত সার্ভিস ওয়ার্কার
    নিয়ম: আগে ফোনের ভেতরের কপি দেখাও, নেট থাকলে গোপনে নতুন কপি এনে রাখো (পরের বার নতুনটা দেখাবে)। */
-var V = 'mf-fast-v2';
-var CORE = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'offline.js', 'mushaf.js', 'hafezi.js', 'pdfread.js', 'share.js', 'readpages.js', 'tiro-bangla.woff', 'tiro-bangla-italic.woff'];
+var V = 'mf-fast-v3';
+var CORE = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'offline.js', 'mushaf.js', 'hafezi.js', 'pdfread.js', 'share.js', 'readpages.js', 'tiro-bangla.woff','hind-Regular.woff','hind-Medium.woff','hind-SemiBold.woff','hind-Bold.woff', 'tiro-bangla-italic.woff'];
 self.addEventListener('install', function(e){
   self.skipWaiting();
   e.waitUntil(caches.open(V).then(function(c){
