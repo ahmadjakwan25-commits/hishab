@@ -6,6 +6,7 @@
 <link rel="manifest" href="manifest.json"><meta name="application-name" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-title" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#17603c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <title>আল-মিফতাহ</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style id="tiro-local">@font-face{font-family:'Tiro Bangla';font-style:normal;font-weight:400;font-display:swap;src:local('Tiro Bangla'),local('TiroBangla-Regular'),url('tiro-bangla.woff') format('woff')}@font-face{font-family:'Tiro Bangla';font-style:italic;font-weight:400;font-display:swap;src:local('Tiro Bangla Italic'),local('TiroBangla-Italic'),url('tiro-bangla-italic.woff') format('woff')}</style>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
 <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&text=%E0%A7%A6%E0%A7%A7%E0%A7%A8%E0%A7%A9%E0%A7%AA%E0%A7%AB%E0%A7%AC%E0%A7%AD%E0%A7%AE%E0%A7%AF&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
@@ -2884,6 +2885,38 @@ if(view==='wid'){wgManifest();window.addEventListener('beforeinstallprompt',func
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&view==='wid')render()});
 
 render();
+/* ===== মোবাইলের ব্যাক বাটন: অ্যাপ থেকে বের না করে আগের ফিচারে ফিরবে ===== */
+(function(){
+ if(typeof render!=='function'||view==='wid'||!window.history||!history.pushState)return;
+ var KEYS=['curS','tpK','tpN','duaK','adT','lmid'],orig=render,pop=false;
+ function snap(y){var o={v:view,y:y||0};KEYS.forEach(function(k){try{if(typeof window[k]!=='undefined')o[k]=window[k]}catch(e){}});return o}
+ var stack=[snap()];
+ try{history.replaceState({mf:1,i:0,s:{v:view}},'')}catch(e){}
+ render=function(){
+  orig.apply(this,arguments);
+  if(pop)return;
+  var top=stack[stack.length-1];
+  if(view!==top.v){
+   top.y=window.scrollY||0;
+   stack.push(snap());
+   try{history.pushState({mf:1,i:stack.length-1,s:{v:view}},'')}catch(e){}
+  }else{stack[stack.length-1]=snap(top.y)}
+ };
+ window.addEventListener('popstate',function(e){
+  var st=e.state;if(!st||!st.mf)return;
+  var i=st.i,ent=stack[i]&&stack[i].v===st.s.v?stack[i]:{v:st.s.v,y:0};
+  stack.length=i+1;stack[i]=ent;
+  pop=true;
+  try{Object.keys(ent).forEach(function(k){if(k!=='v'&&k!=='y')window[k]=ent[k]});view=ent.v;pendingPic='';orig()}catch(err){}
+  pop=false;
+  setTimeout(function(){window.scrollTo(0,ent.y||0)},0);
+ });
+ /* অ্যাপের "← পূর্বের পেজে ফিরে যান" বাটনও একই পথে ফিরবে */
+ document.addEventListener('click',function(ev){
+  var b=ev.target.closest&&ev.target.closest('.back[data-v]');
+  if(b&&stack.length>1&&stack[stack.length-2].v===b.dataset.v){ev.preventDefault();ev.stopPropagation();history.back()}
+ },true);
+})();
 /* ===== দোয়া: তিনটি রঙিন বিভাগ ===== */
 var DC={hadith:{t:'হাদিসের দোয়া',ic:'📜',c:'46,160,100',d:'সহীহ হাদিসে বর্ণিত নবীজি (সা.)-এর শেখানো দোয়া'},sondha:{t:'সকাল সন্ধ্যার দোয়া',ic:'🌅',c:'240,170,40',d:'প্রতিদিন সকাল ও সন্ধ্যার যিকির ও দোয়া'},maqbul:{t:'মুনাজাতে মাকবুল',ic:'🤲',c:'30,150,190',d:'কুরআন ও হাদিস থেকে কবুলযোগ্য মুনাজাতের দোয়া'}},duaK='hadith';
 var DCI={
