@@ -1,90 +1,43 @@
-const CACHE = "almiftah-v4";
-const DATA = "almiftah-data"; // অফলাইন ডাউনলোড করা কুরআন-হাদিস, এটা কখনো মোছা হয় না
-const CORE = ["./", "./index.html", "./offline.js", "./manifest.json", "./icon-192.png", "./icon-512.png"];
-const KEEP = [
-  "fonts.googleapis.com",
-  "fonts.gstatic.com",
-  "api.alquran.cloud",
-  "cdn.jsdelivr.net",
-  "raw.githubusercontent.com"
-];
-const HRE = /\/editions\/([a-z]{3}-[a-z0-9]+)\/(\d+)(?:\.min)?\.json$/;
-const FULL = {};
-
-self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
+/* আল-মিফতাহ: অ্যাপ খোলার সাথে সাথে খোলার জন্য দ্রুত সার্ভিস ওয়ার্কার
+   নিয়ম: আগে ফোনের ভেতরের কপি দেখাও, নেট থাকলে গোপনে নতুন কপি এনে রাখো (পরের বার নতুনটা দেখাবে)। */
+var V = 'mf-fast-v1';
+var CORE = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'offline.js', 'mushaf.js', 'hafezi.js', 'pdfread.js', 'share.js', 'readpages.js'];
+self.addEventListener('install', function(e){
+  self.skipWaiting();
+  e.waitUntil(caches.open(V).then(function(c){
+    return Promise.all(CORE.map(function(u){ return c.add(new Request(u, { cache: 'reload' })).catch(function(){}); }));
+  }));
 });
-
-self.addEventListener("activate", e => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== DATA).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
-});
-
-// ডাউনলোড করা পূর্ণ সংকলন থেকে একটি হাদিস বের করে দেয়
-async function hadithFromFull(url) {
-  const m = url.pathname.match(HRE);
-  if (!m) return null;
-  const ed = m[1], n = m[2];
-  if (!FULL[ed]) {
-    const re = new RegExp("/editions/" + ed + "(\\.min)?\\.json$");
-    let found = null;
-    for (const name of [DATA, CACHE]) {
-      const c = await caches.open(name);
-      const keys = await c.keys();
-      const k = keys.find(r => re.test(new URL(r.url).pathname));
-      if (k) { found = await c.match(k); break; }
-    }
-    if (!found) return null;
-    const j = await found.json();
-    const map = new Map();
-    (j.hadiths || []).forEach(h => map.set(String(h.hadithnumber), h));
-    FULL[ed] = map;
-  }
-  const h = FULL[ed].get(n);
-  if (!h) return null;
-  return new Response(JSON.stringify(Object.assign({}, h, { hadiths: [h] })), {
-    headers: { "Content-Type": "application/json" }
-  });
+/* পুরোনো ক্যাশ মোছা হয় না — আগে সেভ করা অফলাইন ডেটা নিরাপদ থাকে */
+self.addEventListener('activate', function(e){ e.waitUntil(self.clients.claim()); });
+function keyOf(r, u){ return r.mode === 'navigate' ? new Request('index.html') : (u.search ? null : r); }
+async function find(r, u){
+  var c = await caches.open(V), k = keyOf(r, u), hit = null;
+  if (k) hit = await c.match(k);
+  if (!hit) hit = await caches.match(r.mode === 'navigate' ? 'index.html' : r, { ignoreSearch: !!u.search || r.mode === 'navigate' });
+  if (!hit && r.mode === 'navigate') hit = await caches.match('./');
+  return hit;
 }
-
-self.addEventListener("fetch", e => {
-  const req = e.request;
-  if (req.method !== "GET") return;
-  const url = new URL(req.url);
-
-  if (url.origin === location.origin) {
-    e.respondWith(
-      fetch(req).then(res => {
-        if (res && res.ok && res.status === 200) {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
-        }
-        return res;
-      }).catch(() =>
-        caches.match(req, { ignoreSearch: true }).then(r => r || (req.mode === "navigate" ? caches.match("./index.html") : Response.error()))
-      )
-    );
+function store(r, u, res){
+  if (!res || res.status !== 200 || res.type === 'opaque') return;
+  var k = keyOf(r, u); if (!k) return;
+  var cp = res.clone();
+  caches.open(V).then(function(c){ return c.put(k, cp); }).catch(function(){});
+}
+self.addEventListener('fetch', function(e){
+  var r = e.request; if (r.method !== 'GET' || r.headers.has('range')) return;
+  var u = new URL(r.url); if (u.origin !== location.origin) return;
+  if (/\/content\.json$/.test(u.pathname)) {
+    e.respondWith(new Promise(function(done){
+      var fin = false, t = setTimeout(function(){ find(r, u).then(function(h){ if (!fin && h) { fin = true; done(h); } }); }, 3500);
+      fetch(r).then(function(res){ clearTimeout(t); if (!fin) { fin = true; done(res); } }, function(){ clearTimeout(t); find(r, u).then(function(h){ if (!fin) { fin = true; done(h || Response.error()); } }); });
+    }));
     return;
   }
-
-  if (KEEP.includes(url.hostname)) {
-    e.respondWith((async () => {
-      const hit = await caches.match(req);
-      if (hit) return hit;
-      try {
-        const res = await fetch(req);
-        if (res && (res.ok || res.type === "opaque")) {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(req, copy));
-        }
-        return res;
-      } catch (err) {
-        const h = await hadithFromFull(url);
-        return h || Response.error();
-      }
-    })());
-  }
+  e.respondWith((async function(){
+    var hit = await find(r, u);
+    var net = fetch(r.mode === 'navigate' ? new Request('index.html', { cache: 'no-cache' }) : new Request(r, { cache: 'no-cache' })).then(function(res){ store(r, u, res); return res; });
+    if (hit) { e.waitUntil(net.catch(function(){})); return hit; }
+    try { return await net; } catch(err) { return (await find(r, u)) || Response.error(); }
+  })());
 });

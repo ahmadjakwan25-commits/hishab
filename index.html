@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.json"><meta name="application-name" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-title" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#17603c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <title>আল-মিফতাহ</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&text=%E0%A7%A6%E0%A7%A7%E0%A7%A8%E0%A7%A9%E0%A7%AA%E0%A7%AB%E0%A7%AC%E0%A7%AD%E0%A7%AE%E0%A7%AF&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
+<link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&text=%E0%A7%A6%E0%A7%A7%E0%A7%A8%E0%A7%A9%E0%A7%AA%E0%A7%AB%E0%A7%AC%E0%A7%AD%E0%A7%AE%E0%A7%AF&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
 <style>
 :root{--bg:#f1f5f2;--inc:#1f7a4d;--card:#fff;--ink:#14261c;--mut:#5d7066;--g:#1f7a4d;--g2:#17603c;--line:#dbe5de;--red:#c0392b;--amb:#b7791f;--blue:#2b6cb0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a14;--inc:#3fae77;--card:#182a20;--ink:#e8f1ea;--mut:#9bb1a3;--g:#3fae77;--g2:#2d8a5b;--line:#2a4234;--red:#ef7a6c;--amb:#e0b050;--blue:#6aa7e8}}
@@ -224,7 +225,7 @@ body.wg header,body.wg #fab,body.wg #calc,body.wg #drw{display:none!important}
 @media(prefers-reduced-motion:no-preference){#tvtrip .tvcs .chip:hover,#tvtrip .tvbb:hover{transform:translateY(-2px);box-shadow:0 7px 16px rgba(22,100,79,.14)}}
 
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
 <style id="x-design">
 /* ===== নতুন ভিতরের ডিজাইন: হাদিস, কিতাব, কুরআনের দোয়া, কিবলা, ইসলামিক নাম, তাসবিহ, আসমাউল হুসনা ===== */
 #app{--gold:#d9b34a;--gt:#8a6a10}
@@ -409,7 +410,7 @@ body.wg header,body.wg #fab,body.wg #calc,body.wg #drw{display:none!important}
 #app[data-v="asma"] #asl .item small{font-size:12.5px;line-height:1.45;margin-top:2px}
 @media(max-width:340px){#app[data-v="asma"] #asl{grid-template-columns:1fr}}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600;700&family=Tiro+Bangla&family=Anek+Bangla:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600;700&family=Tiro+Bangla&family=Anek+Bangla:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
 <style id="thx">/* লেখা: ডান-বাম সমান */
 :where(#app,#drw) :where(p,li,small,.tr,.mn,.item>div,.item small){text-align:justify;text-justify:inter-word;hyphens:auto;overflow-wrap:anywhere}
 :where(#app) :where(.empty,.chip,.btn,button,.tb-st small,.tb-dk b,.tb-dk i,.tb-wk div,.tb-btn small) {text-align:center}
@@ -555,7 +556,7 @@ html[data-dn="cozy"] :is(.panel,.tile){padding:19px!important;margin-bottom:16px
 <div class="keys" id="keys"></div>
 <button class="btn" id="use">পরিমাণ ঘরে বসান</button>
 </aside>
-<script src="https://accounts.google.com/gsi/client" async defer onload="gReady()"></script>
+<script>window.addEventListener('load',function(){setTimeout(function(){var q=document.createElement('script');q.src='https://accounts.google.com/gsi/client';q.async=true;q.onload=function(){try{gReady()}catch(e){}};document.head.appendChild(q)},3000)})</script>
 <script>
 var lday='',lmonth='all',pendingPic='',KEY='hishab-v1', db={entries:[]}, view='hub', month=new Date().toISOString().slice(0,7);
 try{var s=localStorage.getItem(KEY);if(s)db=JSON.parse(s)}catch(e){}
@@ -2850,7 +2851,7 @@ function press(k){
 $('fab').onclick=function(){$('calc').classList.toggle('on')};
 $('use').onclick=function(){var r=calc(ex),a=$('amt');if(r!==null&&a){a.value=r;a.dispatchEvent(new Event('input',{bubbles:true}));a.focus()}};
 window.addEventListener('online',function(){if(lsGet('hishab-g')!=='1')return;if(g.tok&&Date.now()<g.exp)gSync();else gAuto()});
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+if('serviceWorker' in navigator)window.addEventListener('load',function(){setTimeout(function(){navigator.serviceWorker.register('sw.js').catch(function(){})},800)});
 /* ===== হোম স্ক্রিন উইজেট ===== */
 var WK=1,WN={1:'নামাজ ও তারিখ',2:'আয়-ব্যয়-ব্যালেন্স',3:'দুটো একসাথে'};
 function wgBal(){var b=bal();return '<div class="wgb"><small>বর্তমান ব্যালেন্স</small><div class="wbig'+(b<0?' neg':'')+'">'+tk(b)+'</div><div class="wr"><div>আয়<b style="color:#1f7a4d">'+tk(sum('income'))+'</b></div><div>ব্যয়<b style="color:#c0392b">'+tk(sum('expense')+sum('market'))+'</b></div></div></div>'}
@@ -3007,7 +3008,7 @@ function notifInit(){loadContent(function(c){
 })}
 $('nb').onclick=function(){dopen(false);view='notif';render();window.scrollTo(0,0)};
 var ctT=0;function ctRef(){var bf=lsGet('mf-ct');ctT=Date.now();loadContent(function(){nbUpdate();if(lsGet('mf-ct')!==bf&&{hub:1,cal:1,days:1}[view]){var y=window.scrollY;render();window.scrollTo(0,y)}})}
-ctRef();document.addEventListener('visibilitychange',function(){if(!document.hidden&&Date.now()-ctT>600000)ctRef()});
+setTimeout(ctRef,1500);document.addEventListener('visibilitychange',function(){if(!document.hidden&&Date.now()-ctT>600000)ctRef()});
 </script>
 <script src="offline.js"></script>
 <script src="mushaf.js"></script>
