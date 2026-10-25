@@ -73,7 +73,7 @@
     "#prw .prtb input{width:70px;padding:8px 4px;text-align:center;border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:inherit;font-weight:700;margin:0}" +
     "#prw .prof{font-size:12px;opacity:.9;white-space:nowrap}" +
     "#prw .prlb{flex:1;min-width:0;text-align:center;font-size:14px;line-height:1.25;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}" +
-    "#prw .prstg{position:relative;flex:1;overflow:hidden;touch-action:pan-y;background:radial-gradient(circle at 50% 30%,#e8e2cd,#cfc8ae)}" +
+    "#prw .prstg{position:relative;flex:1;overflow:hidden;touch-action:none;background:radial-gradient(circle at 50% 30%,#e8e2cd,#cfc8ae)}" +
     "#prw .prstg canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;box-shadow:0 3px 14px rgba(0,0,0,.35);transition:transform .24s ease}" +
     "#prw .prstg.z{overflow:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}" +
     "#prw .prstg.z canvas{position:relative;left:auto;top:auto;transform:none;margin:0 auto;display:block;transition:none}" +
@@ -109,6 +109,7 @@
     "#prw .prft{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;padding-bottom:max(8px,env(safe-area-inset-bottom,0px));border-top:1px solid #e0d6b0;background:#f4edd2}" +
     "#prw .prft button{flex:1;min-width:130px;padding:9px;border:1px solid #c9bd8f;border-radius:10px;background:#fff;font-size:13px;color:#3a3420}" +
     "#prw.land{inset:auto;top:0;transform:rotate(90deg);transform-origin:0 0}" +
+    "#prw.fs .prtb,#prw.fs .prsl,#prw.fs .prct{display:none}" +
     "#prw .prct{display:flex;gap:6px;padding:6px 10px;background:#145132;align-items:center}" +
     "#prw .prct button{flex:1;min-width:0;border:0;border-radius:10px;padding:9px 4px;background:rgba(255,255,255,.18);color:#fff;font-size:15px;white-space:nowrap}" +
     "#prw .prct #pr-zf{flex:1.4;font-size:13px}" +
@@ -208,7 +209,7 @@
     if (DOC) { try { DOC.destroy(); } catch (e) {} DOC = null; }
     cache = {}; order = [];
     S.view = "lib"; S.book = null; S.dl = false;
-    ov.classList.remove("rd", "mo"); ov.classList.add("lib");
+    ov.classList.remove("rd", "mo", "fs"); ov.classList.add("lib");
     $("lb").textContent = "আমার কিতাব";
     $("s").innerHTML = "";
     drawLib();
@@ -313,7 +314,7 @@
     (dl ? dlbooks : books).forEach(function (b) { if (b.id === id) meta = b; });
     if (!meta) return;
     S.view = "rd"; S.book = meta; S.dl = !!dl;
-    ov.classList.remove("lib"); ov.classList.add("rd");
+    ov.classList.remove("lib", "fs"); ov.classList.add("rd");
     $("lb").textContent = meta.name;
     info("⏳", "খোলা হচ্ছে…");
     idbGet((dl ? "d:" : "b:") + id).then(function (blob) {
@@ -362,7 +363,7 @@
   function closeIt() {
     if (!opened) return;
     opened = false;
-    closeMenu();
+    closeMenu(); ov.classList.remove("fs");
     if (DOC) { try { DOC.destroy(); } catch (e) {} DOC = null; }
     ov.style.display = "none";
   }
@@ -507,38 +508,51 @@
   landLabel();
 
   // আঙুল দিয়ে পাতা উল্টানো + ডবল ট্যাপে বড় করা
-  var sg0 = $("s"), px = 0, py = 0, pid = null, pt = 0, lastTap = 0;
+  var sg0 = $("s"), px = 0, py = 0, pid = null, pt = 0, lastTap = 0, tapT = 0;
   function zoomToggle() { setZoom(Z > 1 ? 1 : 2.2); }
+  // একবার ছুঁলে উপর-নিচের সবুজ অংশ লুকিয়ে পুরো পর্দায় কিতাব, আবার ছুঁলে ফিরে আসে
+  function toggleFs() {
+    if (!DOC || S.view !== "rd" || ov.classList.contains("mo")) return;
+    var f = curFocus();
+    ov.classList.toggle("fs");
+    var sg = $("s");
+    f.vx = sg.clientWidth / 2; f.vy = sg.clientHeight / 2;
+    pendingFocus = Z > 1 ? f : null;
+    cache = {}; order = [];
+    show(S.page, 0);
+  }
   sg0.addEventListener("pointerdown", function (e) {
-    if (Z > 1) return;
     var lp = loc(e); px = lp.x; py = lp.y; pid = e.pointerId; pt = Date.now();
   });
   sg0.addEventListener("pointercancel", function () { pid = null; });
   sg0.addEventListener("pointerup", function (e) {
     if (!DOC || multi) return;
-    var now = Date.now();
-    if (Z > 1) {
-      if (now - lastTap < 300) { zoomToggle(); lastTap = 0; } else lastTap = now;
-      return;
-    }
     if (pid !== e.pointerId) return;
     pid = null;
-    var lq = loc(e), dx = lq.x - px, dy = lq.y - py;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > 1.4 * Math.abs(dy)) {
+    var now = Date.now(), lq = loc(e), dx = lq.x - px, dy = lq.y - py;
+    if (Z <= 1 && Math.abs(dx) > 50 && Math.abs(dx) > 1.4 * Math.abs(dy)) {
+      clearTimeout(tapT); tapT = 0; lastTap = 0;
       flip((dx > 0) === S.rtl ? 1 : -1);
-      lastTap = 0;
     } else if (Math.abs(dx) < 12 && Math.abs(dy) < 12 && now - pt < 350) {
-      if (now - lastTap < 300) { zoomToggle(); lastTap = 0; } else lastTap = now;
+      if (tapT && now - lastTap < 320) { clearTimeout(tapT); tapT = 0; lastTap = 0; zoomToggle(); }
+      else { lastTap = now; clearTimeout(tapT); tapT = setTimeout(function () { tapT = 0; lastTap = 0; toggleFs(); }, 300); }
     }
   });
   // দুই আঙুলে চিমটি দিয়ে ছোট-বড়
+  function spt(t) {
+    var p = loc(t);
+    if (ov.classList.contains("land")) return { x: p.x - sg0.offsetLeft, y: p.y - sg0.offsetTop };
+    var r = sg0.getBoundingClientRect();
+    return { x: p.x - r.left, y: p.y - r.top };
+  }
   function tdist(t) { var dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY; return Math.sqrt(dx * dx + dy * dy); }
   sg0.addEventListener("touchstart", function (e) {
     if (e.touches.length >= 2) { multi = true; pid = null; }
-    if (e.touches.length !== 2 || !DOC || ov.classList.contains("land")) return;
+    if (e.touches.length !== 2 || !DOC) return;
     var c = sg0.querySelector("canvas"); if (!c || !c.offsetWidth) return;
-    var sr = sg0.getBoundingClientRect();
-    var vx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - sr.left, vy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - sr.top, fx, fy;
+    var p0 = spt(e.touches[0]), p1 = spt(e.touches[1]);
+    var vx = (p0.x + p1.x) / 2, vy = (p0.y + p1.y) / 2, fx, fy;
+    clearTimeout(tapT); tapT = 0;
     if (Z > 1) { fx = (sg0.scrollLeft + vx - c.offsetLeft) / c.offsetWidth; fy = (sg0.scrollTop + vy - c.offsetTop) / c.offsetHeight; }
     else { fx = (vx - (sg0.clientWidth - c.offsetWidth) / 2) / c.offsetWidth; fy = (vy - (sg0.clientHeight - c.offsetHeight) / 2) / c.offsetHeight; }
     pz = { d0: tdist(e.touches) || 1, z0: Z, r: 1, c: c, f: { fx: clamp01(fx), fy: clamp01(fy), vx: vx, vy: vy } };
