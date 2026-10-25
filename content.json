@@ -257,7 +257,7 @@
   }
  ],
  "th": {
-  "cs": "shadow",
+  "cs": "line",
   "fs": 110,
   "rd": "sq",
   "bgc": "#f1f5f2"
