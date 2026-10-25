@@ -445,8 +445,11 @@
   var DM = ls("pr-dlmode") === "off" ? "off" : "on", dlLoaded = false, dlReady = false;
   var st2 = document.createElement("style");
   st2.textContent =
-    '#app[data-v="library"] #lst .item>a.chip,#qpf .item>a.chip{display:none!important}' +
     ".mfdl,.mfrd,.mfrm{white-space:nowrap;cursor:pointer}" +
+    '#app[data-v="library"] #lst .item>div:first-child,#qpf .item>div:first-child,#app[data-v="library"] #lst .item small,#qpf .item small,.mfoff .item>div:first-child,.mfoff .item small{text-align:left!important;hyphens:manual!important;word-spacing:normal!important}' +
+    ".mfact{display:flex;flex-direction:column;gap:6px;align-items:stretch;flex:none}" +
+    ".mfact .chip{margin:0!important;text-align:center;white-space:nowrap;padding:7px 12px!important;font-size:14px!important}" +
+    ".mfoff .item .mfrd,.mfoff .item .mfrm{font-size:14px;padding:7px 12px}" +
     ".mfdl,.mfrd{border:0!important;padding:8px 15px;font-weight:700;background:linear-gradient(135deg,#f6dc8a,#d9a21f);color:#3d2c02!important;box-shadow:0 6px 12px -6px rgba(217,162,31,.9)}" +
     ".mfdl[data-have]{background:linear-gradient(135deg,#bfe5cc,#5fae7e);box-shadow:none}" +
     ".mfrm{margin-left:6px}" +
@@ -523,6 +526,44 @@
         '</small></div><button type="button" class="chip mfrd" data-id="' + b.id + '">📖 পড়ুন</button><button type="button" class="chip mfrm" data-id="' + b.id + '" aria-label="মুছুন">🗑</button></div>';
     }).join("");
   }
+  /* কোন লিংক ডাউনলোড করা যাবে তা আগে যাচাই করা হয়: যেটা যাবে না তাতে ডাউনলোড বোতাম আসে না */
+  var PC = {}, PQ = [], PS = {}, PR = 0, dlTimer = null;
+  try { PC = JSON.parse(ls("pr-probe") || "{}") || {}; } catch (e) { PC = {}; }
+  function probeSave() { try { ls("pr-probe", JSON.stringify(PC)); } catch (e) {} }
+  function probeState(u) {
+    var p = PC[u];
+    if (!p) return undefined;
+    var ttl = p.r ? 7 * 864e5 : 864e5;
+    if (Date.now() - p.t > ttl) { delete PC[u]; return undefined; }
+    return p.r;
+  }
+  function probeOne(u) {
+    var ac = window.AbortController ? new AbortController() : null;
+    var to = setTimeout(function () { try { if (ac) ac.abort(); } catch (e) {} }, 8000);
+    return fetch(u, ac ? { signal: ac.signal } : {}).then(function (r) {
+      clearTimeout(to);
+      var ct = ((r.headers && r.headers.get("content-type")) || "").toLowerCase();
+      var ok = !!r.ok && ct.indexOf("text/html") < 0;
+      try { if (ac) ac.abort(); } catch (e) {}
+      return ok;
+    });
+  }
+  function dlSchedule() { clearTimeout(dlTimer); dlTimer = setTimeout(dlScan, 80); }
+  function pumpProbes() {
+    while (PR < 3 && PQ.length) {
+      (function (u) {
+        PR++;
+        probeOne(u).then(function (ok) { PC[u] = { r: ok ? 1 : 0, t: Date.now() }; })
+          .catch(function () { PC[u] = { r: 0, t: Date.now() }; })
+          .then(function () { probeSave(); delete PS[u]; PR--; dlSchedule(); pumpProbes(); });
+      })(PQ.shift());
+    }
+  }
+  function queueProbe(u) {
+    if (PS[u] || navigator.onLine === false) return;
+    PS[u] = 1; PQ.push(u); pumpProbes();
+  }
+  window.addEventListener("online", dlSchedule);
   function setDisp(el, v) { if (el.style.display !== v) el.style.display = v; }
   function dlCtxs() {
     var app = document.getElementById("app"), v = app ? app.getAttribute("data-v") : "", out = [], l, q;
@@ -555,16 +596,27 @@
         [].forEach.call(box.querySelectorAll(".item"), function (it) {
           var a = it.querySelector("a.chip[href]"), btn = it.querySelector(".mfdl");
           if (!a && !btn) return;
+          var url = btn ? btn.getAttribute("data-u") : a.href;
+          var have = !!findDl(url, c.kind);
+          var isPdf = /\.pdf(?:[?#].*)?$/i.test(url || "");
+          var ok = have || (isPdf && probeState(url) === 1);
+          if (!ok) {
+            if (btn && !btn.getAttribute("data-busy") && btn.parentNode) btn.parentNode.removeChild(btn);
+            if (isPdf && probeState(url) === undefined) queueProbe(url);
+            return;
+          }
           if (!btn) {
             var t = it.querySelector("b"), au = it.querySelector("small");
             btn = document.createElement("button");
             btn.type = "button"; btn.className = "chip mfdl";
-            btn.setAttribute("data-u", a.href); btn.setAttribute("data-k", c.kind);
+            btn.setAttribute("data-u", url); btn.setAttribute("data-k", c.kind);
             btn.setAttribute("data-t", t ? t.textContent : ""); btn.setAttribute("data-a", au ? au.textContent : "");
-            it.appendChild(btn);
+            var w = a && a.parentNode === it ? document.createElement("span") : null;
+            if (w) { w.className = "mfact"; it.insertBefore(w, a); w.appendChild(a); w.appendChild(btn); }
+            else it.appendChild(btn);
           }
           if (btn.getAttribute("data-busy")) return;
-          var have = !!findDl(btn.getAttribute("data-u"), c.kind), want = have ? "✔ ডাউনলোড হয়েছে" : "⬇️ ডাউনলোড";
+          var want = have ? "✔ ডাউনলোড হয়েছে" : "⬇️ ডাউনলোড";
           if (btn.textContent !== want) btn.textContent = want;
           if (have && !btn.getAttribute("data-have")) btn.setAttribute("data-have", "1");
           if (!have && btn.getAttribute("data-have")) btn.removeAttribute("data-have");
