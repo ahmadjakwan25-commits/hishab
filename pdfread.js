@@ -367,7 +367,7 @@
       books.forEach(function (b) { if (b.id === id) nm = b.name; });
       if (confirm("\"" + nm + "\" মুছে ফেলবেন? ফোন থেকে এই কিতাবের কপি মুছে যাবে।")) {
         books = books.filter(function (b) { return b.id !== id; });
-        idbDel("b:" + id).then(saveBooks).then(drawLib);
+        idbDel("b:" + id).then(saveBooks).then(drawLib).then(function () { dlForget(id); });
         try { localStorage.removeItem("pr-last-" + id); } catch (er) {}
       }
       return;
@@ -438,6 +438,115 @@
   });
   window.addEventListener("resize", function () { if (opened && DOC) { cache = {}; order = []; show(S.page, 0); } });
 
+  /* ---------- ডাউনলোড করে অফলাইনে রাখা (কিতাব ও কুরআনের PDF তালিকা থেকে) ----------
+     ফাইল অ্যাপের নিজস্ব গোপন স্টোরেজে (IndexedDB) জমা হয়। ফোনের Downloads, গ্যালারি বা ফাইল ম্যানেজারে দেখা যায় না।
+     অ্যাপের "পিডিএফ যোগ করে পড়ুন" রিডারেই পড়া যায়, ইন্টারনেট ছাড়াও। */
+  var DL = {};
+  try { DL = JSON.parse(ls("pr-dlmap") || "{}") || {}; } catch (e) { DL = {}; }
+  function dlSave() { ls("pr-dlmap", JSON.stringify(DL)); }
+  function say(m) { try { if (typeof window.toast === "function") { window.toast(m); return; } } catch (e) {} alert(m); }
+  function dlState(url) {
+    var id = DL[url];
+    if (!id) return Promise.resolve("");
+    return loadBooks().then(function () {
+      var ok = books.some(function (b) { return b.id === id; });
+      if (!ok) { delete DL[url]; dlSave(); return ""; }
+      return id;
+    });
+  }
+  function dlFetch(url, onp) {
+    return fetch(url).then(function (r) {
+      if (!r.ok) throw new Error("http");
+      var total = parseInt(r.headers.get("content-length"), 10) || 0;
+      if (!r.body || !r.body.getReader) return r.blob();
+      var rd = r.body.getReader(), parts = [], got = 0;
+      return (function pump() {
+        return rd.read().then(function (x) {
+          if (x.done) return new Blob(parts, { type: "application/pdf" });
+          parts.push(x.value); got += x.value.length;
+          if (onp) onp(got, total);
+          return pump();
+        });
+      })();
+    });
+  }
+  function dlBook(url, name, onp) {
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+    return dlState(url).then(function (have) {
+      if (have) return have;
+      return dlFetch(url, onp).then(function (blob) {
+        return openBlob(blob).then(function (doc) {
+          var meta = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: name, pages: doc.numPages, size: blob.size, added: Date.now(), src: url };
+          try { doc.destroy(); } catch (e) {}
+          return idbSet("b:" + meta.id, blob)
+            .then(function () { return loadBooks(); })
+            .then(function () { books.push(meta); return saveBooks(); })
+            .then(function () { DL[url] = meta.id; dlSave(); return meta.id; });
+        });
+      });
+    });
+  }
+  function readSaved(id) {
+    if (!opened) {
+      opened = true;
+      ov.style.display = "flex";
+      try { history.pushState({ pr: 1 }, ""); } catch (e) {}
+      setTimeout(prefetchLib, 1500);
+    }
+    loadBooks().then(function () { showLib(); openBook(id); });
+  }
+  function dlForget(id) {
+    Object.keys(DL).forEach(function (u) { if (DL[u] === id) delete DL[u]; });
+    dlSave();
+    var bs = document.querySelectorAll('.mfdl[data-id="' + id + '"]');
+    for (var i = 0; i < bs.length; i++) { bs[i].removeAttribute("data-id"); bs[i].disabled = false; bs[i].textContent = "⬇️ ডাউনলোড"; }
+  }
+  function dlDone(b, id) { b.setAttribute("data-id", id); b.disabled = false; b.textContent = "📖 অফলাইন পড়ুন"; }
+  function dlScan() {
+    var as = document.querySelectorAll("#lst .item a.chip[href], #qpf .item a.chip[href]");
+    [].forEach.call(as, function (a) {
+      var h = a.href || "";
+      if (!/\.pdf(?:[?#].*)?$/i.test(h)) return;
+      var it = a.parentNode;
+      if (!it || it.querySelector(".mfdl")) return;
+      var t = it.querySelector("b"), btn = document.createElement("button");
+      btn.type = "button"; btn.className = "chip mfdl"; btn.style.marginRight = "6px";
+      btn.setAttribute("data-u", h);
+      btn.setAttribute("data-t", t ? t.textContent : "");
+      btn.textContent = "⬇️ ডাউনলোড";
+      it.insertBefore(btn, a);
+      dlState(h).then(function (id) { if (id) dlDone(btn, id); });
+    });
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target && e.target.closest ? e.target.closest(".mfdl") : null;
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var id = b.getAttribute("data-id");
+    if (id) { readSaved(id); return; }
+    if (b.disabled) return;
+    if (navigator.onLine === false) { say("ডাউনলোড করতে ইন্টারনেট লাগবে"); return; }
+    var url = b.getAttribute("data-u"), name = (b.getAttribute("data-t") || "").trim() || decodeURIComponent((url.split("?")[0].split("/").pop() || "কিতাব").replace(/\.pdf$/i, ""));
+    b.disabled = true; b.textContent = "⏳ …";
+    dlBook(url, name, function (got, total) {
+      b.textContent = total ? "⏳ " + bd(Math.min(99, Math.round(got * 100 / total))) + "%" : "⏳ " + sizeTxt(got);
+    }).then(function (nid) {
+      dlDone(b, nid);
+      say("ডাউনলোড হয়েছে। এখন ইন্টারনেট ছাড়াই পড়া যাবে ✔");
+    }).catch(function () {
+      b.disabled = false; b.textContent = "⬇️ ডাউনলোড";
+      say("ডাউনলোড করা যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।");
+    });
+  }, true);
+  function dlWatch() {
+    var app = document.getElementById("app"), q = false;
+    dlScan();
+    if (app && window.MutationObserver) new MutationObserver(function () {
+      if (q) return; q = true;
+      setTimeout(function () { q = false; dlScan(); }, 60);
+    }).observe(app, { childList: true, subtree: true });
+  }
+
   /* ---------- মূল পাতায় ঘর: "কিতাব" ঘরের পাশে ---------- */
   function mountTile() {
     var app = document.getElementById("app");
@@ -459,8 +568,8 @@
     mountTile();
     if (app && window.MutationObserver) new MutationObserver(function () { mountTile(); }).observe(app, { childList: true });
   }
-  function mount() { document.body.appendChild(ov); watch(); }
+  function mount() { document.body.appendChild(ov); watch(); dlWatch(); }
   if (document.body) mount(); else document.addEventListener("DOMContentLoaded", mount);
 
-  window.__pr = { open: openIt, flip: flip, go: go, S: S };
+  window.__pr = { open: openIt, flip: flip, go: go, S: S, dl: dlBook, state: dlState, read: readSaved };
 })();
