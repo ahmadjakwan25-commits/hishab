@@ -17,20 +17,6 @@
   function bd(n) { return String(n).replace(/\d/g, function (d) { return "০১২৩৪৫৬৭৮৯".charAt(d); }); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function ascii(s) { return String(s).replace(/[০-৯]/g, function (d) { return "০১২৩৪৫৬৭৮৯".indexOf(d); }); }
-
-  /* ---------- Google Drive লিংক: Drive API দিয়ে ডাউনলোড ----------
-     Drive-এর PDF অবশ্যই "Anyone with the link" শেয়ার করা থাকতে হবে।
-     কী-টি Google Cloud-এ Websites ও Drive API দিয়ে সীমাবদ্ধ করা আছে। */
-  var DRIVE_KEY = "AIzaSyAMxbHl91IWUWXTGIalFfmq8HP1eiaFtWQ";
-  function driveId(u) {
-    var m = /^https?:\/\/(?:drive|docs)\.google\.com\/(?:file\/d\/|file\/u\/\d+\/d\/)([\w-]{10,})/i.exec(u || "") ||
-      /^https?:\/\/(?:drive|docs)\.google\.com\/(?:open|uc)\?(?:[^#]*&)?id=([\w-]{10,})/i.exec(u || "");
-    return m ? m[1] : "";
-  }
-  function dlSrc(u) {
-    var id = driveId(u);
-    return id ? "https://www.googleapis.com/drive/v3/files/" + id + "?alt=media&supportsAllDrives=true&key=" + DRIVE_KEY : u;
-  }
   function sizeTxt(b) {
     if (b < 1048576) return bd(Math.max(1, Math.round(b / 1024))) + " KB";
     var mb = b / 1048576;
@@ -89,14 +75,14 @@
     "#prw .prlb{flex:1;min-width:0;text-align:center;font-size:14px;line-height:1.25;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}" +
     "#prw .prstg{position:relative;flex:1;overflow:hidden;touch-action:pan-y;background:radial-gradient(circle at 50% 30%,#e8e2cd,#cfc8ae)}" +
     "#prw .prstg canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;box-shadow:0 3px 14px rgba(0,0,0,.35);transition:transform .24s ease}" +
-    "#prw .prstg.z{overflow:auto;touch-action:auto;-webkit-overflow-scrolling:touch}" +
+    "#prw .prstg.z{overflow:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}" +
     "#prw .prstg.z canvas{position:relative;left:auto;top:auto;transform:none;margin:0 auto;display:block;transition:none}" +
     "#prw .prmsg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;line-height:1.6;color:#3a3420}" +
     "#prw .prmsg .big{font-size:44px}" +
     "#prw .prsl{padding:6px 14px;padding-bottom:max(6px,env(safe-area-inset-bottom,0px));background:#145132}" +
     "#prw .prsl input{width:100%;margin:0;padding:0;accent-color:#f4c542}" +
     /* মোড: কিতাবের তালিকা / পড়ার পাতা */
-    "#prw.lib .prstg,#prw.lib .prsl,#prw.lib #pr-p,#prw.lib .prof,#prw.lib #pr-m{display:none}" +
+    "#prw.lib .prstg,#prw.lib .prsl,#prw.lib #pr-p,#prw.lib .prof,#prw.lib #pr-m,#prw.lib .prct,#prw.lib #pr-bm{display:none}" +
     "#prw.rd .prlib{display:none}" +
     "#prw .prlib{flex:1;overflow:auto;padding:14px 12px 24px;-webkit-overflow-scrolling:touch;background:radial-gradient(circle at 50% 0,#efe8cf,#d6cdb0)}" +
     "#prw .pradd{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border:2px dashed #17603c;border-radius:14px;background:#f4edd2;color:#17603c;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:14px}" +
@@ -117,11 +103,22 @@
     "#prw .prmh button{border:0;border-radius:10px;padding:6px 12px;background:rgba(255,255,255,.2);color:#fff}" +
     "#prw .prsr{padding:12px 12px 6px}" +
     "#prw .prsr input{width:100%;margin:0;padding:12px;border:1.5px solid #c9bd8f;border-radius:10px;font:inherit;font-size:16px;background:#fff;color:#1c1a14}" +
-    "#prw .prres{flex:1;overflow:auto;padding:4px 12px}" +
+    "#prw .prres{flex:0 0 auto;max-height:24%;overflow:auto;padding:4px 12px}" +
     "#prw .prgo{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:12px;border:1px solid #17603c;border-radius:10px;background:#e3f1e8;color:#1c1a14;font-size:16px}" +
     "#prw .prem{padding:14px 6px;text-align:center;color:#7a735a;font-size:14px;line-height:1.6}" +
     "#prw .prft{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;padding-bottom:max(8px,env(safe-area-inset-bottom,0px));border-top:1px solid #e0d6b0;background:#f4edd2}" +
     "#prw .prft button{flex:1;min-width:130px;padding:9px;border:1px solid #c9bd8f;border-radius:10px;background:#fff;font-size:13px;color:#3a3420}" +
+    "#prw.land{inset:auto;top:0;transform:rotate(90deg);transform-origin:0 0}" +
+    "#prw .prct{display:flex;gap:6px;padding:6px 10px;background:#145132;align-items:center}" +
+    "#prw .prct button{flex:1;min-width:0;border:0;border-radius:10px;padding:9px 4px;background:rgba(255,255,255,.18);color:#fff;font-size:15px;white-space:nowrap}" +
+    "#prw .prct #pr-zf{flex:1.4;font-size:13px}" +
+    "#prw .prct button.on,#prw .prtb #pr-bm.on{background:#f4c542;color:#3d2c02}" +
+    "#prw .prbmh{display:flex;align-items:center;gap:8px;padding:8px 12px 4px;border-top:1px solid #e0d6b0}#prw .prbmh b{flex:1;font-size:15px}" +
+    "#prw .prbmh button{border:1px solid #17603c;border-radius:10px;padding:7px 10px;background:#e3f1e8;color:#17603c;font-size:13px}" +
+    "#prw .prbml{flex:1;overflow:auto;padding:4px 12px}" +
+    "#prw .prbm{display:flex;gap:6px;margin-bottom:6px}" +
+    "#prw .prbg{flex:1;display:flex;justify-content:space-between;align-items:center;text-align:left;padding:11px 12px;border:1px solid #d8c47a;border-radius:10px;background:#fff7d6;color:#1c1a14;font-size:15px}#prw .prbg small{color:#7a6a2a;font-size:12px}" +
+    "#prw .prbd{border:0;border-radius:10px;padding:0 12px;background:#f3e0dc;color:#9a2b1f}" +
     "#pr-tile b{line-height:1.25}";
   document.head.appendChild(st);
 
@@ -133,19 +130,21 @@
     '<button id="pr-m" aria-label="মেনু">☰</button>' +
     '<input id="pr-p" type="number" min="1" inputmode="numeric" aria-label="পৃষ্ঠা নম্বর"><span class="prof" id="pr-of"></span>' +
     '<div class="prlb" id="pr-lb">আমার কিতাব</div>' +
-    '<button id="pr-x" aria-label="বন্ধ">✕</button></div>' +
+    '<button id="pr-bm" aria-label="বুকমার্ক">🔖</button><button id="pr-x" aria-label="বন্ধ">✕</button></div>' +
     '<div class="prlib" id="pr-lib"></div>' +
     '<div class="prstg" id="pr-s"></div>' +
+    '<div class="prct"><button id="pr-pv" aria-label="আগের পাতা">‹ আগের</button><button id="pr-zo" aria-label="ছোট করুন">➖</button><button id="pr-zf" aria-label="মাপ ঠিক করুন">১০০%</button><button id="pr-zi" aria-label="বড় করুন">➕</button><button id="pr-nx" aria-label="পরের পাতা">পরের ›</button><button id="pr-ro" aria-label="আড়াআড়ি">🔄</button></div>' +
     '<div class="prsl"><input id="pr-r" type="range" min="1" max="1" value="1" aria-label="পাতা সরান"></div>' +
     '<div class="prbkd" id="pr-bk"></div>' +
     '<div class="prmn"><div class="prmh"><b>পৃষ্ঠা খুঁজুন</b><button id="pr-mx">✕ বন্ধ</button></div>' +
     '<div class="prsr"><input id="pr-q" type="search" inputmode="numeric" placeholder="পৃষ্ঠা নম্বর লিখুন…" autocomplete="off"></div>' +
     '<div class="prres" id="pr-res"></div>' +
-    '<div class="prft"><button id="pr-dir"></button><button id="pr-lbk">📚 কিতাবের তালিকা</button></div></div>';
+    '<div class="prbmh"><b>🔖 বুকমার্ক</b><button id="pr-bma"></button></div><div class="prbml" id="pr-bml"></div>' +
+    '<div class="prft"><button id="pr-dir"></button><button id="pr-ro2">🔄 আড়াআড়ি</button><button id="pr-lbk">📚 কিতাবের তালিকা</button></div></div>';
   function $(id) { return ov.querySelector("#pr-" + id); }
 
   /* ---------- অবস্থা ---------- */
-  var S = { view: "lib", page: 1, rtl: ls("pr-dir") !== "ltr", book: null, dl: false };
+  var S = { view: "lib", page: 1, rtl: ls("pr-dir") !== "ltr", book: null, dl: false, land: ls("pr-land") === "1" };
   var pdfjs = null, DOC = null, NUM = 0, Z = 1, token = 0, cache = {}, order = [], books = [], dlbooks = [], opened = false;
 
   function loadLib() {
@@ -225,7 +224,7 @@
     if (cache[n] && cache[n].key === key) return Promise.resolve(cache[n].c);
     return DOC.getPage(n).then(function (page) {
       var v1 = page.getViewport({ scale: 1 });
-      var fit = Z > 1 ? (W / v1.width) * Z : Math.min(W / v1.width, H / v1.height);
+      var fit = Math.min(W / v1.width, H / v1.height) * Z;
       var dpr = Math.min(window.devicePixelRatio || 1, 3);
       var vw = v1.width * fit * dpr, vh = v1.height * fit * dpr, cap = 14e6;
       if (vw * vh > cap) dpr = dpr * Math.sqrt(cap / (vw * vh));
@@ -243,13 +242,19 @@
     });
   }
   function place(c, exitDir) {
-    var sg = $("s"), old = sg.querySelector("canvas");
+    var sg = $("s"), old = sg.querySelector("canvas"), pf = pendingFocus;
+    pendingFocus = null;
     var msg = sg.querySelector(".prmsg"); if (msg) sg.removeChild(msg);
     if (Z > 1 || !old || !exitDir) {
       while (sg.firstChild) sg.removeChild(sg.firstChild);
       sg.appendChild(c);
       sg.classList.toggle("z", Z > 1);
-      if (Z > 1) { sg.scrollLeft = (sg.scrollWidth - sg.clientWidth) / 2; sg.scrollTop = 0; }
+      if (Z > 1) {
+        if (pf) {
+          sg.scrollLeft = c.offsetLeft + pf.fx * c.offsetWidth - pf.vx;
+          sg.scrollTop = c.offsetTop + pf.fy * c.offsetHeight - pf.vy;
+        } else { sg.scrollLeft = (sg.scrollWidth - sg.clientWidth) / 2; sg.scrollTop = 0; }
+      }
       return;
     }
     var W = sg.clientWidth;
@@ -272,6 +277,7 @@
   function labels() {
     $("p").value = S.page;
     $("r").value = S.page;
+    zlabel(); bmDraw();
   }
   function show(n, exitDir) {
     var my = ++token;
@@ -284,13 +290,13 @@
       info("😔", "এই পাতা আঁকা যায়নি। আবার চেষ্টা করুন।");
     });
   }
-  function go(n, exitDir) {
+  function go(n, exitDir, keepZ) {
     n = parseInt(n, 10);
     if (!(n >= 1)) n = 1;
     if (n > NUM) n = NUM;
     S.page = n;
     if (S.book) ls("pr-last-" + S.book.id, n);
-    Z = 1; $("s").classList.remove("z");
+    if (!keepZ) { Z = 1; $("s").classList.remove("z"); }
     labels();
     show(n, exitDir || 0);
   }
@@ -340,7 +346,7 @@
     }
     res.innerHTML = '<button class="prgo" data-p="' + n + '"><span>↪</span><span>পৃষ্ঠা ' + bd(n) + "-এ যান</span></button>";
   }
-  function openMenu() { ov.classList.add("mo"); $("lbk").textContent = S.dl ? "⬅️ তালিকায় ফিরুন" : "📚 কিতাবের তালিকা"; $("q").value = ""; drawRes(); setTimeout(function () { try { $("q").focus(); } catch (e) {} }, 260); }
+  function openMenu() { ov.classList.add("mo"); $("lbk").textContent = S.dl ? "⬅️ তালিকায় ফিরুন" : "📚 কিতাবের তালিকা"; $("q").value = ""; drawRes(); bmDraw(); setTimeout(function () { try { $("q").focus(); } catch (e) {} }, 260); }
   function closeMenu() { ov.classList.remove("mo"); }
   function dirLabel() { $("dir").textContent = S.rtl ? "↔ ডানে টানলে পরের পাতা" : "↔ বামে টানলে পরের পাতা"; }
 
@@ -348,7 +354,7 @@
   function openIt() {
     if (opened) return;
     opened = true;
-    ov.style.display = "flex";
+    ov.style.display = "flex"; applyLand();
     try { history.pushState({ pr: 1 }, ""); } catch (e) {}
     loadBooks().then(function () { showLib(); });
     setTimeout(prefetchLib, 1500);
@@ -382,7 +388,7 @@
       if (confirm("\"" + nm + "\" মুছে ফেলবেন? ফোন থেকে এই কিতাবের কপি মুছে যাবে।")) {
         books = books.filter(function (b) { return b.id !== id; });
         idbDel("b:" + id).then(saveBooks).then(drawLib);
-        try { localStorage.removeItem("pr-last-" + id); } catch (er) {}
+        try { localStorage.removeItem("pr-last-" + id); localStorage.removeItem("pr-bm-" + id); } catch (er) {}
       }
       return;
     }
@@ -414,21 +420,102 @@
   };
   dirLabel();
 
-  // আঙুল দিয়ে পাতা উল্টানো + ডবল ট্যাপে বড় করা
-  var sg0 = $("s"), px = 0, py = 0, pid = null, pt = 0, lastTap = 0;
-  function zoomToggle() {
+  /* ---------- জুম, আড়াআড়ি, বুকমার্ক ---------- */
+  var pendingFocus = null, multi = false, pz = null, ZST = [1, 1.4, 2, 2.8, 4, 6];
+  function clamp01(v) { return v !== v ? 0.5 : Math.max(0, Math.min(1, v)); }
+  function zlabel() { $("zf").textContent = bd(Math.round(Z * 100)) + "%"; }
+  function curFocus() {
+    var sg = $("s"), c = sg.querySelector("canvas"), vx = sg.clientWidth / 2, vy = sg.clientHeight / 2;
+    if (!c || Z <= 1 || !c.offsetWidth) return { fx: 0.5, fy: 0.5, vx: vx, vy: vy };
+    return { fx: clamp01((sg.scrollLeft + vx - c.offsetLeft) / c.offsetWidth), fy: clamp01((sg.scrollTop + vy - c.offsetTop) / c.offsetHeight), vx: vx, vy: vy };
+  }
+  function setZoom(nz, f) {
     if (!DOC) return;
-    Z = Z > 1 ? 1 : 2.2;
-    sg0.classList.toggle("z", Z > 1);
+    nz = Math.max(1, Math.min(6, nz));
+    if (Math.abs(nz - Z) < 0.01) { zlabel(); return; }
+    pendingFocus = f || curFocus();
+    Z = nz;
+    $("s").classList.toggle("z", Z > 1);
+    zlabel();
     show(S.page, 0);
   }
+  function zoomStep(dir) {
+    var i;
+    if (dir > 0) { for (i = 0; i < ZST.length; i++) if (ZST[i] > Z + 0.01) { setZoom(ZST[i]); return; } }
+    else { for (i = ZST.length - 1; i >= 0; i--) if (ZST[i] < Z - 0.01) { setZoom(ZST[i]); return; } }
+  }
+  function step(d) {
+    if (!DOC) return;
+    var n = S.page + d;
+    if (n < 1 || n > NUM) return;
+    go(n, 0, true);
+  }
+  // আড়াআড়ি: ফোন সোজা ধরা থাকলেও পাতা আড়াআড়ি দেখায় (ফোন বাঁয়ে ঘুরিয়ে ধরুন)
+  function landLabel() { $("ro").className = S.land ? "on" : ""; $("ro2").textContent = S.land ? "↩ সোজা করুন" : "🔄 আড়াআড়ি"; }
+  function applyLand() {
+    var want = !!S.land && window.innerHeight > window.innerWidth;
+    ov.classList.toggle("land", want);
+    if (want) { ov.style.width = window.innerHeight + "px"; ov.style.height = window.innerWidth + "px"; ov.style.left = window.innerWidth + "px"; }
+    else { ov.style.width = ""; ov.style.height = ""; ov.style.left = ""; }
+    landLabel();
+  }
+  function toggleLand() {
+    S.land = !S.land; ls("pr-land", S.land ? "1" : "0");
+    applyLand();
+    if (DOC) { cache = {}; order = []; show(S.page, 0); }
+  }
+  function loc(e) { return ov.classList.contains("land") ? { x: e.clientY, y: window.innerWidth - e.clientX } : { x: e.clientX, y: e.clientY }; }
+  // বুকমার্ক (প্রতিটি কিতাবের আলাদা, ফোনেই জমা থাকে)
+  function bmKey() { return "pr-bm-" + (S.book ? S.book.id : ""); }
+  function bmGet() { try { var a = JSON.parse(ls(bmKey()) || "[]"); return a && a.length !== undefined ? a : []; } catch (e) { return []; } }
+  function bmDraw() {
+    if (!S.book) return;
+    var a = bmGet(), has = a.some(function (b) { return b.p === S.page; });
+    $("bm").className = has ? "on" : "";
+    $("bma").textContent = has ? "✕ বুকমার্ক সরান" : "➕ এই পৃষ্ঠা (" + bd(S.page) + ")";
+    $("bml").innerHTML = a.length ? a.map(function (b) {
+      var d = ""; try { d = new Date(b.t).toLocaleDateString("bn-BD", { day: "numeric", month: "short" }); } catch (e) {}
+      return '<div class="prbm"><button class="prbg" data-bg="' + b.p + '"><span>🔖 পৃষ্ঠা ' + bd(b.p) + "</span><small>" + d + '</small></button><button class="prbd" data-bd="' + b.p + '" aria-label="মুছুন">✕</button></div>';
+    }).join("") : '<div class="prem">কোনো বুকমার্ক নেই।<br>পড়তে পড়তে 🔖 চেপে যেকোনো পৃষ্ঠা রেখে দিন।</div>';
+  }
+  function bmToggle() {
+    if (!S.book || !DOC) return;
+    var a = bmGet(), i = -1;
+    a.forEach(function (b, k) { if (b.p === S.page) i = k; });
+    if (i >= 0) a.splice(i, 1); else a.push({ p: S.page, t: Date.now() });
+    a.sort(function (x, y) { return x.p - y.p; });
+    ls(bmKey(), JSON.stringify(a));
+    bmDraw();
+    say(i >= 0 ? "বুকমার্ক সরানো হয়েছে" : "পৃষ্ঠা " + bd(S.page) + " বুকমার্ক করা হয়েছে 🔖");
+  }
+  $("pv").onclick = function () { step(-1); };
+  $("nx").onclick = function () { step(1); };
+  $("zo").onclick = function () { zoomStep(-1); };
+  $("zi").onclick = function () { zoomStep(1); };
+  $("zf").onclick = function () { setZoom(1); };
+  $("ro").onclick = toggleLand;
+  $("ro2").onclick = function () { closeMenu(); toggleLand(); };
+  $("bm").onclick = bmToggle;
+  $("bma").onclick = bmToggle;
+  $("bml").onclick = function (e) {
+    var g = e.target.closest ? e.target.closest("[data-bg]") : null, d = e.target.closest ? e.target.closest("[data-bd]") : null;
+    if (d) {
+      var p = parseInt(d.getAttribute("data-bd"), 10), a = bmGet().filter(function (b) { return b.p !== p; });
+      ls(bmKey(), JSON.stringify(a)); bmDraw();
+    } else if (g && DOC) { closeMenu(); go(parseInt(g.getAttribute("data-bg"), 10)); }
+  };
+  landLabel();
+
+  // আঙুল দিয়ে পাতা উল্টানো + ডবল ট্যাপে বড় করা
+  var sg0 = $("s"), px = 0, py = 0, pid = null, pt = 0, lastTap = 0;
+  function zoomToggle() { setZoom(Z > 1 ? 1 : 2.2); }
   sg0.addEventListener("pointerdown", function (e) {
     if (Z > 1) return;
-    px = e.clientX; py = e.clientY; pid = e.pointerId; pt = Date.now();
+    var lp = loc(e); px = lp.x; py = lp.y; pid = e.pointerId; pt = Date.now();
   });
   sg0.addEventListener("pointercancel", function () { pid = null; });
   sg0.addEventListener("pointerup", function (e) {
-    if (!DOC) return;
+    if (!DOC || multi) return;
     var now = Date.now();
     if (Z > 1) {
       if (now - lastTap < 300) { zoomToggle(); lastTap = 0; } else lastTap = now;
@@ -436,7 +523,7 @@
     }
     if (pid !== e.pointerId) return;
     pid = null;
-    var dx = e.clientX - px, dy = e.clientY - py;
+    var lq = loc(e), dx = lq.x - px, dy = lq.y - py;
     if (Math.abs(dx) > 50 && Math.abs(dx) > 1.4 * Math.abs(dy)) {
       flip((dx > 0) === S.rtl ? 1 : -1);
       lastTap = 0;
@@ -444,13 +531,48 @@
       if (now - lastTap < 300) { zoomToggle(); lastTap = 0; } else lastTap = now;
     }
   });
+  // দুই আঙুলে চিমটি দিয়ে ছোট-বড়
+  function tdist(t) { var dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY; return Math.sqrt(dx * dx + dy * dy); }
+  sg0.addEventListener("touchstart", function (e) {
+    if (e.touches.length >= 2) { multi = true; pid = null; }
+    if (e.touches.length !== 2 || !DOC || ov.classList.contains("land")) return;
+    var c = sg0.querySelector("canvas"); if (!c || !c.offsetWidth) return;
+    var sr = sg0.getBoundingClientRect();
+    var vx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - sr.left, vy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - sr.top, fx, fy;
+    if (Z > 1) { fx = (sg0.scrollLeft + vx - c.offsetLeft) / c.offsetWidth; fy = (sg0.scrollTop + vy - c.offsetTop) / c.offsetHeight; }
+    else { fx = (vx - (sg0.clientWidth - c.offsetWidth) / 2) / c.offsetWidth; fy = (vy - (sg0.clientHeight - c.offsetHeight) / 2) / c.offsetHeight; }
+    pz = { d0: tdist(e.touches) || 1, z0: Z, r: 1, c: c, f: { fx: clamp01(fx), fy: clamp01(fy), vx: vx, vy: vy } };
+  }, { passive: true });
+  sg0.addEventListener("touchmove", function (e) {
+    if (!pz || e.touches.length !== 2) return;
+    if (e.cancelable) e.preventDefault();
+    var r = Math.max(1 / pz.z0, Math.min(6 / pz.z0, tdist(e.touches) / pz.d0)); pz.r = r;
+    pz.c.style.transition = "none";
+    pz.c.style.transformOrigin = (pz.f.fx * 100) + "% " + (pz.f.fy * 100) + "%";
+    pz.c.style.transform = (pz.z0 > 1 ? "" : "translate(-50%,-50%) ") + "scale(" + r + ")";
+  }, { passive: false });
+  function endPinch(e) {
+    if (e.touches.length === 0) setTimeout(function () { multi = false; }, 80);
+    if (!pz || e.touches.length >= 2) return;
+    var p = pz; pz = null;
+    p.c.style.transform = ""; p.c.style.transformOrigin = ""; p.c.style.transition = "";
+    if (Math.abs(p.r - 1) > 0.06) setZoom(p.z0 * p.r, p.f);
+  }
+  sg0.addEventListener("touchend", endPinch, { passive: true });
+  sg0.addEventListener("touchcancel", endPinch, { passive: true });
   document.addEventListener("keydown", function (e) {
     if (!opened || S.view !== "rd" || ov.classList.contains("mo")) return;
     if (e.target && e.target.tagName === "INPUT") return;
     if (e.key === "ArrowLeft") flip(S.rtl ? 1 : -1);
     else if (e.key === "ArrowRight") flip(S.rtl ? -1 : 1);
   });
-  window.addEventListener("resize", function () { if (opened && DOC) { cache = {}; order = []; show(S.page, 0); } });
+  window.addEventListener("resize", function () {
+    if (!opened) return;
+    var ae = document.activeElement;
+    if (ae && ae.tagName === "INPUT" && ov.contains(ae)) return;   // কিবোর্ড খুললে ঘোরানো বদলায় না
+    applyLand();
+    if (DOC) { cache = {}; order = []; show(S.page, 0); }
+  });
 
   /* ---------- কিতাব ও কুরআন: অনলাইন / অফলাইন ----------
      অনলাইন তালিকায় শুধু ডাউনলোড বোতাম থাকে। ডাউনলোড হলে কিতাব অফলাইন তালিকায় যায় এবং সেখান থেকেই পড়া যায়।
@@ -474,7 +596,7 @@
   function loadDl() { return idbGet("dlbooks").then(function (b) { dlbooks = b || []; }).catch(function () { dlbooks = []; }); }
   function saveDl() { return idbSet("dlbooks", dlbooks); }
   function dlFetch(url, onp) {
-    return fetch(dlSrc(url)).then(function (r) {
+    return fetch(url).then(function (r) {
       if (!r.ok) throw new Error("http");
       var total = parseInt(r.headers.get("content-length"), 10) || 0;
       if (!r.body || !r.body.getReader) return r.blob();
@@ -513,7 +635,7 @@
   function readDl(id) {
     if (!opened) {
       opened = true;
-      ov.style.display = "flex";
+      ov.style.display = "flex"; applyLand();
       try { history.pushState({ pr: 1 }, ""); } catch (e) {}
       setTimeout(prefetchLib, 1500);
     }
@@ -531,7 +653,7 @@
     idbDel("d:" + id).then(function () {
       dlbooks = dlbooks.filter(function (b) { return b.id !== id; });
       return saveDl();
-    }).then(function () { try { localStorage.removeItem("pr-last-" + id); } catch (er) {} dlScan(); });
+    }).then(function () { try { localStorage.removeItem("pr-last-" + id); localStorage.removeItem("pr-bm-" + id); } catch (er) {} dlScan(); });
   }
   function offHtml(list) {
     if (!list.length) return '<div class="empty">কিছু ডাউনলোড করা নেই।<br>অনলাইন থেকে ডাউনলোড করলে এখানে আসবে, তখন ইন্টারনেট ছাড়াই পড়া যাবে।</div>';
@@ -613,7 +735,7 @@
           var url = btn ? btn.getAttribute("data-u") : a.href;
           var have = !!findDl(url, c.kind);
           var isPdf = /\.pdf(?:[?#].*)?$/i.test(url || "");
-          var ok = have || !!driveId(url) || (isPdf && probeState(url) === 1);
+          var ok = have || (isPdf && probeState(url) === 1);
           if (!ok) {
             if (btn && !btn.getAttribute("data-busy") && btn.parentNode) btn.parentNode.removeChild(btn);
             if (isPdf && probeState(url) === undefined) queueProbe(url);
@@ -655,7 +777,7 @@
     if (t.getAttribute("data-busy")) return;
     if (navigator.onLine === false) { say("ডাউনলোড করতে ইন্টারনেট লাগবে"); return; }
     var url = t.getAttribute("data-u"), kind = t.getAttribute("data-k") || "books";
-    var name = (t.getAttribute("data-t") || "").trim() || (driveId(url) ? "কিতাব" : decodeURIComponent((url.split("?")[0].split("/").pop() || "কিতাব").replace(/\.pdf$/i, "")));
+    var name = (t.getAttribute("data-t") || "").trim() || decodeURIComponent((url.split("?")[0].split("/").pop() || "কিতাব").replace(/\.pdf$/i, ""));
     t.setAttribute("data-busy", "1"); t.textContent = "⏳ …";
     dlAdd(url, name, (t.getAttribute("data-a") || "").trim(), kind, function (got, total) {
       t.textContent = total ? "⏳ " + bd(Math.min(99, Math.round(got * 100 / total))) + "%" : "⏳ " + sizeTxt(got);
@@ -664,7 +786,7 @@
       say("ডাউনলোড হয়েছে। এখন অফলাইন ট্যাব থেকে ইন্টারনেট ছাড়াই পড়া যাবে ✔");
     }).catch(function () {
       t.removeAttribute("data-busy"); t.textContent = "⬇️ ডাউনলোড";
-      say(driveId(url) ? "Drive থেকে ডাউনলোড করা যায়নি। ফাইলটি \"Anyone with the link\" করা আছে কিনা এবং ইন্টারনেট ঠিক আছে কিনা দেখুন।" : "ডাউনলোড করা যায়নি। এটা সরাসরি PDF লিংক কিনা এবং ইন্টারনেট ঠিক আছে কিনা দেখুন।");
+      say("ডাউনলোড করা যায়নি। এটা সরাসরি PDF লিংক কিনা এবং ইন্টারনেট ঠিক আছে কিনা দেখুন।");
     });
   }, true);
   function dlWatch() {
