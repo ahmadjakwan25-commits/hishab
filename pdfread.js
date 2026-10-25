@@ -17,6 +17,20 @@
   function bd(n) { return String(n).replace(/\d/g, function (d) { return "০১২৩৪৫৬৭৮৯".charAt(d); }); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function ascii(s) { return String(s).replace(/[০-৯]/g, function (d) { return "০১২৩৪৫৬৭৮৯".indexOf(d); }); }
+
+  /* ---------- Google Drive লিংক: Drive API দিয়ে ডাউনলোড ----------
+     Drive-এর PDF অবশ্যই "Anyone with the link" শেয়ার করা থাকতে হবে।
+     কী-টি Google Cloud-এ Websites ও Drive API দিয়ে সীমাবদ্ধ করা আছে। */
+  var DRIVE_KEY = "AIzaSyAMxbHl91IWUWXTGIalFfmq8HP1eiaFtWQ";
+  function driveId(u) {
+    var m = /^https?:\/\/(?:drive|docs)\.google\.com\/(?:file\/d\/|file\/u\/\d+\/d\/)([\w-]{10,})/i.exec(u || "") ||
+      /^https?:\/\/(?:drive|docs)\.google\.com\/(?:open|uc)\?(?:[^#]*&)?id=([\w-]{10,})/i.exec(u || "");
+    return m ? m[1] : "";
+  }
+  function dlSrc(u) {
+    var id = driveId(u);
+    return id ? "https://www.googleapis.com/drive/v3/files/" + id + "?alt=media&supportsAllDrives=true&key=" + DRIVE_KEY : u;
+  }
   function sizeTxt(b) {
     if (b < 1048576) return bd(Math.max(1, Math.round(b / 1024))) + " KB";
     var mb = b / 1048576;
@@ -460,7 +474,7 @@
   function loadDl() { return idbGet("dlbooks").then(function (b) { dlbooks = b || []; }).catch(function () { dlbooks = []; }); }
   function saveDl() { return idbSet("dlbooks", dlbooks); }
   function dlFetch(url, onp) {
-    return fetch(url).then(function (r) {
+    return fetch(dlSrc(url)).then(function (r) {
       if (!r.ok) throw new Error("http");
       var total = parseInt(r.headers.get("content-length"), 10) || 0;
       if (!r.body || !r.body.getReader) return r.blob();
@@ -599,7 +613,7 @@
           var url = btn ? btn.getAttribute("data-u") : a.href;
           var have = !!findDl(url, c.kind);
           var isPdf = /\.pdf(?:[?#].*)?$/i.test(url || "");
-          var ok = have || (isPdf && probeState(url) === 1);
+          var ok = have || !!driveId(url) || (isPdf && probeState(url) === 1);
           if (!ok) {
             if (btn && !btn.getAttribute("data-busy") && btn.parentNode) btn.parentNode.removeChild(btn);
             if (isPdf && probeState(url) === undefined) queueProbe(url);
@@ -641,7 +655,7 @@
     if (t.getAttribute("data-busy")) return;
     if (navigator.onLine === false) { say("ডাউনলোড করতে ইন্টারনেট লাগবে"); return; }
     var url = t.getAttribute("data-u"), kind = t.getAttribute("data-k") || "books";
-    var name = (t.getAttribute("data-t") || "").trim() || decodeURIComponent((url.split("?")[0].split("/").pop() || "কিতাব").replace(/\.pdf$/i, ""));
+    var name = (t.getAttribute("data-t") || "").trim() || (driveId(url) ? "কিতাব" : decodeURIComponent((url.split("?")[0].split("/").pop() || "কিতাব").replace(/\.pdf$/i, "")));
     t.setAttribute("data-busy", "1"); t.textContent = "⏳ …";
     dlAdd(url, name, (t.getAttribute("data-a") || "").trim(), kind, function (got, total) {
       t.textContent = total ? "⏳ " + bd(Math.min(99, Math.round(got * 100 / total))) + "%" : "⏳ " + sizeTxt(got);
@@ -650,7 +664,7 @@
       say("ডাউনলোড হয়েছে। এখন অফলাইন ট্যাব থেকে ইন্টারনেট ছাড়াই পড়া যাবে ✔");
     }).catch(function () {
       t.removeAttribute("data-busy"); t.textContent = "⬇️ ডাউনলোড";
-      say("ডাউনলোড করা যায়নি। এটা সরাসরি PDF লিংক কিনা এবং ইন্টারনেট ঠিক আছে কিনা দেখুন।");
+      say(driveId(url) ? "Drive থেকে ডাউনলোড করা যায়নি। ফাইলটি \"Anyone with the link\" করা আছে কিনা এবং ইন্টারনেট ঠিক আছে কিনা দেখুন।" : "ডাউনলোড করা যায়নি। এটা সরাসরি PDF লিংক কিনা এবং ইন্টারনেট ঠিক আছে কিনা দেখুন।");
     });
   }, true);
   function dlWatch() {
