@@ -606,11 +606,23 @@
     ".mfbar{margin:0 0 10px}";
   document.head.appendChild(st2);
 
+  /* গুগল ড্রাইভের লিংক: Drive API দিয়ে ডাউনলোড (লিংকের ফাইল "Anyone with the link" শেয়ার করা থাকতে হবে)
+     নিচের "" এর ভেতরে আপনার Google Drive API key বসান। ফাঁকা থাকলে ড্রাইভের লিংকে ডাউনলোড বোতাম আসবে না। */
+  var DRIVE_KEY = window.MF_DRIVE_KEY || "AIzaSyAMxbHl91IWUWXTGIalFfmq8HP1eiaFtWQ";
+  function driveId(u) {
+    if (!/^https?:\/\/(?:drive|docs)\.google\.com\//i.test(u || "")) return "";
+    var m = /\/file\/d\/([\w-]{15,})/.exec(u) || /[?&]id=([\w-]{15,})/.exec(u);
+    return m ? m[1] : "";
+  }
+  function realUrl(u) {
+    var id = driveId(u);
+    return id && DRIVE_KEY ? "https://www.googleapis.com/drive/v3/files/" + id + "?alt=media&supportsAllDrives=true&key=" + encodeURIComponent(DRIVE_KEY) : u;
+  }
   function say(m) { try { if (typeof window.toast === "function") { window.toast(m); return; } } catch (e) {} alert(m); }
   function loadDl() { return idbGet("dlbooks").then(function (b) { dlbooks = b || []; }).catch(function () { dlbooks = []; }); }
   function saveDl() { return idbSet("dlbooks", dlbooks); }
   function dlFetch(url, onp) {
-    return fetch(url).then(function (r) {
+    return fetch(realUrl(url)).then(function (r) {
       if (!r.ok) throw new Error("http");
       var total = parseInt(r.headers.get("content-length"), 10) || 0;
       if (!r.body || !r.body.getReader) return r.blob();
@@ -683,14 +695,14 @@
   function probeState(u) {
     var p = PC[u];
     if (!p) return undefined;
-    var ttl = p.r ? 7 * 864e5 : 864e5;
+    var ttl = p.r ? 7 * 864e5 : 3 * 6e4;   // ব্যর্থ হলে মাত্র ৩ মিনিট মনে রাখে (নতুন আপলোডের ফাইল তৈরি হতে সময় লাগে)
     if (Date.now() - p.t > ttl) { delete PC[u]; return undefined; }
     return p.r;
   }
   function probeOne(u) {
     var ac = window.AbortController ? new AbortController() : null;
     var to = setTimeout(function () { try { if (ac) ac.abort(); } catch (e) {} }, 8000);
-    return fetch(u, ac ? { signal: ac.signal } : {}).then(function (r) {
+    return fetch(realUrl(u), ac ? { signal: ac.signal } : {}).then(function (r) {
       clearTimeout(to);
       var ct = ((r.headers && r.headers.get("content-type")) || "").toLowerCase();
       var ok = !!r.ok && ct.indexOf("text/html") < 0;
@@ -748,7 +760,7 @@
           if (!a && !btn) return;
           var url = btn ? btn.getAttribute("data-u") : a.href;
           var have = !!findDl(url, c.kind);
-          var isPdf = /\.pdf(?:[?#].*)?$/i.test(url || "");
+          var isPdf = /\.pdf(?:[?#].*)?$/i.test(url || "") || (!!DRIVE_KEY && !!driveId(url));
           var ok = have || (isPdf && probeState(url) === 1);
           if (!ok) {
             if (btn && !btn.getAttribute("data-busy") && btn.parentNode) btn.parentNode.removeChild(btn);
