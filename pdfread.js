@@ -131,8 +131,8 @@
   function $(id) { return ov.querySelector("#pr-" + id); }
 
   /* ---------- অবস্থা ---------- */
-  var S = { view: "lib", page: 1, rtl: ls("pr-dir") !== "ltr", book: null };
-  var pdfjs = null, DOC = null, NUM = 0, Z = 1, token = 0, cache = {}, order = [], books = [], opened = false;
+  var S = { view: "lib", page: 1, rtl: ls("pr-dir") !== "ltr", book: null, dl: false };
+  var pdfjs = null, DOC = null, NUM = 0, Z = 1, token = 0, cache = {}, order = [], books = [], dlbooks = [], opened = false;
 
   function loadLib() {
     if (pdfjs) return Promise.resolve(pdfjs);
@@ -194,7 +194,7 @@
     token++;
     if (DOC) { try { DOC.destroy(); } catch (e) {} DOC = null; }
     cache = {}; order = [];
-    S.view = "lib"; S.book = null;
+    S.view = "lib"; S.book = null; S.dl = false;
     ov.classList.remove("rd", "mo"); ov.classList.add("lib");
     $("lb").textContent = "আমার কিতাব";
     $("s").innerHTML = "";
@@ -288,15 +288,15 @@
   }
 
   /* ---------- কিতাব খোলা ---------- */
-  function openBook(id) {
+  function openBook(id, dl) {
     var meta = null;
-    books.forEach(function (b) { if (b.id === id) meta = b; });
+    (dl ? dlbooks : books).forEach(function (b) { if (b.id === id) meta = b; });
     if (!meta) return;
-    S.view = "rd"; S.book = meta;
+    S.view = "rd"; S.book = meta; S.dl = !!dl;
     ov.classList.remove("lib"); ov.classList.add("rd");
     $("lb").textContent = meta.name;
     info("⏳", "খোলা হচ্ছে…");
-    idbGet("b:" + id).then(function (blob) {
+    idbGet((dl ? "d:" : "b:") + id).then(function (blob) {
       if (!blob) throw new Error("missing");
       return openBlob(blob);
     }).then(function (d) {
@@ -326,7 +326,7 @@
     }
     res.innerHTML = '<button class="prgo" data-p="' + n + '"><span>↪</span><span>পৃষ্ঠা ' + bd(n) + "-এ যান</span></button>";
   }
-  function openMenu() { ov.classList.add("mo"); $("q").value = ""; drawRes(); setTimeout(function () { try { $("q").focus(); } catch (e) {} }, 260); }
+  function openMenu() { ov.classList.add("mo"); $("lbk").textContent = S.dl ? "⬅️ তালিকায় ফিরুন" : "📚 কিতাবের তালিকা"; $("q").value = ""; drawRes(); setTimeout(function () { try { $("q").focus(); } catch (e) {} }, 260); }
   function closeMenu() { ov.classList.remove("mo"); }
   function dirLabel() { $("dir").textContent = S.rtl ? "↔ ডানে টানলে পরের পাতা" : "↔ বামে টানলে পরের পাতা"; }
 
@@ -347,7 +347,7 @@
     ov.style.display = "none";
   }
   $("x").onclick = function () {
-    if (S.view === "rd") { showLib(); return; }
+    if (S.view === "rd") { if (S.dl) { leaveDl(); return; } showLib(); return; }
     var had = false;
     try { had = history.state && history.state.pr; } catch (e) {}
     if (had) history.back(); else closeIt();
@@ -355,7 +355,7 @@
   window.addEventListener("popstate", function () {
     if (!opened) return;
     if (ov.classList.contains("mo")) { closeMenu(); try { history.pushState({ pr: 1 }, ""); } catch (e) {} return; }
-    if (S.view === "rd") { showLib(); try { history.pushState({ pr: 1 }, ""); } catch (e) {} return; }
+    if (S.view === "rd") { if (S.dl) { closeIt(); return; } showLib(); try { history.pushState({ pr: 1 }, ""); } catch (e) {} return; }
     closeIt();
   });
 
@@ -367,7 +367,7 @@
       books.forEach(function (b) { if (b.id === id) nm = b.name; });
       if (confirm("\"" + nm + "\" মুছে ফেলবেন? ফোন থেকে এই কিতাবের কপি মুছে যাবে।")) {
         books = books.filter(function (b) { return b.id !== id; });
-        idbDel("b:" + id).then(saveBooks).then(drawLib).then(function () { dlForget(id); });
+        idbDel("b:" + id).then(saveBooks).then(drawLib);
         try { localStorage.removeItem("pr-last-" + id); } catch (er) {}
       }
       return;
@@ -378,7 +378,7 @@
   $("m").onclick = function () { if (DOC) openMenu(); };
   $("mx").onclick = closeMenu;
   $("bk").onclick = closeMenu;
-  $("lbk").onclick = function () { closeMenu(); showLib(); };
+  $("lbk").onclick = function () { closeMenu(); if (S.dl) leaveDl(); else showLib(); };
   $("q").oninput = drawRes;
   $("q").onkeydown = function (e) {
     if (e.key === "Enter") {
@@ -438,22 +438,24 @@
   });
   window.addEventListener("resize", function () { if (opened && DOC) { cache = {}; order = []; show(S.page, 0); } });
 
-  /* ---------- ডাউনলোড করে অফলাইনে রাখা (কিতাব ও কুরআনের PDF তালিকা থেকে) ----------
-     ফাইল অ্যাপের নিজস্ব গোপন স্টোরেজে (IndexedDB) জমা হয়। ফোনের Downloads, গ্যালারি বা ফাইল ম্যানেজারে দেখা যায় না।
-     অ্যাপের "পিডিএফ যোগ করে পড়ুন" রিডারেই পড়া যায়, ইন্টারনেট ছাড়াও। */
-  var DL = {};
-  try { DL = JSON.parse(ls("pr-dlmap") || "{}") || {}; } catch (e) { DL = {}; }
-  function dlSave() { ls("pr-dlmap", JSON.stringify(DL)); }
+  /* ---------- কিতাব ও কুরআন: অনলাইন / অফলাইন ----------
+     অনলাইন তালিকায় শুধু ডাউনলোড বোতাম থাকে। ডাউনলোড হলে কিতাব অফলাইন তালিকায় যায় এবং সেখান থেকেই পড়া যায়।
+     ফাইল অ্যাপের গোপন স্টোরেজে (IndexedDB) জমা হয়, "পিডিএফ যোগ করে পড়ুন"-এর আমার কিতাব থেকে আলাদা।
+     ফোনের Downloads, গ্যালারি বা ফাইল ম্যানেজারে দেখা যায় না। */
+  var DM = ls("pr-dlmode") === "off" ? "off" : "on", dlLoaded = false, dlReady = false;
+  var st2 = document.createElement("style");
+  st2.textContent =
+    '#app[data-v="library"] #lst .item>a.chip,#qpf .item>a.chip{display:none!important}' +
+    ".mfdl,.mfrd,.mfrm{white-space:nowrap;cursor:pointer}" +
+    ".mfdl,.mfrd{border:0!important;padding:8px 15px;font-weight:700;background:linear-gradient(135deg,#f6dc8a,#d9a21f);color:#3d2c02!important;box-shadow:0 6px 12px -6px rgba(217,162,31,.9)}" +
+    ".mfdl[data-have]{background:linear-gradient(135deg,#bfe5cc,#5fae7e);box-shadow:none}" +
+    ".mfrm{margin-left:6px}" +
+    ".mfbar{margin:0 0 10px}";
+  document.head.appendChild(st2);
+
   function say(m) { try { if (typeof window.toast === "function") { window.toast(m); return; } } catch (e) {} alert(m); }
-  function dlState(url) {
-    var id = DL[url];
-    if (!id) return Promise.resolve("");
-    return loadBooks().then(function () {
-      var ok = books.some(function (b) { return b.id === id; });
-      if (!ok) { delete DL[url]; dlSave(); return ""; }
-      return id;
-    });
-  }
+  function loadDl() { return idbGet("dlbooks").then(function (b) { dlbooks = b || []; }).catch(function () { dlbooks = []; }); }
+  function saveDl() { return idbSet("dlbooks", dlbooks); }
   function dlFetch(url, onp) {
     return fetch(url).then(function (r) {
       if (!r.ok) throw new Error("http");
@@ -470,72 +472,133 @@
       })();
     });
   }
-  function dlBook(url, name, onp) {
+  function findDl(url, kind) {
+    for (var i = 0; i < dlbooks.length; i++) if (dlbooks[i].src === url && dlbooks[i].kind === kind) return dlbooks[i];
+    return null;
+  }
+  function dlAdd(url, name, author, kind, onp) {
     try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
-    return dlState(url).then(function (have) {
-      if (have) return have;
+    return loadDl().then(function () {
+      var ex = findDl(url, kind);
+      if (ex) return ex.id;
       return dlFetch(url, onp).then(function (blob) {
         return openBlob(blob).then(function (doc) {
-          var meta = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: name, pages: doc.numPages, size: blob.size, added: Date.now(), src: url };
+          var meta = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: name, author: author || "", kind: kind, pages: doc.numPages, size: blob.size, added: Date.now(), src: url };
           try { doc.destroy(); } catch (e) {}
-          return idbSet("b:" + meta.id, blob)
-            .then(function () { return loadBooks(); })
-            .then(function () { books.push(meta); return saveBooks(); })
-            .then(function () { DL[url] = meta.id; dlSave(); return meta.id; });
+          return idbSet("d:" + meta.id, blob)
+            .then(function () { return loadDl(); })
+            .then(function () { dlbooks.push(meta); return saveDl(); })
+            .then(function () { return meta.id; });
         });
       });
     });
   }
-  function readSaved(id) {
+  function readDl(id) {
     if (!opened) {
       opened = true;
       ov.style.display = "flex";
       try { history.pushState({ pr: 1 }, ""); } catch (e) {}
       setTimeout(prefetchLib, 1500);
     }
-    loadBooks().then(function () { showLib(); openBook(id); });
+    loadDl().then(function () { openBook(id, true); });
   }
-  function dlForget(id) {
-    Object.keys(DL).forEach(function (u) { if (DL[u] === id) delete DL[u]; });
-    dlSave();
-    var bs = document.querySelectorAll('.mfdl[data-id="' + id + '"]');
-    for (var i = 0; i < bs.length; i++) { bs[i].removeAttribute("data-id"); bs[i].disabled = false; bs[i].textContent = "⬇️ ডাউনলোড"; }
+  function leaveDl() {
+    var had = false;
+    try { had = history.state && history.state.pr; } catch (e) {}
+    if (had) history.back(); else closeIt();
   }
-  function dlDone(b, id) { b.setAttribute("data-id", id); b.disabled = false; b.textContent = "📖 অফলাইন পড়ুন"; }
+  function delDl(id) {
+    var nm = "";
+    dlbooks.forEach(function (b) { if (b.id === id) nm = b.name; });
+    if (!confirm("\"" + nm + "\" অফলাইন থেকে মুছে ফেলবেন? চাইলে আবার অনলাইন থেকে ডাউনলোড করা যাবে।")) return;
+    idbDel("d:" + id).then(function () {
+      dlbooks = dlbooks.filter(function (b) { return b.id !== id; });
+      return saveDl();
+    }).then(function () { try { localStorage.removeItem("pr-last-" + id); } catch (er) {} dlScan(); });
+  }
+  function offHtml(list) {
+    if (!list.length) return '<div class="empty">কিছু ডাউনলোড করা নেই।<br>অনলাইন থেকে ডাউনলোড করলে এখানে আসবে, তখন ইন্টারনেট ছাড়াই পড়া যাবে।</div>';
+    return list.map(function (b) {
+      return '<div class="item fi"><div style="flex:1"><b>' + esc(b.name) + "</b><small>" + esc(b.author || "") + (b.author ? " · " : "") + bd(b.pages) + " পৃষ্ঠা · " + sizeTxt(b.size) +
+        '</small></div><button type="button" class="chip mfrd" data-id="' + b.id + '">📖 পড়ুন</button><button type="button" class="chip mfrm" data-id="' + b.id + '" aria-label="মুছুন">🗑</button></div>';
+    }).join("");
+  }
+  function setDisp(el, v) { if (el.style.display !== v) el.style.display = v; }
+  function dlCtxs() {
+    var app = document.getElementById("app"), v = app ? app.getAttribute("data-v") : "", out = [], l, q;
+    if (v === "library" && (l = document.getElementById("lst"))) out.push({ kind: "books", box: l });
+    if ((q = document.getElementById("qpf"))) out.push({ kind: "quran", box: q });
+    return out;
+  }
   function dlScan() {
-    var as = document.querySelectorAll("#lst .item a.chip[href], #qpf .item a.chip[href]");
-    [].forEach.call(as, function (a) {
-      var h = a.href || "";
-      if (!/\.pdf(?:[?#].*)?$/i.test(h)) return;
-      var it = a.parentNode;
-      if (!it || it.querySelector(".mfdl")) return;
-      var t = it.querySelector("b"), btn = document.createElement("button");
-      btn.type = "button"; btn.className = "chip mfdl"; btn.style.marginRight = "6px";
-      btn.setAttribute("data-u", h);
-      btn.setAttribute("data-t", t ? t.textContent : "");
-      btn.textContent = "⬇️ ডাউনলোড";
-      it.insertBefore(btn, a);
-      dlState(h).then(function (id) { if (id) dlDone(btn, id); });
+    if (!dlLoaded) { dlLoaded = true; loadDl().then(function () { dlReady = true; dlScan(); }); return; }
+    if (!dlReady) return;
+    dlCtxs().forEach(function (c) {
+      var box = c.box, par = box.parentNode;
+      if (!par) return;
+      var bar = box.previousElementSibling;
+      if (!bar || !bar.classList || !bar.classList.contains("mfbar")) {
+        bar = document.createElement("div"); bar.className = "qtabs mfbar";
+        par.insertBefore(bar, box);
+      }
+      var mine = dlbooks.filter(function (b) { return b.kind === c.kind; });
+      var th = '<button type="button" class="qtab mftab' + (DM === "on" ? " on" : "") + '" data-m="on">🌐 অনলাইন</button>' +
+        '<button type="button" class="qtab mftab' + (DM === "off" ? " on" : "") + '" data-m="off">📥 অফলাইন (' + bd(mine.length) + ")</button>";
+      if (bar.getAttribute("data-sig") !== th) { bar.innerHTML = th; bar.setAttribute("data-sig", th); }
+      var off = box.nextElementSibling;
+      if (!off || !off.classList || !off.classList.contains("mfoff")) {
+        off = document.createElement("div"); off.className = c.kind === "books" ? "panel mfoff" : "mfoff";
+        par.insertBefore(off, box.nextSibling);
+      }
+      if (DM === "on") {
+        setDisp(box, ""); setDisp(off, "none");
+        [].forEach.call(box.querySelectorAll(".item"), function (it) {
+          var a = it.querySelector("a.chip[href]"), btn = it.querySelector(".mfdl");
+          if (!a && !btn) return;
+          if (!btn) {
+            var t = it.querySelector("b"), au = it.querySelector("small");
+            btn = document.createElement("button");
+            btn.type = "button"; btn.className = "chip mfdl";
+            btn.setAttribute("data-u", a.href); btn.setAttribute("data-k", c.kind);
+            btn.setAttribute("data-t", t ? t.textContent : ""); btn.setAttribute("data-a", au ? au.textContent : "");
+            it.appendChild(btn);
+          }
+          if (btn.getAttribute("data-busy")) return;
+          var have = !!findDl(btn.getAttribute("data-u"), c.kind), want = have ? "✔ ডাউনলোড হয়েছে" : "⬇️ ডাউনলোড";
+          if (btn.textContent !== want) btn.textContent = want;
+          if (have && !btn.getAttribute("data-have")) btn.setAttribute("data-have", "1");
+          if (!have && btn.getAttribute("data-have")) btn.removeAttribute("data-have");
+        });
+      } else {
+        setDisp(box, "none"); setDisp(off, "");
+        var sig = mine.map(function (b) { return b.id; }).join(",") + "|" + DM;
+        if (off.getAttribute("data-sig") !== sig) { off.innerHTML = offHtml(mine); off.setAttribute("data-sig", sig); }
+      }
     });
   }
   document.addEventListener("click", function (e) {
-    var b = e.target && e.target.closest ? e.target.closest(".mfdl") : null;
-    if (!b) return;
+    var t = e.target && e.target.closest ? e.target.closest(".mftab,.mfdl,.mfrd,.mfrm") : null;
+    if (!t) return;
     e.preventDefault(); e.stopPropagation();
-    var id = b.getAttribute("data-id");
-    if (id) { readSaved(id); return; }
-    if (b.disabled) return;
+    var cl = t.classList;
+    if (cl.contains("mftab")) { DM = t.getAttribute("data-m") === "off" ? "off" : "on"; ls("pr-dlmode", DM); dlScan(); return; }
+    if (cl.contains("mfrd")) { readDl(t.getAttribute("data-id")); return; }
+    if (cl.contains("mfrm")) { delDl(t.getAttribute("data-id")); return; }
+    // ডাউনলোড বোতাম
+    if (t.getAttribute("data-have")) { DM = "off"; ls("pr-dlmode", DM); dlScan(); return; }
+    if (t.getAttribute("data-busy")) return;
     if (navigator.onLine === false) { say("ডাউনলোড করতে ইন্টারনেট লাগবে"); return; }
-    var url = b.getAttribute("data-u"), name = (b.getAttribute("data-t") || "").trim() || decodeURIComponent((url.split("?")[0].split("/").pop() || "কিতাব").replace(/\.pdf$/i, ""));
-    b.disabled = true; b.textContent = "⏳ …";
-    dlBook(url, name, function (got, total) {
-      b.textContent = total ? "⏳ " + bd(Math.min(99, Math.round(got * 100 / total))) + "%" : "⏳ " + sizeTxt(got);
-    }).then(function (nid) {
-      dlDone(b, nid);
-      say("ডাউনলোড হয়েছে। এখন ইন্টারনেট ছাড়াই পড়া যাবে ✔");
+    var url = t.getAttribute("data-u"), kind = t.getAttribute("data-k") || "books";
+    var name = (t.getAttribute("data-t") || "").trim() || decodeURIComponent((url.split("?")[0].split("/").pop() || "কিতাব").replace(/\.pdf$/i, ""));
+    t.setAttribute("data-busy", "1"); t.textContent = "⏳ …";
+    dlAdd(url, name, (t.getAttribute("data-a") || "").trim(), kind, function (got, total) {
+      t.textContent = total ? "⏳ " + bd(Math.min(99, Math.round(got * 100 / total))) + "%" : "⏳ " + sizeTxt(got);
+    }).then(function () {
+      t.removeAttribute("data-busy"); dlScan();
+      say("ডাউনলোড হয়েছে। এখন অফলাইন ট্যাব থেকে ইন্টারনেট ছাড়াই পড়া যাবে ✔");
     }).catch(function () {
-      b.disabled = false; b.textContent = "⬇️ ডাউনলোড";
-      say("ডাউনলোড করা যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।");
+      t.removeAttribute("data-busy"); t.textContent = "⬇️ ডাউনলোড";
+      say("ডাউনলোড করা যায়নি। এটা সরাসরি PDF লিংক কিনা এবং ইন্টারনেট ঠিক আছে কিনা দেখুন।");
     });
   }, true);
   function dlWatch() {
@@ -571,5 +634,5 @@
   function mount() { document.body.appendChild(ov); watch(); dlWatch(); }
   if (document.body) mount(); else document.addEventListener("DOMContentLoaded", mount);
 
-  window.__pr = { open: openIt, flip: flip, go: go, S: S, dl: dlBook, state: dlState, read: readSaved };
+  window.__pr = { open: openIt, flip: flip, go: go, S: S, read: readDl };
 })();
