@@ -6,7 +6,29 @@
 <link rel="manifest" href="manifest.json"><meta name="application-name" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-title" content="আল-মিফতাহ"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#17603c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <title>আল-মিফতাহ</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<style id="tiro-local">@font-face{font-family:'AmalRuqaa';font-weight:700;font-display:swap;src:url('aref-ruqaa.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:400;font-display:swap;src:url('hind-Regular.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:500;font-display:swap;src:url('hind-Medium.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:600;font-display:swap;src:url('hind-SemiBold.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:700;font-display:swap;src:url('hind-Bold.woff') format('woff')}@font-face{font-family:'Tiro Bangla';font-style:normal;font-weight:400;font-display:swap;src:local('Tiro Bangla'),local('TiroBangla-Regular'),url('tiro-bangla.woff') format('woff')}@font-face{font-family:'Tiro Bangla';font-style:italic;font-weight:400;font-display:swap;src:local('Tiro Bangla Italic'),local('TiroBangla-Italic'),url('tiro-bangla-italic.woff') format('woff')}</style>
+<style id="tiro-local">@font-face{font-family:'AmalRuqaa';font-weight:700;font-display:swap;src:url('aref-ruqaa.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:400;font-display:swap;src:url('hind-Regular.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:500;font-display:swap;src:url('hind-Medium.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:600;font-display:swap;src:url('hind-SemiBold.woff') format('woff')}@font-face{font-family:'Hind Siliguri';font-style:normal;font-weight:700;font-display:swap;src:url('hind-Bold.woff') format('woff')}@font-face{font-family:'Tiro Bangla';font-style:normal;font-weight:400;font-display:swap;src:local('Tiro Bangla'),local('TiroBangla-Regular'),url('tiro-bangla.woff') format('woff')}@font-face{font-family:'Tiro Bangla';font-style:italic;font-weight:400;font-display:swap;src:local('Tiro Bangla Italic'),local('TiroBangla-Italic'),url('tiro-bangla-italic.woff') format('woff')}
+/* ===== পরিচালকের পাতা: রঙিন আলাদা অংশ ===== */
+#app[data-v="admin"] .panel.ap{--c:#2b6cb0;position:relative;border-radius:18px;padding:14px 14px 14px 16px;margin-bottom:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 13%,var(--card)),color-mix(in srgb,var(--c) 4%,var(--card)) 75%);border:1px solid color-mix(in srgb,var(--c) 32%,var(--line));border-left:6px solid var(--c);box-shadow:0 3px 12px color-mix(in srgb,var(--c) 14%,transparent)}
+#app[data-v="admin"] .panel.ap>b{display:block;font-size:16.5px;color:color-mix(in srgb,var(--c) 78%,var(--ink));padding-bottom:8px;margin-bottom:4px;border-bottom:1px dashed color-mix(in srgb,var(--c) 35%,transparent)}
+#app[data-v="admin"] .panel.ap.ap1{--c:#b7791f}
+#app[data-v="admin"] .panel.ap.ap2{--c:#2b6cb0}
+#app[data-v="admin"] .panel.ap.ap3{--c:#1f7a4d}
+#app[data-v="admin"] .panel.ap.ap4{--c:#7c4dbd}
+#app[data-v="admin"] .panel.ap.ap5{--c:#c0392b}
+#app[data-v="admin"] .panel.ap.ap6{--c:#0f8b8d}
+#app[data-v="admin"] .panel.ap.ap7{--c:#c2417a}
+#app[data-v="admin"] .ap .chip{background:color-mix(in srgb,var(--c) 8%,var(--card));border-color:color-mix(in srgb,var(--c) 35%,var(--line))}
+#app[data-v="admin"] .ap .chip.on{background:var(--c);border-color:var(--c);color:#fff}
+#app[data-v="admin"] .ap input:not([type=color]):not([type=file]),#app[data-v="admin"] .ap textarea,#app[data-v="admin"] .ap select{border-color:color-mix(in srgb,var(--c) 35%,var(--line));background:color-mix(in srgb,var(--c) 3%,var(--card))}
+#app[data-v="admin"] .ap .btn{background:var(--c)}
+#app[data-v="admin"] .panel.ap5 .btn{background:var(--red)}
+#app[data-v="admin"] .ap .item{border-color:color-mix(in srgb,var(--c) 22%,var(--line));background:color-mix(in srgb,var(--c) 5%,var(--card));border-radius:12px}
+#app[data-v="admin"] .panel.ap7 label{color:color-mix(in srgb,var(--c) 70%,var(--ink));font-weight:600}
+/* ===== মূল পাতার শিরোনাম ===== */
+.hbr{width:48%!important;right:2.5%!important}
+.hmf{font-size:clamp(46px,16vw,92px)!important;line-height:1.25!important}
+.htg{display:inline-block;margin-top:4px;font-weight:700;font-size:clamp(11px,3.2vw,16px)!important;color:#fff;background:none;border:0;padding:0;text-shadow:0 1px 2px rgba(8,70,130,.95),0 0 6px rgba(56,160,225,.95),0 0 12px rgba(86,185,240,.7)}
+</style>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
 <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&text=%E0%A7%A6%E0%A7%A7%E0%A7%A8%E0%A7%A9%E0%A7%AA%E0%A7%AB%E0%A7%AC%E0%A7%AD%E0%A7%AE%E0%A7%AF&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
@@ -1762,13 +1784,13 @@ function ghSave(d,sha,msg){var o={message:msg||'content update',content:b64e(JSO
 function adSet(t){adMsg=t;var e=$('adm');if(e)e.textContent=t}
 function tokenHtml(){
  var i=ghInfo();
- return '<div class="panel"><b>নির্মাতা প্রবেশ</b><small style="color:var(--mut);display:block;margin-bottom:6px">এখান থেকে শুধু আপনিই কিতাব, মাসায়েল, প্রবন্ধ যোগ করতে পারবেন। এর জন্য GitHub থেকে একটি গোপন চাবি (টোকেন) একবার বানিয়ে এখানে বসাতে হয়। টোকেন শুধু এই ফোনে থাকে, কারো সঙ্গে শেয়ার করবেন না।</small><label>GitHub টোকেন</label><input id="adtk" type="password" autocomplete="off" placeholder="github_pat_…"><label>GitHub ইউজারনেম</label><input id="ado" value="'+esc(i.o)+'"><label>রিপোজিটরির নাম</label><input id="adr" value="'+esc(i.r)+'"><button class="btn" data-h="ad:tok">সংরক্ষণ করুন</button><div id="adm" class="empty">'+esc(adMsg)+'</div></div>';
+ return '<div class="panel ap ap3"><b>🔑 নির্মাতা প্রবেশ</b><small style="color:var(--mut);display:block;margin-bottom:6px">এখান থেকে শুধু আপনিই কিতাব, মাসায়েল, প্রবন্ধ যোগ করতে পারবেন। এর জন্য GitHub থেকে একটি গোপন চাবি (টোকেন) একবার বানিয়ে এখানে বসাতে হয়। টোকেন শুধু এই ফোনে থাকে, কারো সঙ্গে শেয়ার করবেন না।</small><label>GitHub টোকেন</label><input id="adtk" type="password" autocomplete="off" placeholder="github_pat_…"><label>GitHub ইউজারনেম</label><input id="ado" value="'+esc(i.o)+'"><label>রিপোজিটরির নাম</label><input id="adr" value="'+esc(i.r)+'"><button class="btn" data-h="ad:tok">সংরক্ষণ করুন</button><div id="adm" class="empty">'+esc(adMsg)+'</div></div>';
 }
 function adminHtml(){
  if(!ghTok())return tokenHtml();
- var cur=hjAdj(),h='<div class="panel"><b>হিজরি তারিখ (সবার জন্য)</b><div class="empty">'+hijriS()+'</div><div class="row3" style="flex-wrap:wrap">'+[-1,0,1].map(function(v){return '<button class="chip'+(cur===v?' on':'')+'" data-h="ad:hj:'+v+'">'+(v<0?'−১ দিন':v>0?'+১ দিন':'মূল (০)')+'</button>'}).join('')+'</div><small style="color:var(--mut);display:block;margin-top:6px">চাঁদ দেখে বাংলাদেশের তারিখ মেলাতে এখানে বদলান। সেভ হলে ১–২ মিনিটের মধ্যে সবার অ্যাপে বদলে যাবে।</small></div><div class="panel"><div class="row3" style="flex-wrap:wrap">';
+ var cur=hjAdj(),h='<div class="panel ap ap1"><b>📅 হিজরি তারিখ (সবার জন্য)</b><div class="empty">'+hijriS()+'</div><div class="row3" style="flex-wrap:wrap">'+[-1,0,1].map(function(v){return '<button class="chip'+(cur===v?' on':'')+'" data-h="ad:hj:'+v+'">'+(v<0?'−১ দিন':v>0?'+১ দিন':'মূল (০)')+'</button>'}).join('')+'</div><small style="color:var(--mut);display:block;margin-top:6px">চাঁদ দেখে বাংলাদেশের তারিখ মেলাতে এখানে বদলান। সেভ হলে ১–২ মিনিটের মধ্যে সবার অ্যাপে বদলে যাবে।</small></div><div class="panel ap ap2"><b>🗂 কী যোগ করবেন?</b><div class="row3" style="flex-wrap:wrap;margin-top:8px">';
  Object.keys(ADN).forEach(function(k){h+='<button class="chip" data-h="ad:t:'+k+'">'+(adT===k?'✓ ':'')+ADN[k]+'</button>'});
- h+='</div></div><div class="panel"><b>'+(adEd>=0?'সম্পাদনা':'নতুন যোগ করুন')+': '+ADN[adT]+'</b>';
+ h+='</div></div><div class="panel ap ap3"><b>'+(adEd>=0?'✏️ সম্পাদনা':'➕ নতুন যোগ করুন')+': '+ADN[adT]+'</b>';
  var cu=(adEd>=0&&ADD&&ADD.data[adT]&&ADD.data[adT][adEd])||{};
  FS[adT].forEach(function(f){
   if(f[0]==='file')h+='<label>'+f[1]+'</label><input type="file" id="af-file" accept="application/pdf">';
@@ -1776,13 +1798,13 @@ function adminHtml(){
   else if(f[2]==='g')h+='<label>'+f[1]+'</label><select id="af-'+f[0]+'"><option'+(cu[f[0]]!=='মেয়ে'?' selected':'')+'>ছেলে</option><option'+(cu[f[0]]==='মেয়ে'?' selected':'')+'>মেয়ে</option></select>';else if(f[2]==='t')h+='<label>'+f[1]+'</label><textarea id="af-'+f[0]+'" rows="5">'+esc(cu[f[0]]||'')+'</textarea>';
   else h+='<label>'+f[1]+'</label><input id="af-'+f[0]+'" value="'+esc(cu[f[0]]||'')+'">';
  });
- h+='<button class="btn" data-h="ad:s">'+(adEd>=0?'আপডেট করুন':'সেভ করুন')+'</button>'+(adEd>=0?'<button class="btn" data-h="ad:c" style="background:var(--mut)">বাতিল</button>':'')+'<div id="adm" class="empty">'+esc(adMsg)+'</div></div><div class="panel"><b>বর্তমান তালিকা</b><div id="adl">'+mfLd()+'</div></div><div class="panel"><small style="color:var(--mut);display:block">সেভ করার ১–২ মিনিট পর সবার অ্যাপে নতুন লেখা দেখা যাবে। বড় PDF (২৫ এমবির বেশি) আপলোড না করে লিংক দিন।</small><button class="btn" data-h="ad:out" style="background:var(--red)">এই ফোন থেকে টোকেন মুছুন</button></div>';
+ h+='<button class="btn" data-h="ad:s">'+(adEd>=0?'আপডেট করুন':'সেভ করুন')+'</button>'+(adEd>=0?'<button class="btn" data-h="ad:c" style="background:var(--mut)">বাতিল</button>':'')+'<div id="adm" class="empty">'+esc(adMsg)+'</div></div><div class="panel ap ap4"><b>📚 বর্তমান তালিকা</b><div id="adl">'+mfLd()+'</div></div><div class="panel ap ap5"><small style="color:var(--mut);display:block">সেভ করার ১–২ মিনিট পর সবার অ্যাপে নতুন লেখা দেখা যাবে। বড় PDF (২৫ এমবির বেশি) আপলোড না করে লিংক দিন।</small><button class="btn" data-h="ad:out" style="background:var(--red)">এই ফোন থেকে টোকেন মুছুন</button></div>';
  return h+adFontHtml()+adThHtml();
 }
-function adFontHtml(){var f=(CT&&CT.font)||'';return '<div class="panel"><b>ফন্ট (সবার জন্য)</b><div class="row3" style="flex-wrap:wrap">'+FF.map(function(x){return '<button class="chip'+(f===x[0]?' on':'')+'" data-h="ad:ft:'+(x[0]||'def')+'">'+x[1]+'</button>'}).join('')+'</div><small style="color:var(--mut);display:block">সংখ্যাসহ সব লেখা এই ফন্টে হবে। ১–২ মিনিট পর সবার অ্যাপে বদলাবে।</small></div>'}
+function adFontHtml(){var f=(CT&&CT.font)||'';return '<div class="panel ap ap6"><b>🔤 ফন্ট (সবার জন্য)</b><div class="row3" style="flex-wrap:wrap">'+FF.map(function(x){return '<button class="chip'+(f===x[0]?' on':'')+'" data-h="ad:ft:'+(x[0]||'def')+'">'+x[1]+'</button>'}).join('')+'</div><small style="color:var(--mut);display:block">সংখ্যাসহ সব লেখা এই ফন্টে হবে। ১–২ মিনিট পর সবার অ্যাপে বদলাবে।</small></div>'}
 function adThHtml(){var t=(CT&&CT.th)||{};
  function ch(key,list){return '<div class="row3" style="flex-wrap:wrap">'+list.map(function(x){return '<button class="chip'+((t[key]||'')===x[0]?' on':'')+'" data-h="ad:th:'+key+':'+(x[0]||'def')+'">'+x[1]+'</button>'}).join('')+'</div>'}
- return '<div class="panel"><b>থিমের সাজ (সবার জন্য)</b><small style="color:var(--mut);display:block">শুধু পরিচালক এগুলো বদলাতে পারেন। ব্যবহারকারীরা কেবল রঙের থিম বদলাতে পারেন।</small>'
+ return '<div class="panel ap ap7"><b>🎨 থিমের সাজ (সবার জন্য)</b><small style="color:var(--mut);display:block">শুধু পরিচালক এগুলো বদলাতে পারেন। ব্যবহারকারীরা কেবল রঙের থিম বদলাতে পারেন।</small>'
  +'<label>পেছনের নকশা</label>'+ch('pt',PT)
  +'<label>পেছনের রং</label><div class="prv"><input type="color" id="adbg" value="'+(t.bgc||'#f1f5f2')+'"><button class="chip" data-h="ad:th:bgc:*">সেভ</button>'+(t.bgc?'<button class="chip" data-h="ad:th:bgc:def">✕ বাদ</button>':'')+'</div>'
  +'<label>লেখার আকার</label>'+ch('fs',[['','স্বাভাবিক'],['90','ছোট'],['110','বড়'],['120','আরও বড়'],['130','অনেক বড়']])
