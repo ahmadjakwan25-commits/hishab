@@ -229,7 +229,8 @@
  "th": {
   "cs": "shadow",
   "fs": 110,
-  "rd": "sq"
+  "rd": "sq",
+  "bgc": "#f1f5f2"
  },
  "font": "tb"
 }
