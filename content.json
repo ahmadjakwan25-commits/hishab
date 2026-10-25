@@ -222,7 +222,8 @@
   }
  ],
  "th": {
-  "cs": "shadow"
+  "cs": "shadow",
+  "fs": 110
  },
  "font": "tb"
 }
