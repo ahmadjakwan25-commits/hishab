@@ -1848,7 +1848,7 @@ function adminHtml(){
   else if(f[2]==='g')h+='<label>'+f[1]+'</label><select id="af-'+f[0]+'"><option'+(cu[f[0]]!=='মেয়ে'?' selected':'')+'>ছেলে</option><option'+(cu[f[0]]==='মেয়ে'?' selected':'')+'>মেয়ে</option></select>';else if(f[2]==='t')h+='<label>'+f[1]+'</label><textarea id="af-'+f[0]+'" rows="5">'+esc(cu[f[0]]||'')+'</textarea>';
   else h+='<label>'+f[1]+'</label><input id="af-'+f[0]+'" value="'+esc(cu[f[0]]||'')+'">';
  });
- h+='<button class="btn" data-h="ad:s">'+(adEd>=0?'আপডেট করুন':'সেভ করুন')+'</button>'+(adEd>=0?'<button class="btn" data-h="ad:c" style="background:var(--mut)">বাতিল</button>':'')+'<div id="adm" class="empty">'+esc(adMsg)+'</div></div><div class="panel ap ap4"><b>📚 বর্তমান তালিকা</b><div id="adl">'+mfLd()+'</div></div><div class="panel ap ap5"><small style="color:var(--mut);display:block">সেভ করার ১–২ মিনিট পর সবার অ্যাপে নতুন লেখা দেখা যাবে। বড় PDF (২৫ এমবির বেশি) আপলোড না করে লিংক দিন।</small><button class="btn" data-h="ad:out" style="background:var(--red)">এই ফোন থেকে টোকেন মুছুন</button></div>';
+ h+='<button class="btn" data-h="ad:s">'+(adEd>=0?'আপডেট করুন':'সেভ করুন')+'</button>'+(adEd>=0?'<button class="btn" data-h="ad:c" style="background:var(--mut)">বাতিল</button>':'')+'<div id="adm" class="empty">'+esc(adMsg)+'</div></div>'+(FS[adT].some(function(f){return f[0]==='topic'})?'<div class="panel ap ap2"><b>📥 ফাইল থেকে একসাথে যোগ</b><small style="color:var(--mut);display:block;margin:4px 0 8px">তৈরি করা .json ফাইল বেছে নিন। আগে থেকে থাকা (একই বিষয়-শিরোনাম-সূত্রের) আইটেম আবার যোগ হবে না।</small><input type="file" id="af-imp" accept=".json,application/json"><button class="btn" data-h="ad:imp">ফাইল থেকে যোগ করুন</button></div>':'')+'<div class="panel ap ap4"><b>📚 বর্তমান তালিকা</b><div id="adl">'+mfLd()+'</div></div><div class="panel ap ap5"><small style="color:var(--mut);display:block">সেভ করার ১–২ মিনিট পর সবার অ্যাপে নতুন লেখা দেখা যাবে। বড় PDF (২৫ এমবির বেশি) আপলোড না করে লিংক দিন।</small><button class="btn" data-h="ad:out" style="background:var(--red)">এই ফোন থেকে টোকেন মুছুন</button></div>';
  return h+adFontHtml()+adThHtml();
 }
 function adFontHtml(){var f=(CT&&CT.font)||'';return '<div class="panel ap ap6"><b>🔤 ফন্ট (সবার জন্য)</b><div class="row3" style="flex-wrap:wrap">'+FF.map(function(x){return '<button class="chip'+(f===x[0]?' on':'')+'" data-h="ad:ft:'+(x[0]||'def')+'">'+x[1]+'</button>'}).join('')+'</div><small style="color:var(--mut);display:block">সংখ্যাসহ সব লেখা এই ফন্টে হবে। ১–২ মিনিট পর সবার অ্যাপে বদলাবে।</small></div>'}
@@ -1860,6 +1860,26 @@ function adThHtml(){var t=(CT&&CT.th)||{};
  +'<label>লেখার আকার</label>'+ch('fs',[['','স্বাভাবিক'],['90','ছোট'],['110','বড়'],['120','আরও বড়'],['130','অনেক বড়']])
  +'<label>কোণা</label>'+ch('rd',RDS)+'<label>কার্ডের ধরন</label>'+ch('cs',CSS_)+'<label>মাথার অংশ (হেডার)</label>'+ch('hd',HDS)+'<label>ফাঁকা জায়গা</label>'+ch('dn',DNS)
  +'<small style="color:var(--mut);display:block">১–২ মিনিট পর সবার অ্যাপে বদলাবে।</small></div>'}
+function adImport(){
+  var fi=$('af-imp'),f=fi&&fi.files&&fi.files[0];
+  if(!f){adSet('প্রথমে একটি .json ফাইল বেছে নিন');return}
+  if(f.size>3000000){adSet('ফাইল অনেক বড় (৩ এমবির বেশি)');return}
+  var kind=adT,allow=FS[kind].map(function(x){return x[0]}).filter(function(k){return k!=='file'}),rd=new FileReader();
+  rd.onload=function(){
+    var arr;try{arr=JSON.parse(rd.result)}catch(e){adSet('ফাইলটি সঠিক JSON নয়');return}
+    if(!Array.isArray(arr)){adSet('ফাইলে একটি তালিকা থাকতে হবে');return}
+    var items=[];
+    arr.forEach(function(x){if(!x||typeof x!=='object')return;var o={};allow.forEach(function(k){if(typeof x[k]==='string'&&x[k].trim())o[k]=x[k].trim().slice(0,8000)});if(o.topic&&(o.bn||o.a||o.text||o.title||o.q))items.push(o)});
+    if(!items.length){adSet('ফাইলে যোগ করার মতো কিছু পাওয়া যায়নি');return}
+    if(!confirm(items.length+' টি আইটেম যোগ হবে ('+ADN[kind]+')। চালিয়ে যাবেন?'))return;
+    adCommit(function(d){
+      var cur=d[kind]=d[kind]||[],seen={},kf=function(o){return (o.topic||'')+'|'+(o.title||o.q||'')+'|'+(o.source||'')};
+      cur.forEach(function(x){seen[kf(x)]=1});
+      items.forEach(function(o){var k=kf(o);if(!seen[k]){seen[k]=1;cur.push(o)}});
+    },'bulk import: '+kind);
+  };
+  rd.readAsText(f,'utf-8');
+}
 function adTitle(x){return x.title||x.q||(x.bn||'').slice(0,30)||x.name||'(নামহীন)'}
 function adList(){
  var b=$('adl');if(!b)return;var a=(ADD&&ADD.data[adT])||[],h='';
@@ -1880,7 +1900,7 @@ function adCommit(mut,msg){
 function adminAct(p){
  var c=p[1];
  if(c==='go'){adT=p[2]||'books';adEd=-1;adMsg='';view='admin';render();window.scrollTo(0,0)}
- else if(c==='t'){adT=p[2];adEd=-1;adMsg='';render()}
+ else if(c==='t'){adT=p[2];adEd=-1;adMsg='';render()}else if(c==='imp'){adImport()}
  else if(c==='tok'){
   var t=($('adtk').value||'').trim();if(!t){adSet('টোকেন লিখুন');return}
   var s=mfs();s.gh={o:($('ado').value||'').trim(),r:($('adr').value||'').trim(),b:'main'};mfw(s);lsSet('mf-gh',t);adMsg='';render();
