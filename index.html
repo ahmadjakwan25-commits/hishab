@@ -556,6 +556,16 @@ html[data-dn="cozy"] :is(.panel,.tile){padding:19px!important;margin-bottom:16px
 .tile.hk small{font-size:10.5px;margin-top:0;line-height:1.2}
 </style>
 <style id="x-quran">
+/* সূর্য-চাঁদের সাদা রশ্মি বন্ধ */
+.hml,.hmg{display:none!important}
+.hmoon{filter:drop-shadow(0 0 5px rgba(255,255,255,.55))!important}
+.hsun{box-shadow:0 0 12px 3px var(--sg,rgba(255,200,80,.35))!important}
+/* কুরআন: বুকমার্ক ও অর্থ লুকানো */
+#sbody.qnm .tr{display:none}
+.qbk{margin-left:auto;background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:999px;padding:3px 11px;font-size:13px;font-weight:700;cursor:pointer}
+.qbk.on{background:#f3d27a;color:#3d2c02}
+.qbl{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
 /* ===== (১) উপরে বাম পাশের লাইন একটু চাপানো ===== */
 .hdt{line-height:1.12!important;top:4%!important}
 .hdt .hdc{margin-bottom:0!important}
@@ -1438,24 +1448,25 @@ function surahRows(q){
  return n?h:'<div class="empty">পাওয়া যায়নি</div>';
 }
 var qTab='s',qOpen=false;
+function qBkHtml(){var b=mfs().qbk||[];if(!b.length)return '';var h='<div style="margin-top:10px"><b>🔖 বুকমার্ক</b><div class="qbl">';b.forEach(function(k){var a=k.split(':');h+='<button class="chip" data-h="qj:'+a[0]+':'+a[1]+'">'+SN[a[0]-1]+' · '+bd(a[1])+'</button>'});return h+'</div></div>'}
 function quranHtml(){
  var l=mfs().ql,tabs='<div class="qtabs"><button class="qtab'+(qTab==='s'?' on':'')+'" data-h="qt:s">📖 কুরআন (সূরা)</button><button class="qtab'+(qTab==='p'?' on':'')+'" data-h="qt:p">📄 PDF ও লিংক</button><button class="qtab'+(qTab==='v'?' on':'')+'" data-h="qt:v">🎬 তিলাওয়াত (ভিডিও লিংক)</button></div>';
  var h=(ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:'+(qTab==='v'?'tilawat':'quran')+'">✏️ '+(qTab==='v'?'ভিডিও লিংক':'PDF/লিংক')+' যোগ বা সম্পাদনা</button></div>':'')+tabs;
  if(qTab==='p')h+='<div class="panel" id="qpp"><b>কুরআনের PDF ও লিংক</b><div id="qpf"><div class="empty">লোড হচ্ছে…</div></div></div>';
  else if(qTab==='v')h+='<div class="panel" id="qvp"><b>তিলাওয়াত (ভিডিও লিংক)</b><input data-fl="1" placeholder="খুঁজুন" style="margin:8px 0"><div id="qvf"><div class="empty">লোড হচ্ছে…</div></div><small style="color:var(--mut);display:block;margin-top:8px">ভিডিও দেখতে ইন্টারনেট লাগবে।</small></div>';
- else h+='<div class="panel"><input id="qs" placeholder="সূরার নাম বা নম্বর লিখুন">'+(l?'<button class="chip" data-h="sr:'+l+'" style="margin-top:8px">শেষ পড়া: সূরা '+SN[l-1]+'</button>':'')+'<button class="qopen" data-h="qop"><span class="qi">📖</span><span style="flex:1;text-align:left">সকল সূরার তালিকা<small style="display:block;color:var(--mut);font-weight:400">১১৪টি সূরা</small></span><span class="qc">'+(qOpen?'▲':'▼')+'</span></button></div><div class="panel" id="qpn"'+(qOpen?'':' style="display:none"')+'><div id="qlist">'+(qOpen?surahRows(''):'')+'</div></div>';
+ else h+='<div class="panel"><input id="qs" placeholder="সূরার নাম বা নম্বর লিখুন">'+(l?'<button class="chip" data-h="sr:'+l+'" style="margin-top:8px">শেষ পড়া: সূরা '+SN[l-1]+'</button>':'')+''+qBkHtml()+'<button class="qopen" data-h="qop"><span class="qi">📖</span><span style="flex:1;text-align:left">সকল সূরার তালিকা<small style="display:block;color:var(--mut);font-weight:400">১১৪টি সূরা</small></span><span class="qc">'+(qOpen?'▲':'▼')+'</span></button></div><div class="panel" id="qpn"'+(qOpen?'':' style="display:none"')+'><div id="qlist">'+(qOpen?surahRows(''):'')+'</div></div>';
  return h+'<div class="panel"><small style="color:var(--mut)">আরবি: Al-Quran Cloud (উসমানি লিপি)। বাংলা অনুবাদ: মুহিউদ্দীন খান। কোনো অনুবাদ কুরআনের বিকল্প নয়। ইন্টারনেট থেকে প্রথমবার লোড হয়, পরে ফোনে জমা থাকে।</small></div>';
 }
 function surahHtml(){
  var n=curS;
- return hdH('সূরা '+SN[n-1],'quran')+'<div class="sbn"><span class="sbn-n">'+bd(n)+'</span><b>সূরা '+SN[n-1]+'</b><small>'+bd(n)+' / '+bd(114)+'</small></div><div class="panel"><div class="row3" style="flex-wrap:wrap"><button class="chip" data-h="qf:-">A−</button><button class="chip" data-h="qf:+">A+</button>'+(n>1?'<button class="chip" data-h="sr:'+(n-1)+'">← আগের</button>':'')+(n<114?'<button class="chip" data-h="sr:'+(n+1)+'">পরের →</button>':'')+'</div></div><div id="sbody" class="panel">'+mfLd()+'</div>';
+ return hdH('সূরা '+SN[n-1],'quran')+'<div class="sbn"><span class="sbn-n">'+bd(n)+'</span><b>সূরা '+SN[n-1]+'</b><small>'+bd(n)+' / '+bd(114)+'</small></div><div class="panel"><div class="row3" style="flex-wrap:wrap"><button class="chip" data-h="qf:-">A−</button><button class="chip" data-h="qf:+">A+</button><button class="chip" data-h="qm">'+(mfs().qno?'👁 অর্থ দেখান':'🙈 অর্থ লুকান')+'</button>'+(n>1?'<button class="chip" data-h="sr:'+(n-1)+'">← আগের</button>':'')+(n<114?'<button class="chip" data-h="sr:'+(n+1)+'">পরের →</button>':'')+'</div></div><div id="sbody" class="panel'+(mfs().qno?' qnm':'')+'">'+mfLd()+'</div>';
 }
 function showSurah(n,ar,bnT){
- var fs=mfs().qfs||26,h='',bis='';
+ var fs=mfs().qfs||26,h='',bis='',bk=mfs().qbk||[];
  if(n!==1&&n!==9&&ar[0]&&ar[0].indexOf('بِسْمِ')===0){var w=ar[0].split(' ');bis=w.slice(0,4).join(' ');ar=ar.slice();ar[0]=w.slice(4).join(' ')}
  if(bis)h+='<div class="ar" style="font-size:'+fs+'px;text-align:center">'+esc(bis)+'</div>';
- ar.forEach(function(t,i){h+='<div class="ay"><div class="ayh"><span class="ayn">'+bd(i+1)+'</span><span>আয়াত '+bd(i+1)+'</span></div><div class="ar" style="font-size:'+fs+'px">'+esc(t)+' <span class="an">﴿'+bd(i+1)+'﴾</span></div><div class="tr">'+esc(bnT[i]||'')+'</div></div>'});
- var b=$('sbody');if(b&&curS===n&&view==='surah')b.innerHTML=h;
+ ar.forEach(function(t,i){var ob=bk.indexOf(n+':'+(i+1))>=0;h+='<div class="ay" id="ay'+(i+1)+'"><div class="ayh"><span class="ayn">'+bd(i+1)+'</span><span>আয়াত '+bd(i+1)+'</span><button class="qbk'+(ob?' on':'')+'" data-h="qk:'+n+':'+(i+1)+'">'+(ob?'🔖 বুকমার্ক করা':'🔖 বুকমার্ক')+'</button></div><div class="ar" style="font-size:'+fs+'px">'+esc(t)+' <span class="an">﴿'+bd(i+1)+'﴾</span></div><div class="tr">'+esc(bnT[i]||'')+'</div></div>'});
+ var b=$('sbody');if(b&&curS===n&&view==='surah'){b.innerHTML=h;if(window.qJump){var e=$('ay'+window.qJump);window.qJump=0;if(e)setTimeout(function(){e.scrollIntoView({block:'start'})},60)}}
 }
 function loadSurah(){
  var n=curS,s=mfs();s.ql=n;mfw(s);
@@ -1787,6 +1798,9 @@ function hubAct(a){
  else if(c==='lsd'){lsPick('d',p[1])}else if(c==='lsg'){lsPick('g',p[1])}else if(c==='locp'){spOpen=!spOpen;var y0=window.scrollY;render();window.scrollTo(0,y0)}else if(c==='hdtab'){hdTab=p[1]==='t'?'t':'c';var a1=$('hdt'),a2=$('hdw'),b1=$('hdtc'),b2=$('hdtt');if(a1)a1.style.display=hdTab==='t'?'':'none';if(a2)a2.style.display=hdTab==='c'?'':'none';if(b1)b1.className=hdTab==='c'?'on':'';if(b2)b2.className=hdTab==='t'?'on':''}else if(c==='qop'){qOpen=!qOpen;render()}else if(c==='qt'){qTab=p[1]==='p'?'p':p[1]==='v'?'v':'s';render()}
  else if(c==='qf'){s.qfs=Math.max(18,Math.min(48,(s.qfs||26)+(p[1]==='+'?2:-2)));mfw(s);render()}
  else if(c==='hj'){s.hj=+p[1];mfw(s);render()}
+ else if(c==='qm'){s.qno=s.qno?0:1;mfw(s);var yq=window.scrollY;render();window.scrollTo(0,yq)}
+ else if(c==='qk'){var kk=p[1]+':'+p[2],ba=s.qbk||[],ix=ba.indexOf(kk);if(ix>=0)ba.splice(ix,1);else ba.push(kk);s.qbk=ba;mfw(s);var yk=window.scrollY;render();window.scrollTo(0,yk)}
+ else if(c==='qj'){qOpen=false;curS=+p[1];window.qJump=+p[2];view='surah';render()}
  else if(c==='gps'){var m=$('gpm');if(m)m.textContent='অবস্থান খোঁজা হচ্ছে…';if(!navigator.geolocation){if(m)m.textContent='এই ডিভাইসে অবস্থান পাওয়া যায় না';return}navigator.geolocation.getCurrentPosition(function(r){var z=mfs();z.gps=[r.coords.latitude,r.coords.longitude];delete z.gn;delete z.gz;mfw(z);render()},function(){var m2=$('gpm');if(m2)m2.textContent='অবস্থান পাওয়া যায়নি। অনুমতি দিয়েছেন কিনা দেখুন।'},{timeout:15000})}
  else if(c==='qb')qStart();
  else if(c==='qo'){var qz=mfs();qz.qoff=p[1]==='r'?0:Math.max(-45,Math.min(45,(+qz.qoff||0)+(+p[1])));mfw(qz);qOffC=qz.qoff;render()}
