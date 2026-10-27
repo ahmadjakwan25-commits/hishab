@@ -1536,8 +1536,8 @@ function duaInit(){
  loadContent(function(c){var b=$('dcb');if(b)b.innerHTML=topicPanel('duas',dcOther(c.duas||[]),'বিষয় অনুযায়ী দোয়া')});
 }
 /* ---------- কিতাব, প্রবন্ধ, মাসায়েল, লাইভ ---------- */
-function pdfN(a){var n=0;(a||[]).forEach(function(x){if(x&&/\.pdf(\?|#|$)/i.test(x.url||''))n++});return n}
-function onLine(a){return '<div class="onl" style="margin:0 0 10px;font-weight:700;color:var(--g2,#14845a)">🌐 অনলাইন: '+bd(pdfN(a))+'টি PDF আপলোড করা আছে</div>'}
+function pdfN(a){return (a||[]).filter(function(x){return x&&(x.title||x.url)}).length}
+function onLine(a){return '<div class="onl" style="margin:0 0 10px;font-weight:700;color:var(--g2,#14845a)">🌐 অনলাইন: '+bd(pdfN(a))+'টি আপলোড করা আছে</div>'}
 function okUrl(u){return /^(https?:\/\/|[\w\-\/\.%]+\.pdf$)/i.test(u||'')}
 function listPage(title,kind){return hdH(title)+(ghTok()?'<div class="panel"><button class="chip" data-h="ad:go:'+kind+'">✏️ নতুন যোগ / সম্পাদনা</button></div>':'')+'<div class="panel"><input data-fl="1" placeholder="খুঁজুন"></div><div id="lst" class="panel">'+mfLd()+'</div>'}
 function listInit(kind){
