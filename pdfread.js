@@ -683,7 +683,9 @@
   }
   function offHtml(list) {
     if (!list.length) return '<div class="empty">কিছু ডাউনলোড করা নেই।<br>অনলাইন থেকে ডাউনলোড করলে এখানে আসবে, তখন ইন্টারনেট ছাড়াই পড়া যাবে।</div>';
-    return list.map(function (b) {
+    var tot = 0; dlbooks.forEach(function (b) { tot += b.size || 0; });
+    var sum = '<div class="prst" style="padding:6px 4px 10px">📦 মোট ডাউনলোড: ' + bd(dlbooks.length) + 'টি · ফোনে জায়গা নিয়েছে ' + sizeTxt(tot) + '</div>';
+    return sum + list.map(function (b) {
       return '<div class="item fi"><div style="flex:1"><b>' + esc(b.name) + "</b><small>" + esc(b.author || "") + (b.author ? " · " : "") + bd(b.pages) + " পৃষ্ঠা · " + sizeTxt(b.size) +
         '</small></div><button type="button" class="chip mfrd" data-id="' + b.id + '">📖 পড়ুন</button><button type="button" class="chip mfrm" data-id="' + b.id + '" aria-label="মুছুন">🗑</button></div>';
     }).join("");
@@ -761,7 +763,8 @@
           var url = btn ? btn.getAttribute("data-u") : a.href;
           var have = !!findDl(url, c.kind);
           var isPdf = /\.pdf(?:[?#].*)?$/i.test(url || "") || (!!DRIVE_KEY && !!driveId(url));
-          var ok = have || (isPdf && probeState(url) === 1);
+          /* .pdf ও Drive লিংকে বোতাম সবসময় আসে (গোপন যাচাই দুর্বল নেটে ভুলভাবে বোতাম লুকিয়ে ফেলত) */
+          var ok = have || isPdf;
           if (!ok) {
             if (btn && !btn.getAttribute("data-busy") && btn.parentNode) btn.parentNode.removeChild(btn);
             if (isPdf && probeState(url) === undefined) queueProbe(url);
