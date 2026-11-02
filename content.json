@@ -3826,7 +3826,8 @@
   "fs": 110,
   "rd": "sq",
   "bgc": "#f1f5f2",
-  "pt": "glow"
+  "pt": "glow",
+  "cs": "shadow"
  },
  "font": "tb",
  "tilawat": [
