@@ -3825,7 +3825,8 @@
  "th": {
   "fs": 110,
   "rd": "sq",
-  "bgc": "#f1f5f2"
+  "bgc": "#f1f5f2",
+  "pt": "glow"
  },
  "font": "tb",
  "tilawat": [
