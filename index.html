@@ -3260,6 +3260,7 @@ function send(keep){
 function later(){if(!timer)timer=setTimeout(function(){send(false);},20000);}
 function watch(){
   var v='';try{v=String(view);}catch(e){return;}
+  if(v!=='admin'&&agOpen){agOpen='';agL=false;}
   if(v!==last){last=v;if(v&&v!=='admin'&&v!=='hub'){feat[v]=Math.min(50,(feat[v]||0)+1);saveFeat();later();}}
 }
 load();
@@ -3284,41 +3285,74 @@ window.statsHtml=function(){
 };
 /* ---------- পরিচালকের পাতা: প্রতিটি অংশ আলাদা ফিচার ---------- */
 var AG=[
- {k:'hj',i:'📅',n:'হিজরি তারিখ',m:['📅']},
- {k:'add',i:'➕',n:'নতুন যোগ করুন',m:['🗂','➕','✏','📥']},
- {k:'list',i:'📚',n:'বর্তমান তালিকা',m:['📚']},
- {k:'font',i:'🔤',n:'ফন্ট',m:['🔤']},
- {k:'theme',i:'🎨',n:'থিমের সাজ',m:['🎨']},
- {k:'stats',i:'📊',n:'পরিসংখ্যান',m:['📊']},
- {k:'tok',i:'🔑',n:'টোকেন মুছুন',m:[]}
+ {k:'hj',i:'📅',n:'হিজরি তারিখ'},
+ {k:'notifs',i:'🔔',n:'নোটিফিকেশন',t:1},
+ {k:'quran',i:'📖',n:'কুরআন PDF/লিংক',t:1},
+ {k:'tilawat',i:'🎧',n:'তিলাওয়াত ভিডিও',t:1},
+ {k:'books',i:'📚',n:'কিতাব (PDF)',t:1},
+ {k:'masail',i:'❓',n:'মাসায়েল',t:1},
+ {k:'essays',i:'✍️',n:'প্রবন্ধ',t:1},
+ {k:'hadiths',i:'📜',n:'হাদিস',t:1},
+ {k:'duas',i:'🤲',n:'দোয়া',t:1},
+ {k:'live',i:'📺',n:'লাইভ লিংক',t:1},
+ {k:'names',i:'🌟',n:'ইসলামিক নাম',t:1},
+ {k:'font',i:'🔤',n:'ফন্ট'},
+ {k:'theme',i:'🎨',n:'থিমের সাজ'},
+ {k:'stats',i:'📊',n:'পরিসংখ্যান'},
+ {k:'tok',i:'🔑',n:'টোকেন মুছুন'}
 ];
-var agOpen='';
+var agOpen='',agL=false;
+function isType(k){for(var i=0;i<AG.length;i++){if(AG[i].k===k&&AG[i].t)return true;}return false;}
 function agOf(p){
   if(p.id==='stp')return 'stats';
   if(p.querySelector('[data-h="ad:out"]'))return 'tok';
   var b=p.querySelector(':scope>b');if(!b)return '';var t=b.textContent.trim();
-  for(var i=0;i<AG.length;i++){if(AG[i].k==='stats')continue;for(var j=0;j<AG[i].m.length;j++){if(t.indexOf(AG[i].m[j])===0)return AG[i].k;}}
+  if(t.indexOf('📅')===0)return 'hj';
+  if(t.indexOf('🗂')===0)return 'skip';
+  if(t.indexOf('➕')===0||t.indexOf('✏')===0||t.indexOf('📥')===0)return 'form';
+  if(t.indexOf('📚')===0)return 'list';
+  if(t.indexOf('🔤')===0)return 'font';
+  if(t.indexOf('🎨')===0)return 'theme';
   return '';
 }
 function adTiles(){
   var ps=document.querySelectorAll('#app .panel.ap');if(!ps.length)return;
   var ed=-1;try{ed=adEd;}catch(e){}
-  if(ed>=0)agOpen='add';
+  if(ed>=0&&!isType(agOpen)){try{agOpen=adT;}catch(e){}}
   var old=document.getElementById('agbox');if(old)old.remove();
   var box=document.createElement('div');box.id='agbox';
-  var keys=[];for(var i=0;i<ps.length;i++)keys.push(agOf(ps[i]));
+  var keys=[],has={};for(var i=0;i<ps.length;i++){var k0=agOf(ps[i]);keys.push(k0);has[k0]=1;}
   if(!agOpen){
     var g='<div class="g3">';
-    AG.forEach(function(x){if(keys.indexOf(x.k)<0)return;g+='<button class="tile" type="button" data-ag="'+x.k+'"><span>'+x.i+'</span><b>'+x.n+'</b></button>';});
+    AG.forEach(function(x){
+      var ok=x.t?has.form:has[x.k];if(!ok)return;
+      g+='<button class="tile" type="button" data-ag="'+x.k+'"><span>'+x.i+'</span><b>'+x.n+'</b></button>';
+    });
     box.innerHTML=g+'</div>';
   }else{
     var nm='';AG.forEach(function(x){if(x.k===agOpen)nm=x.i+' '+x.n;});
-    box.innerHTML='<button class="chip" type="button" data-ag="" style="margin-bottom:10px">← পরিচালকের তালিকা</button> <b>'+nm+'</b>';
+    box.innerHTML='<button class="chip" type="button" data-ag="" style="margin-bottom:10px">← পরিচালকের তালিকা</button> <b>'+nm+'</b>'+
+      (isType(agOpen)&&has.list?'<button class="chip" type="button" data-agl="1" style="margin-left:8px">'+(agL?'▲ তালিকা লুকান':'📚 বর্তমান তালিকা দেখুন')+'</button>':'');
   }
   ps[0].parentNode.insertBefore(box,ps[0]);
-  for(var j=0;j<ps.length;j++){var k=keys[j];ps[j].style.display=(k&&k===agOpen)?'':'none';}
-  box.onclick=function(e){var t=e.target.closest('[data-ag]');if(!t)return;agOpen=t.getAttribute('data-ag');adTiles();window.scrollTo(0,0);};
+  for(var j=0;j<ps.length;j++){
+    var k=keys[j],show=false;
+    if(agOpen){
+      if(isType(agOpen))show=(k==='form')||(k==='list'&&agL);
+      else show=(k===agOpen);
+    }
+    ps[j].style.display=show?'':'none';
+  }
+  box.onclick=function(e){
+    var l=e.target.closest('[data-agl]');if(l){agL=!agL;adTiles();return;}
+    var t=e.target.closest('[data-ag]');if(!t)return;
+    var v=t.getAttribute('data-ag');agL=false;
+    if(v&&isType(v)){try{adT=v;adEd=-1;adMsg='';}catch(x){}agOpen=v;render();window.scrollTo(0,0);return;}
+    agOpen=v;adTiles();window.scrollTo(0,0);
+  };
 }
+/* অন্য পাতার “✏️ যোগ করুন” বাটন থেকে এলে সরাসরি সেই ফিচার খুলবে */
+try{var _aa=adminAct;adminAct=function(p){if(p&&p[1]==='go'){agOpen=p[2]||'books';agL=false;}return _aa.apply(this,arguments);};}catch(e){}
 window.statsInit=function(){
   try{adTiles();}catch(e){}
   var b=document.getElementById('stgo');if(!b)return;
