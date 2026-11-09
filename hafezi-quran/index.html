@@ -67,12 +67,13 @@ function idb(){if(dbp)return dbp;dbp=new Promise((ok,no)=>{try{const r=indexedDB
 async function idbOp(m,...a){const d=await idb();return new Promise((ok,no)=>{const t=d.transaction('p',m=='get'||m=='getAllKeys'||m=='count'?'readonly':'readwrite');const r=t.objectStore('p')[m](...a);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
 idbOp('getAllKeys').then(k=>{k.forEach(x=>DL.add(+x));updDl()}).catch(()=>{});
 async function imgUrl(p){if(DL.has(p)){try{const b=await idbOp('get',p);if(b)return URL.createObjectURL(b)}catch(e){}}return I[p]}
-function setImg(pg,p){const im=new Image();im.alt='';pg.appendChild(im);if(DL.has(p)){imgUrl(p).then(u=>{if(cur===p)im.src=u})}else im.src=I[p]}
+const altU=u=>u.indexOf('pages/')>=0?u.replace('pages/','../'):u.replace('../','pages/');
+function setImg(pg,p){const im=new Image();im.alt='';im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src=altU(I[p])}};pg.appendChild(im);if(DL.has(p)){imgUrl(p).then(u=>{if(cur===p)im.src=u})}else im.src=I[p]}
 let DLRUN=false,DLSTOP=false;
 function updDl(){const n=DL.size,t=keys.length;if(!$('dls'))return;$('dls').textContent=`অফলাইনে সেভ: ${bn(n)} / ${bn(t)} পাতা`+(n==t?' ✅ সব পাতা ফোনে আছে':'');$('dlbar').style.width=(t?n/t*100:0)+'%';$('dlgo').hidden=DLRUN||n==t;$('dlstop').hidden=!DLRUN;$('dlrm').hidden=DLRUN||!n}
 async function dlAll(){if(DLRUN)return;DLRUN=true;DLSTOP=false;updDl();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
  const todo=keys.filter(p=>!DL.has(p));let fail=0,i=0;
- async function w(){while(!DLSTOP){const p=todo[i++];if(p==null)return;try{const r=await fetch(I[p]);if(!r.ok)throw 0;const b=await r.blob();await idbOp('put',b,p);DL.add(p);updDl()}catch(e){fail++}}}
+ async function w(){while(!DLSTOP){const p=todo[i++];if(p==null)return;try{let r=await fetch(I[p]);if(!r.ok)r=await fetch(altU(I[p]));if(!r.ok)throw 0;const b=await r.blob();await idbOp('put',b,p);DL.add(p);updDl()}catch(e){fail++}}}
  await Promise.all([w(),w(),w(),w()]);DLRUN=false;updDl();if(fail)flash(`${bn(fail)}টি পাতা নামেনি, আবার চাপুন`);else if(!DLSTOP)flash('ডাউনলোড সম্পূর্ণ')}
 $('dlb').onclick=()=>{try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('tx').textContent='';$('cf').hidden=true;$('dlp').hidden=false;$('ti').textContent='অফলাইনে পড়ার জন্য ডাউনলোড (প্রায় ৪০ MB)';updDl();$('sh').classList.add('o')};
 $('dlgo').onclick=dlAll;$('dlstop').onclick=()=>{DLSTOP=true};
@@ -108,7 +109,7 @@ document.addEventListener('fullscreenchange',()=>{if(curA)acBuild()});
 function wrap(ctx,t,w){const out=[];let line='';for(const wd of t.split(/\s+/)){const tst=line?line+' '+wd:wd;if(ctx.measureText(tst).width>w&&line){out.push(line);line=wd}else line=tst}if(line)out.push(line);return out}
 function loadImg(src){return new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=src})}
 async function doImg(){if(!curA)return;flash('ছবি বানানো হচ্ছে…');const a=curA;const tr=cache[a.s+':'+a.a]||await trOf(a);
- try{const p=cur;const im=await loadImg(await imgUrl(p));const W=im.naturalWidth,H=im.naturalHeight;const k=860/(0.76*W);
+ try{const p=cur;let im;try{im=await loadImg(await imgUrl(p))}catch(e){im=await loadImg(altU(I[p]))}const W=im.naturalWidth,H=im.naturalHeight;const k=860/(0.76*W);
   const rs=(D[p].find(x=>x.s==a.s&&x.a==a.a)||{r:[]}).r;
   const CW=1000,pad=40;const c0=document.createElement('canvas').getContext('2d');c0.font='34px "Noto Sans Bengali",system-ui,sans-serif';const lines=wrap(c0,tr||'',CW-2*pad);
   let ah=0;rs.forEach(r=>ah+=r[3]/100*H*k+6);
