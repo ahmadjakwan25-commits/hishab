@@ -618,6 +618,15 @@ html[data-dn="cozy"] :is(.panel,.tile){padding:19px!important;margin-bottom:16px
 #app[data-v="surah"] .ay .tr{margin:0 10px 10px;padding:9px 12px 10px;border:0;border-left:4px solid rgb(var(--q));border-radius:0 12px 12px 0;background:rgba(var(--q),.09);font-size:16px;line-height:1.9}
 #app[data-v="surah"] .ay .tr::before{content:"অর্থ";display:block;font-size:11px;font-weight:700;letter-spacing:.5px;color:rgb(var(--q));margin-bottom:1px}
 </style>
+<style id="perf-fix">
+/* স্ক্রল হালকা করার জন্য */
+html body{background-attachment:scroll!important}
+.hero{contain:paint}
+.hmoon{filter:drop-shadow(0 0 8px #fff) drop-shadow(0 0 22px rgba(255,248,210,.8))!important;animation:none!important;will-change:transform}
+.hmg{animation:none!important}
+html.scr .hero *,html.scr .hero *::before,html.scr .hero *::after{animation-play-state:paused!important}
+html.scr .hc .wf::before{animation-play-state:paused!important}
+</style>
 </head>
 <body>
 <header><button id="mb" aria-label="মেনু">☰</button><button id="nb" aria-label="নোটিফিকেশন">🔔<span id="nbadge"></span></button><h1>আল-মিফতাহ</h1><p id="hsub">ইবাদত ও হিসাব এক জায়গায়</p></header>
@@ -3413,5 +3422,12 @@ setTimeout(hideIf,800);
 <script src="share.js"></script>
 <script src="readpages.js"></script>
 <script src="hfzcard.js"></script>
+<script id="perf-js">
+(function(){var h=document.documentElement,t=0,on=0;
+function f(){if(!on){on=1;h.classList.add('scr')}clearTimeout(t);t=setTimeout(function(){on=0;h.classList.remove('scr')},200)}
+try{document.addEventListener('scroll',f,{capture:true,passive:true})}catch(e){}
+document.addEventListener('visibilitychange',function(){h.classList.toggle('scr',document.hidden)});
+})();
+</script>
 </body>
 </html>
