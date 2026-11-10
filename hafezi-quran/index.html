@@ -93,7 +93,7 @@ function akey(a,rc){return (rc||rcSel)+'/'+p3(a.s)+p3(a.a)}
 async function audSrc(a){const k=akey(a);if(AD.has(k)){try{const b=await idbS('a','get',k);if(b){if(aoUrl)URL.revokeObjectURL(aoUrl);aoUrl=URL.createObjectURL(b);return aoUrl}}catch(e){}}return auUrl(a)}
 function playAy(a){AUK=a.s+':'+a.a;curA=a;$('tf').textContent='';acBuild();$('am').textContent='';const tk=++ATK;audSrc(a).then(u=>{if(tk!==ATK)return;AU.src=u;AU.play().catch(()=>{})})}
 AU.onplay=()=>{$('pl').textContent='⏸'};AU.onpause=()=>{$('pl').textContent='▶'};AU.onended=()=>{$('pl').textContent='▶';if(AUTO)nextAy()};
-AU.onerror=()=>{$('pl').textContent='▶';$('am').textContent='তেলাওয়াত আনা যায়নি। ইন্টারনেট দেখুন বা অন্য ক্বারী বেছে নিন।'};
+let AURT=0;AU.onerror=()=>{$('pl').textContent='▶';const a=curA;if(a&&AURT!==ATK){AURT=ATK;const tk=ATK;setTimeout(()=>{if(tk===ATK&&curA===a){AU.src=auUrl(a)+'?r='+Date.now();AU.play().catch(()=>{})}},800);return}$('am').textContent='তেলাওয়াত আনা যায়নি'+(a?` (সূরা ${a.s}, আয়াত ${a.a})`:'')+'। ইন্টারনেট দেখুন বা অন্য ক্বারী বেছে নিন।'};
 $('pl').onclick=()=>{if(!curA)return;if(AUK!==curA.s+':'+curA.a){playAy(curA);return}if(AU.ended){playAy(curA);return}if(AU.paused){AU.play().catch(()=>{})}else AU.pause()};
 $('rc').onchange=e=>{rcSel=e.target.value;try{localStorage.setItem('qrc',rcSel)}catch(x){}if(curA&&AUK)playAy(curA)};
 
@@ -119,9 +119,12 @@ function ayList(sc){const seen={},out=[];const pg=sc=='p'?[cur]:keys.filter(p=>j
 let DARUN=false,DASTOP=false,DABYTES=0;
 function daFill(){const sel=$('dasc');const v=sel.value||'p';let h=`<option value="p">এই পাতা (পাতা ${bn(cur)})</option>`;juzList().forEach(j=>{h+=`<option value="${j}">পারা ${bn(j)}</option>`});sel.innerHTML=h;sel.value=v}
 function daUpd(){const rc=rcSel;const nm=(RC.find(r=>r[0]==rc)||[])[1]||rc;$('dar').textContent='ক্বারী: '+nm;const l=ayList($('dasc').value||'p');let n=0;l.forEach(a=>{if(AD.has(akey(a,rc)))n++});const t=l.length;$('das').textContent=`ফোনে আছে: ${bn(n)} / ${bn(t)} আয়াত`+(n==t&&t?' ✅':'')+(DARUN&&DABYTES?` · ${(DABYTES/1048576).toFixed(1)} MB নামানো হলো`:'');$('dabar').style.width=(t?n/t*100:0)+'%';$('dago').hidden=DARUN||n==t;$('dastop').hidden=!DARUN;$('darm').hidden=DARUN;$('dasc').disabled=DARUN}
-async function daGo(){if(DARUN)return;DARUN=true;DASTOP=false;DABYTES=0;const rc=rcSel,l=ayList($('dasc').value||'p').filter(a=>!AD.has(akey(a,rc)));let i=0,fail=0;daUpd();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
- async function w(){while(!DASTOP){const a=l[i++];if(!a)return;try{const r=await fetch(`https://everyayah.com/data/${rc}/${p3(a.s)}${p3(a.a)}.mp3`);if(!r.ok)throw 0;const b=await r.blob();if(!b.size)throw 0;await idbS('a','put',b,akey(a,rc));AD.add(akey(a,rc));DABYTES+=b.size;daUpd()}catch(e){fail++}}}
- await Promise.all([w(),w(),w()]);DARUN=false;daUpd();if(fail)flash(`${bn(fail)}টি আয়াত নামেনি, আবার চাপুন`);else if(!DASTOP)flash('তেলাওয়াত ডাউনলোড সম্পূর্ণ')}
+async function fetchRetry(u,n){let e0;for(let t=0;t<(n||3);t++){const c=new AbortController();const tm=setTimeout(()=>c.abort(),25000);
+  try{const r=await fetch(u,{signal:c.signal});clearTimeout(tm);if(r.ok){const b=await r.blob();if(b.size>200)return b;e0='empty'}else e0='HTTP '+r.status;if(r.status==404)break}catch(e){clearTimeout(tm);e0=String(e&&e.message||e)}
+  await new Promise(z=>setTimeout(z,700*(t+1)))}throw new Error(e0||'fail')}
+async function daGo(){if(DARUN)return;DARUN=true;DASTOP=false;DABYTES=0;const rc=rcSel,l=ayList($('dasc').value||'p').filter(a=>!AD.has(akey(a,rc)));let i=0,fail=0;const fl=[];daUpd();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+ async function w(){while(!DASTOP){const a=l[i++];if(!a)return;try{const b=await fetchRetry(`https://everyayah.com/data/${rc}/${p3(a.s)}${p3(a.a)}.mp3`,3);await idbS('a','put',b,akey(a,rc));AD.add(akey(a,rc));DABYTES+=b.size;daUpd()}catch(e){fail++;fl.push(a.s+':'+a.a+(e&&e.message?' ('+e.message+')':''))}}}
+ await Promise.all([w(),w()]);DARUN=false;daUpd();if(fail){flash(`${bn(fail)}টি আয়াত নামেনি, আবার চাপুন`);$('das').textContent+=' · নামেনি (সূরা:আয়াত): '+fl.slice(0,6).join(', ')+(fl.length>6?'…':'')}else if(!DASTOP)flash('তেলাওয়াত ডাউনলোড সম্পূর্ণ')}
 $('dago').onclick=daGo;$('dastop').onclick=()=>{DASTOP=true};$('dasc').onchange=daUpd;
 $('darm').onclick=async()=>{if(!confirm('এই ক্বারীর ডাউনলোড করা সব তেলাওয়াত মুছবেন?'))return;const pre=rcSel+'/';try{const ks=await idbS('a','getAllKeys');for(const k of ks)if(String(k).startsWith(pre)){await idbS('a','delete',k);AD.delete(k)}}catch(e){}daUpd()};
 $('dlgo').onclick=dlAll;$('dlstop').onclick=()=>{DLSTOP=true};
