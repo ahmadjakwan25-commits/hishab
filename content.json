@@ -3900,7 +3900,8 @@
  ],
  "th": {
   "fs": 110,
-  "bgc": "#f1f5f2"
+  "bgc": "#f1f5f2",
+  "rd": "sq"
  },
  "font": "tb",
  "tilawat": [
