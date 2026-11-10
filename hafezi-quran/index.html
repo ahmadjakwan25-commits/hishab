@@ -39,11 +39,17 @@
 .rda{direction:rtl;text-align:right;font-family:"Amiri","Noto Naskh Arabic","Scheherazade New",serif;line-height:2.1}.rdt{margin-top:8px;line-height:1.8}
 .rdb{margin-top:8px;background:#e9efe9;color:#1d2b2a;border:1px solid #c9d6cc;border-radius:10px;padding:7px 12px;font-size:14px}.rdf{margin-top:8px;padding-top:8px;border-top:1px solid #ddd;white-space:pre-wrap;line-height:1.8;font-size:15px}
 .rdm{text-align:center;color:#666;padding:16px;font-size:14px}.rdm button{margin-top:8px;background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px}
+#tp{position:fixed;inset:0;z-index:50;background:#0008;display:flex;align-items:flex-end;justify-content:center}#tp[hidden]{display:none}
+.tpb{background:#fffdf7;color:#1d2b2a;width:100%;max-width:560px;max-height:85vh;overflow:auto;border-radius:16px 16px 0 0;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.tph{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.tph b{font-size:17px;color:#0f6b57}.tph button{border:0;background:#0001;width:34px;height:34px;border-radius:50%;font-size:16px}
+.tpr{border:1px solid #d9c9a0;border-radius:12px;padding:10px;margin:8px 0;display:flex;flex-direction:column;gap:6px}
+.tpn{border:0;background:none;text-align:left;font-size:16px;font-weight:700;color:#1d2b2a;padding:2px 0}.tpn small{display:block;font-weight:400;font-size:12.5px;color:#666}
+.tpd,.tpx{border:0;border-radius:8px;padding:9px 12px;font-size:14px;background:#0f6b57;color:#fff}.tpd:disabled{background:#9bb;opacity:.8}.tpx{background:#b33}.tpm{font-size:12.5px;color:#555}.tpn2{font-size:12.5px;color:#666;margin-top:6px}
 #mp{position:fixed;left:10px;bottom:34px;right:70px;z-index:8;display:flex;align-items:center;gap:8px;background:#0f6b57ee;color:#fff;border-radius:24px;padding:6px 10px;box-shadow:0 2px 8px #0005}#mp[hidden]{display:none}#mp button{background:#fff2;border:0;color:#fff;width:34px;height:34px;border-radius:50%;font-size:16px;flex:none}#mpt{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #am{font-size:12px;color:#a33;min-height:0}
 </style></head><body>
 <div class="bar"><button id="mn" aria-label="মেনু">☰</button><button id="nx">‹ পরের</button><select id="sel"></select><button id="pv">আগের ›</button><button id="dlb" title="তেলাওয়াত ডাউনলোড">🎧</button><button id="bk" hidden>🔖</button><button id="st">⚙</button></div>
-<div id="pgw"><div id="pg"></div></div><div id="zm"><button id="zi" type="button" aria-label="বড় করুন">＋</button><button id="zo" type="button" aria-label="ছোট করুন">－</button></div><div id="rd" hidden><div class="rb"><button id="rdx" type="button" aria-label="ফিরে যান">←</button><b>অনুবাদ মোড</b><button id="rdm" type="button">A−</button><button id="rdp" type="button">A+</button></div><div id="rdl"></div></div><div id="pgl"></div><div id="gt" hidden><div class="gc"><h2>হাফেজী কোরআন শরীফ</h2><p id="gtp"></p><div class="gb"><i id="gtb"></i></div><small id="gts"></small><p id="gtm" style="color:#a33;font-size:14px"></p><button id="gtgo" type="button">⬇ ডাউনলোড শুরু করুন</button><button id="gtstop" type="button" hidden>⏹ থামান</button></div></div><div id="mp" hidden><button id="mpb" type="button">⏸</button><span id="mpt"></span><button id="mpx" type="button" aria-label="বন্ধ">✕</button></div><div id="mnb"></div><div id="mnu"><div class="mh">হাফেজী কোরআন শরীফ</div><div class="mt"><button data-t="j" class="on" type="button">পারা</button><button data-t="s" type="button">সূরা</button><button data-t="b" type="button">বুকমার্ক</button></div><div id="mnl"></div></div>
+<div id="pgw"><div id="pg"></div></div><div id="zm"><button id="zi" type="button" aria-label="বড় করুন">＋</button><button id="zo" type="button" aria-label="ছোট করুন">－</button></div><div id="rd" hidden><div class="rb"><button id="rdx" type="button" aria-label="ফিরে যান">←</button><b>অনুবাদ মোড</b><button id="rdm" type="button">A−</button><button id="rdp" type="button">A+</button></div><div id="rdl"></div></div><div id="pgl"></div><div id="gt" hidden><div class="gc"><h2>হাফেজী কোরআন শরীফ</h2><p id="gtp"></p><div class="gb"><i id="gtb"></i></div><small id="gts"></small><p id="gtm" style="color:#a33;font-size:14px"></p><button id="gtgo" type="button">⬇ ডাউনলোড শুরু করুন</button><button id="gtstop" type="button" hidden>⏹ থামান</button></div></div><div id="tp" hidden><div class="tpb"><div class="tph"><b>তাফসীরের কিতাব বেছে নিন</b><button id="tpc" type="button">✕</button></div><div id="tpl"></div><div class="tpn2">ডাউনলোড করলে ইন্টারনেট ছাড়াই পুরো কোরআনের তাফসীর পড়া যাবে। প্রতিটি কিতাব কয়েক MB নিতে পারে, ওয়াইফাই থাকলে ভালো।</div></div></div><div id="mp" hidden><button id="mpb" type="button">⏸</button><span id="mpt"></span><button id="mpx" type="button" aria-label="বন্ধ">✕</button></div><div id="mnb"></div><div id="mnu"><div class="mh">হাফেজী কোরআন শরীফ</div><div class="mt"><button data-t="j" class="on" type="button">পারা</button><button data-t="s" type="button">সূরা</button><button data-t="b" type="button">বুকমার্ক</button></div><div id="mnl"></div></div>
 <div id="sh"><h3 id="ti"></h3><div id="au"><button id="pl" type="button">▶</button><select id="rc"></select></div><div id="am"></div><small id="tr" style="color:#666">অনুবাদ: মুহিউদ্দীন খান</small><div id="tx"></div><div id="ac"></div><div id="tf"></div><div id="dlp" hidden><div id="dls" style="font-size:15px;line-height:1.7"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:10px 0"><div id="dlbar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dlgo" type="button">⬇ সব পাতা ডাউনলোড</button><button id="dlstop" type="button" hidden>⏹ থামান</button><button id="dlrm" type="button">🗑 মুছুন</button></div><small style="display:block;margin-top:8px">ডাউনলোড হয়ে গেলে ইন্টারনেট ছাড়াই পাতা দেখা যাবে।</small><hr style="margin:14px 0;border:0;border-top:1px solid #ccc"><div style="font-weight:700">🎧 তেলাওয়াত ডাউনলোড</div><small id="dar" style="display:block;margin:4px 0"></small><select id="dasc" style="width:100%;padding:8px;border:1px solid #999;border-radius:8px;font-size:14px;background:#fff;color:#1d2b2a"></select><div id="das" style="font-size:14px;line-height:1.7;margin:8px 0 4px"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:6px 0"><div id="dabar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dago" type="button">⬇ তেলাওয়াত ডাউনলোড</button><button id="dastop" type="button" hidden>⏹ থামান</button><button id="darm" type="button">🗑 এই ক্বারীর তেলাওয়াত মুছুন</button></div><small style="display:block;margin-top:8px">ওপরের তালিকা থেকে ক্বারী বদলে নিতে পারবেন (নিচের প্লেয়ারের ক্বারী যেটি, সেটিই নামবে)। তেলাওয়াতে জায়গা বেশি লাগে, ওয়াইফাইতে নামানো ভালো। অনুবাদ ও তাফসীরে ইন্টারনেট লাগবে।</small></div><div id="cf" hidden><small>অনুবাদের API লিংক (যেখানে সূরা নম্বরের জায়গায় {sura} আর আয়াত নম্বরের জায়গায় {aya} লিখুন):</small><input id="api" placeholder="https://.../{sura}/{aya}"><button id="sv">সংরক্ষণ</button></div></div>
 <script src="data.js"></script>
 <script>
@@ -52,7 +58,7 @@ const SN={1:'আল-ফাতিহা',2:'আল-বাকারা',3:'আল-
 const keys=Object.keys(I).map(Number).sort((a,b)=>a-b);let cur=2,cache={};
 const $=id=>document.getElementById(id);
 const DEFS=['https://api.alquran.cloud/v1/ayah/{sura}:{aya}/bn.bengali','https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/ben-muhiuddinkhan/{sura}/{aya}.json','https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/ben-muhiuddinkhan/{sura}/{aya}.min.json'];let API='';try{API=localStorage.getItem('qapi')||''}catch(e){}
-{const g={};keys.forEach(p=>{const j=juzOf(p);(g[j]=g[j]||[]).push(p)});$('sel').innerHTML=Object.keys(g).map(j=>`<optgroup label="পারা ${bn(j)}">`+g[j].map(p=>`<option value="${p}">পাতা ${bn(p)}</option>`).join('')+'</optgroup>').join('')}
+{const g={};keys.forEach(p=>{const j=juzOf(p);(g[j]=g[j]||[]).push(p)});$('sel').innerHTML=Object.keys(g).map(j=>`<optgroup label="পারা ${bn(j)}">`+g[j].map((p,ix)=>`<option value="${p}">পৃষ্ঠা ${bn(ix+1)}</option>`).join('')+'</optgroup>').join('')}
 function showImg(p){cur=p;$('sel').value=p;const pg=$('pg');pg.innerHTML='';setImg(pg,p);
  D[p].forEach((a,i)=>a.r.forEach(r=>{const d=document.createElement('div');d.className='h';d.dataset.i=i;
   d.style.cssText=`left:${r[0]}%;top:${r[1]}%;width:${r[2]}%;height:${r[3]}%`;d.onclick=()=>tap(p,i);pg.appendChild(d)}));close()}
@@ -66,6 +72,7 @@ async function tap(p,i,quiet){const a=D[p][i];AP=p;document.querySelectorAll('.h
  const k=a.s+':'+a.a;
  if(cache[k]){$('tx').textContent=cache[k];return}
  $('tx').textContent='লোড হচ্ছে…';
+ try{const d=rdMem[a.s]||await idbS('t','get',a.s);if(d&&d.tr&&d.tr[a.a-1]){cache[k]=d.tr[a.a-1];if(!curA||curA===a)$('tx').textContent=cache[k];return}}catch(e){}
  const src=(API&&!DEFS.includes(API))?[API].concat(DEFS):DEFS;let err='';
  for(const t of src){const u=t.replace('{sura}',a.s).replace('{aya}',a.a).replace('{ayah}',a.a);
   try{const c=new AbortController();const tm=setTimeout(()=>c.abort(),8000);const r=await fetch(u,{signal:c.signal});clearTimeout(tm);
@@ -122,6 +129,8 @@ $('dlrm').onclick=async()=>{if(!confirm('ফোন থেকে ডাউনল�
 let MODE='page';
 
 function juzList(){const r=[];keys.forEach(p=>{const j=juzOf(p);if(!r.includes(j))r.push(j)});return r}
+function pjN(p){const j=juzOf(p);return keys.filter(q=>juzOf(q)==j).indexOf(p)+1}
+function pjL(p){return `পারা ${bn(juzOf(p))}, পৃষ্ঠা ${bn(pjN(p))}`}
 function juzPages(j){const a=keys.filter(p=>juzOf(p)==j);return [a[0],a[a.length-1]]}
 function suraStarts(){const m={};keys.forEach(p=>D[p].forEach(a=>{if(a.a==1&&m[a.s]==null)m[a.s]=p}));keys.forEach(p=>D[p].forEach(a=>{if(m[a.s]==null)m[a.s]=p}));return m}
 function pbGet(){try{return JSON.parse(localStorage.getItem('hfz_pbm')||'[]')}catch(e){return[]}}
@@ -137,15 +146,15 @@ function menuFill(){const L=$('mnl');L.innerHTML='';document.querySelectorAll('#
  let last=NaN;try{last=+localStorage.getItem('hfz_last')}catch(e){}
  if(MT=='j'){
   if(JSEL!=null){L.appendChild(mItem('← পারা তালিকা','',()=>{JSEL=null;menuFill()},false));
-   const h=document.createElement('div');h.style.cssText='padding:8px 14px;font-weight:700;color:var(--ac)';h.textContent=`পারা ${bn(JSEL)} — পাতার তালিকা`;L.appendChild(h);
-   keys.filter(p=>juzOf(p)==JSEL).forEach(p=>L.appendChild(mItem(`পাতা ${bn(p)}`,pgSuras(p),()=>goP(p),p==cur)))}
-  else{if(keys.includes(last))L.appendChild(mItem('▶ শেষ পড়া',`পাতা ${bn(last)}`,()=>goP(last),false));
-   juzList().forEach(j=>{const r=juzPages(j);L.appendChild(mItem(`পারা ${bn(j)}`,`পাতা ${bn(r[0])}–${bn(r[1])}  ›`,()=>{JSEL=j;menuFill()},juzOf(cur)==j))})}}
- else if(MT=='s'){const st=suraStarts();Object.keys(st).map(Number).sort((a,b)=>a-b).forEach(n=>{L.appendChild(mItem(`${bn(n)}. ${SN[n]||''}`,`পাতা ${bn(st[n])}`,()=>goP(st[n]),false))})}
+   const h=document.createElement('div');h.style.cssText='padding:8px 14px;font-weight:700;color:var(--ac)';h.textContent=`পারা ${bn(JSEL)} — পৃষ্ঠার তালিকা`;L.appendChild(h);
+   keys.filter(p=>juzOf(p)==JSEL).forEach(p=>L.appendChild(mItem(`পৃষ্ঠা ${bn(pjN(p))}`,pgSuras(p),()=>goP(p),p==cur)))}
+  else{if(keys.includes(last))L.appendChild(mItem('▶ শেষ পড়া',pjL(last),()=>goP(last),false));
+   juzList().forEach(j=>{const r=juzPages(j);L.appendChild(mItem(`পারা ${bn(j)}`,`${bn(keys.filter(q=>juzOf(q)==j).length)}টি পৃষ্ঠা  ›`,()=>{JSEL=j;menuFill()},juzOf(cur)==j))})}}
+ else if(MT=='s'){const st=suraStarts();Object.keys(st).map(Number).sort((a,b)=>a-b).forEach(n=>{L.appendChild(mItem(`${bn(n)}. ${SN[n]||''}`,pjL(st[n]),()=>goP(st[n]),false))})}
  else{const b=document.createElement('button');b.type='button';b.className='mb';const v=pbGet();const has=v.includes(cur);b.textContent=has?`🔖 পাতা ${bn(cur)} বুকমার্ক সরান`:`🔖 পাতা ${bn(cur)} বুকমার্ক করুন`;b.onclick=()=>{let x=pbGet();x=x.includes(cur)?x.filter(q=>q!=cur):x.concat([cur]);pbSet(x);menuFill()};L.appendChild(b);
   const ab=bmGet();if(!v.length&&!ab.length){const e=document.createElement('div');e.style.cssText='padding:14px;color:#666;font-size:14px';e.textContent='এখনো কোনো বুকমার্ক নেই। কোনো আয়াতে টেপ করে 🔖 চাপলে আয়াত বুকমার্ক হবে।';L.appendChild(e)}
-  v.slice().sort((a,b)=>a-b).forEach(p=>L.appendChild(mItem(`📄 পাতা ${bn(p)}`,`পারা ${bn(juzOf(p))}`,()=>goP(p),false)));
-  ab.forEach(x=>L.appendChild(mItem(`🔖 ${SN[x.s]||''}, আয়াত ${bn(x.a)}`,`পাতা ${bn(x.p)}`,()=>{goP(x.p);const i=D[x.p].findIndex(y=>y.s==x.s&&y.a==x.a);if(i>=0)tap(x.p,i)},false)))}}
+  v.slice().sort((a,b)=>a-b).forEach(p=>L.appendChild(mItem(`📄 ${pjL(p)}`,pgSuras(p),()=>goP(p),false)));
+  ab.forEach(x=>L.appendChild(mItem(`🔖 ${SN[x.s]||''}, আয়াত ${bn(x.a)}`,pjL(x.p),()=>{goP(x.p);const i=D[x.p].findIndex(y=>y.s==x.s&&y.a==x.a);if(i>=0)tap(x.p,i)},false)))}}
 $('mn').onclick=menuOpen;$('mnb').onclick=menuClose;
 document.querySelectorAll('#mnu .mt button').forEach(b=>b.onclick=()=>{MT=b.dataset.t;JSEL=null;menuFill()});
 // zoom + swipe
@@ -178,8 +187,7 @@ function rdBlock(n,a,ar,tr){const d=document.createElement('div');d.className='r
  const T=document.createElement('div');T.className='rdt';T.textContent=tr;
  const B=document.createElement('button');B.type='button';B.className='rdb';B.textContent='📜 তাফসীর দেখুন';
  const F=document.createElement('div');F.className='rdf';F.hidden=true;
- B.onclick=async()=>{if(!F.hidden){F.hidden=true;B.textContent='📜 তাফসীর দেখুন';return}F.hidden=false;B.textContent='🔼 তাফসীর লুকান';const k=n+':'+a;if(tfMem[k]){F.textContent=tfMem[k];return}F.textContent='তাফসীর লোড হচ্ছে…';
-  try{const r=await fetch(TFU.replace('{sura}',n).replace('{aya}',a));if(!r.ok)throw 0;const x=pick(await r.json());const dv=document.createElement('div');dv.innerHTML=String(x).replace(/<br\s*\/?>/gi,'\n').replace(/<\/p>/gi,'\n');const tx=(dv.textContent||'').trim();if(!tx)throw 0;tfMem[k]='[তাফসীরে ইবনে কাসীর]\n'+tx;F.textContent=tfMem[k]}catch(e){F.textContent='তাফসীর আনা যায়নি। ইন্টারনেট দেখুন, অথবা এই আয়াতের তাফসীর এই উৎসে নেই।'}};
+ B.onclick=()=>{if(!F.hidden){F.hidden=true;B.textContent='📜 তাফসীর দেখুন';return}tfPick(slug=>{F.hidden=false;B.textContent='🔼 তাফসীর লুকান';tfShow(slug,n,a,F)})};
  d.appendChild(h);d.appendChild(A);d.appendChild(T);d.appendChild(B);d.appendChild(F);return d}
 async function rdAppend(n,from){RDBUSY=true;const L=$('rdl');const st=document.getElementById('rds');if(st)st.remove();
  const m=document.createElement('div');m.className='rdm';m.id='rdload';m.textContent='লোড হচ্ছে…';L.appendChild(m);
@@ -207,7 +215,7 @@ function mpUpd(){const open=$('sh').classList.contains('o');const on=!!AUK&&!ope
 new MutationObserver(mpUpd).observe($('sh'),{attributes:true,attributeFilter:['class']});
 $('mpb').onclick=()=>{if(!curA)return;if(AU.ended){playAy(curA);return}AU.paused?AU.play().catch(()=>{}):AU.pause()};
 $('mpx').onclick=()=>{try{AU.pause()}catch(e){}AUK=null;mpUpd()};
-function show(p){try{localStorage.setItem('hfz_last',p)}catch(e){}MODE=='tr'?showTr(p):showImg(p);$('pgl').textContent=`পারা ${bn(juzOf(p))} · পাতা ${bn(p)}`;const n=keys[keys.indexOf(p)+1];if(n&&!DL.has(n)){const q=new Image();q.src=I[n]}}
+function show(p){try{localStorage.setItem('hfz_last',p)}catch(e){}MODE=='tr'?showTr(p):showImg(p);$('pgl').textContent=`পারা ${bn(juzOf(p))} · পৃষ্ঠা ${bn(pjN(p))}`;const n=keys[keys.indexOf(p)+1];if(n&&!DL.has(n)){const q=new Image();q.src=I[n]}}
 function srcList(){return(API&&!DEFS.includes(API))?[API].concat(DEFS):DEFS}
 async function trOf(a){const k=a.s+':'+a.a;if(cache[k])return cache[k];
  for(const t of srcList()){const u=t.replace('{sura}',a.s).replace('{aya}',a.a).replace('{ayah}',a.a);
@@ -254,9 +262,44 @@ async function doImg(){if(!curA)return;flash('ছবি বানানো হ�
   else{const u=URL.createObjectURL(blob);const l=document.createElement('a');l.href=u;l.download=f.name;document.body.appendChild(l);l.click();l.remove();flash('ছবি ডাউনলোড হয়েছে')}
  }catch(e){flash('ছবি বানানো যায়নি')}}
 const TFU='https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/bn-tafseer-ibn-e-kaseer/{sura}/{aya}.json';
-async function doTafsir(){if(!curA)return;const a=curA;const el=$('tf');el.textContent='তাফসীর লোড হচ্ছে…';
+async function doTafsirOld(){if(!curA)return;const a=curA;const el=$('tf');el.textContent='তাফসীর লোড হচ্ছে…';
  try{const c=new AbortController();const tm=setTimeout(()=>c.abort(),12000);const r=await fetch(TFU.replace('{sura}',a.s).replace('{aya}',a.a),{signal:c.signal});clearTimeout(tm);if(r.ok){const j=await r.json();let h=pick(j);if(h){const d=document.createElement('div');d.innerHTML=String(h).replace(/<br\s*\/?>/gi,'\n').replace(/<\/p>/gi,'\n');const tx=(d.textContent||'').trim();if(tx){if(curA===a)el.textContent='[তাফসীরে ইবনে কাসীর]\n'+tx;return}}}}catch(e){}
  if(curA===a)el.textContent='তাফসীর আনা যায়নি। ইন্টারনেট দেখুন, অথবা এই আয়াতের তাফসীর এই উৎসে নেই।'}
+
+
+const TFB_U='https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/';
+const TFB=[{s:'bn-tafseer-ibn-e-kaseer',n:'তাফসীরে ইবনে কাসীর'}];
+const tfMem2={};let TFSTOP=false,TFRUN=false;
+function tfName(s){const b=TFB.find(x=>x.s==s);return b?b.n:s}
+function tfText(x){const d=document.createElement('div');d.innerHTML=String(x).replace(/<br\s*\/?>/gi,'\n').replace(/<\/p>/gi,'\n');return(d.textContent||'').trim()}
+function tfParse(j){const m={};const arr=Array.isArray(j)?j:(j&&(j.ayahs||j.data)||[]);arr.forEach((x,i)=>{const n=+(x.ayah||x.ayah_number||x.verse||i+1);const t=typeof x.text=='string'?x.text:pick(x);if(t)m[n]=t});return m}
+async function tfSura(slug,n,net){const k='tf:'+slug+':'+n;if(tfMem2[k])return tfMem2[k];try{const c=await idbS('t','get',k);if(c){tfMem2[k]=c;return c}}catch(e){}
+ if(!net)return null;const c=new AbortController();const tm=setTimeout(()=>c.abort(),20000);
+ try{const r=await fetch(TFB_U+slug+'/'+n+'.json',{signal:c.signal});if(!r.ok)throw 0;const m=tfParse(await r.json());if(!Object.keys(m).length)throw 0;tfMem2[k]=m;try{await idbS('t','put',m,k)}catch(e){}return m}finally{clearTimeout(tm)}}
+async function tfGet(slug,s,a){let m=null;try{m=await tfSura(slug,s,true)}catch(e){}
+ if(m)return m[a]?tfText(m[a]):'';
+ const r=await fetch(TFB_U+slug+'/'+s+'/'+a+'.json');if(!r.ok)throw 0;const x=pick(await r.json());if(!x)throw 0;return tfText(x)}
+async function tfShow(slug,s,a,el){const tk=el._tk=(el._tk||0)+1;el.textContent='তাফসীর লোড হচ্ছে…';
+ try{const t=await tfGet(slug,s,a);if(el._tk!==tk)return;el.textContent='['+tfName(slug)+']\n'+(t||'এই আয়াতের আলাদা তাফসীর এই কিতাবে নেই (আগের আয়াতের তাফসীরের সাথে মিলিয়ে থাকতে পারে)। অন্য কিতাব বেছে দেখুন।')}
+ catch(e){if(el._tk===tk)el.textContent='তাফসীর আনা যায়নি। ইন্টারনেট দেখুন, অথবা কিতাবটি ডাউনলোড করে নিন।'}}
+async function tfCount(slug){let c=0;try{const ks=await idbS('t','getAllKeys');const pre='tf:'+slug+':';for(const k of ks)if(typeof k=='string'&&k.startsWith(pre))c++}catch(e){}return c}
+async function tfDl(b,msg,done){if(TFRUN)return;TFRUN=true;TFSTOP=false;let ok=0,fail=0,k=0;const N=114;
+ const todo=[];for(let n=1;n<=N;n++)todo.push(n);
+ async function w(){while(!TFSTOP){const n=todo[k++];if(n==null)return;try{await tfSura(b.s,n,true);ok++}catch(e){fail++}msg.textContent=`নামছে… ${bn(ok+fail)} / ${bn(N)} সূরা`}}
+ await Promise.all([w(),w(),w()]);TFRUN=false;msg.textContent=TFSTOP?'থামানো হয়েছে':fail?`${bn(fail)}টি সূরা নামেনি, আবার চেষ্টা করুন`:'ডাউনলোড সম্পূর্ণ ✓';done()}
+async function tfRender(cb){const L=$('tpl');L.innerHTML='';
+ for(const b of TFB){const c=await tfCount(b.s);const row=document.createElement('div');row.className='tpr';
+  const nm=document.createElement('button');nm.type='button';nm.className='tpn';nm.textContent=b.n;const sm=document.createElement('small');sm.textContent=c>=114?'অফলাইনে আছে ✓':c?`অফলাইনে ${bn(c)} / ${bn(114)} সূরা`:'ডাউনলোড করা নেই';nm.appendChild(sm);
+  nm.onclick=()=>{try{localStorage.setItem('hfz_tfb',b.s)}catch(e){}$('tp').hidden=true;cb(b.s)};
+  const msg=document.createElement('div');msg.className='tpm';
+  const dl=document.createElement('button');dl.type='button';dl.className='tpd';dl.textContent=c>=114?'✓ ডাউনলোড করা':c?'⬇ বাকিটা নামান':'⬇ পুরো কোরআনের তাফসীর ডাউনলোড';dl.disabled=c>=114;
+  dl.onclick=()=>{if(TFRUN){TFSTOP=true;return}dl.textContent='⏹ থামান';tfDl(b,msg,()=>tfRender(cb))};
+  row.appendChild(nm);row.appendChild(dl);row.appendChild(msg);
+  if(c){const rm=document.createElement('button');rm.type='button';rm.className='tpx';rm.textContent='🗑 মুছুন';rm.onclick=async()=>{if(!confirm('এই কিতাবের ডাউনলোড করা তাফসীর মুছবেন?'))return;try{const ks=await idbS('t','getAllKeys');const pre='tf:'+b.s+':';for(const q of ks)if(typeof q=='string'&&q.startsWith(pre)){await idbS('t','delete',q);delete tfMem2[q]}}catch(e){}tfRender(cb)};row.appendChild(rm)}
+  L.appendChild(row)}}
+function tfPick(cb){TFSTOP=false;$('tp').hidden=false;tfRender(cb)}
+$('tpc').onclick=()=>{$('tp').hidden=true};
+function doTafsir(){if(!curA)return;const a=curA;tfPick(slug=>tfShow(slug,a.s,a.a,$('tf')))}
 
 let AP=2;
 function nextAy(){if(!curA)return;const a=curA;let p=(D[AP]&&D[AP].some(x=>x.s==a.s&&x.a==a.a))?AP:cur,i=D[p].findIndex(x=>x.s==a.s&&x.a==a.a);if(i<0)return;
