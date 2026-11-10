@@ -5,7 +5,7 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,"Noto Sans Bengali",sans-serif}
 .bar{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--ac);color:#fff}
 .bar button,.bar select{background:#fff2;color:#fff;border:1px solid #fff6;border-radius:8px;padding:6px 12px;font-size:15px}.bar select option{color:#000}
-#pgw{position:fixed;left:0;top:0;right:0;bottom:0;overflow:auto;display:flex;background:#fff;-webkit-overflow-scrolling:touch}#pg{position:relative;flex:none;margin:auto;touch-action:pan-y pinch-zoom}#pg img{width:100%;display:block;filter:none}
+#pgw{width:100%;overflow-x:auto;overflow-y:hidden}#pg{position:relative;width:100%;max-width:1000px;margin:0 auto;touch-action:pan-y pinch-zoom}#pg img{width:100%;display:block;filter:none}
 #pg .h{position:absolute;cursor:pointer;-webkit-tap-highlight-color:transparent}#pg .h.on{background:#0f6b5744;outline:1px solid #0f6b57}
 #dbg{position:absolute;inset:0;pointer-events:none}
 #sh{position:fixed;left:0;right:0;bottom:0;max-height:55vh;overflow:auto;background:#fffdf7;color:#1d2b2a;border-radius:16px 16px 0 0;box-shadow:0 -4px 20px #0004;padding:14px 16px 20px;transform:translateY(105%);transition:.2s;z-index:9}
@@ -15,15 +15,7 @@
 #tf{margin-top:10px;font-size:16px;line-height:1.7;white-space:pre-wrap;border-top:1px solid #ddd;padding-top:8px}#tf:empty{display:none}
 .ti{max-width:520px;margin:8px auto;background:#fffdf7;color:#1d2b2a;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px #0002;cursor:pointer}.ti b{display:block;color:var(--ac);font-size:14px;margin-bottom:4px}.ti div{font-size:17px;line-height:1.7}
 #dlp button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-size:14px}#dlp button#dlrm{background:#9a3b3b}
-.bar{position:fixed;top:0;left:0;right:0;z-index:6;background:none;padding:calc(6px + env(safe-area-inset-top,0px)) 8px 6px;pointer-events:none;justify-content:flex-start;gap:8px}
-.bar button{pointer-events:auto;width:40px;height:40px;padding:0;border-radius:50%;background:#0f6b57cc;border:1px solid #fff5;color:#fff;font-size:18px;box-shadow:0 2px 6px #0004}
-#nx,#pv,#sel,#bk{display:none!important}#dlb{margin-left:auto}
-#pgl{position:fixed;left:50%;bottom:6px;transform:translateX(-50%);z-index:5;background:#0f6b57cc;color:#fff;font-size:12px;padding:2px 12px;border-radius:12px;pointer-events:none}
-#dls,#dls + div,#dls + div + div,#dls + div + div + small{display:none}
-#gt{position:fixed;left:0;top:0;right:0;bottom:0;z-index:40;background:var(--bg);color:var(--fg);display:flex;align-items:center;justify-content:center;padding:20px}#gt[hidden]{display:none}
-#gt .gc{max-width:420px;width:100%;text-align:center;background:#fffdf7;color:#1d2b2a;border-radius:18px;padding:22px 18px;box-shadow:0 4px 20px #0003;border:2px solid #d9b34a}
-#gt h2{margin:0 0 4px;font-size:22px;color:var(--ac)}#gt p{margin:8px 0;line-height:1.7;font-size:15px}#gt .gb{height:12px;background:#ddd;border-radius:7px;overflow:hidden;margin:10px 0 4px}#gt .gb i{display:block;height:100%;width:0;background:var(--ac)}
-#gt button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 20px;font-size:16px;margin:6px 4px}#gt button[hidden]{display:none}#gt small{color:#666;display:block;font-size:13px}
+.bar{gap:6px}.bar button,.bar select{padding:6px 9px}.bar select{flex:1;min-width:0}
 #mnb{position:fixed;left:0;top:0;right:0;bottom:0;background:#0007;z-index:19;display:none}#mnb.o{display:block}
 #mnu{position:fixed;left:0;top:0;bottom:0;width:min(84vw,330px);background:#fffdf7;color:#1d2b2a;z-index:20;transform:translateX(-105%);transition:.2s;display:flex;flex-direction:column;box-shadow:4px 0 20px #0005}#mnu.o{transform:none}
 #mnu .mh{background:var(--ac);color:#fff;padding:12px 14px;font-size:17px;font-weight:700}
@@ -41,8 +33,8 @@
 .rdm{text-align:center;color:#666;padding:16px;font-size:14px}.rdm button{margin-top:8px;background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px}
 #am{font-size:12px;color:#a33;min-height:0}
 </style></head><body>
-<div class="bar"><button id="mn" aria-label="মেনু">☰</button><button id="nx">‹ পরের</button><select id="sel"></select><button id="pv">আগের ›</button><button id="dlb" title="তেলাওয়াত ডাউনলোড">🎧</button><button id="bk" hidden>🔖</button><button id="st">⚙</button></div>
-<div id="pgw"><div id="pg"></div></div><div id="zm"><button id="zi" type="button" aria-label="বড় করুন">＋</button><button id="zo" type="button" aria-label="ছোট করুন">－</button></div><div id="rd" hidden><div class="rb"><button id="rdx" type="button" aria-label="ফিরে যান">←</button><b>অনুবাদ মোড</b><button id="rdm" type="button">A−</button><button id="rdp" type="button">A+</button></div><div id="rdl"></div></div><div id="pgl"></div><div id="gt" hidden><div class="gc"><h2>হাফেজী কোরআন শরীফ</h2><p id="gtp"></p><div class="gb"><i id="gtb"></i></div><small id="gts"></small><p id="gtm" style="color:#a33;font-size:14px"></p><button id="gtgo" type="button">⬇ ডাউনলোড শুরু করুন</button><button id="gtstop" type="button" hidden>⏹ থামান</button></div></div><div id="mnb"></div><div id="mnu"><div class="mh">হাফেজী কোরআন শরীফ</div><div class="mt"><button data-t="j" class="on" type="button">পারা</button><button data-t="s" type="button">সূরা</button><button data-t="b" type="button">বুকমার্ক</button></div><div id="mnl"></div></div>
+<div class="bar"><button id="mn" aria-label="মেনু">☰</button><button id="nx">‹ পরের</button><select id="sel"></select><button id="pv">আগের ›</button><button id="dlb" title="ডাউনলোড">⬇</button><button id="bk" hidden>🔖</button><button id="st">⚙</button></div>
+<div id="pgw"><div id="pg"></div></div><div id="zm"><button id="zi" type="button" aria-label="বড় করুন">＋</button><button id="zo" type="button" aria-label="ছোট করুন">－</button></div><div id="rd" hidden><div class="rb"><button id="rdx" type="button" aria-label="ফিরে যান">←</button><b>অনুবাদ মোড</b><button id="rdm" type="button">A−</button><button id="rdp" type="button">A+</button></div><div id="rdl"></div></div><div id="mnb"></div><div id="mnu"><div class="mh">হাফেজী কোরআন শরীফ</div><div class="mt"><button data-t="j" class="on" type="button">পারা</button><button data-t="s" type="button">সূরা</button><button data-t="b" type="button">বুকমার্ক</button></div><div id="mnl"></div></div>
 <div id="sh"><h3 id="ti"></h3><div id="au"><button id="pl" type="button">▶</button><select id="rc"></select></div><div id="am"></div><small id="tr" style="color:#666">অনুবাদ: মুহিউদ্দীন খান</small><div id="tx"></div><div id="ac"></div><div id="tf"></div><div id="dlp" hidden><div id="dls" style="font-size:15px;line-height:1.7"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:10px 0"><div id="dlbar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dlgo" type="button">⬇ সব পাতা ডাউনলোড</button><button id="dlstop" type="button" hidden>⏹ থামান</button><button id="dlrm" type="button">🗑 মুছুন</button></div><small style="display:block;margin-top:8px">ডাউনলোড হয়ে গেলে ইন্টারনেট ছাড়াই পাতা দেখা যাবে।</small><hr style="margin:14px 0;border:0;border-top:1px solid #ccc"><div style="font-weight:700">🎧 তেলাওয়াত ডাউনলোড</div><small id="dar" style="display:block;margin:4px 0"></small><select id="dasc" style="width:100%;padding:8px;border:1px solid #999;border-radius:8px;font-size:14px;background:#fff;color:#1d2b2a"></select><div id="das" style="font-size:14px;line-height:1.7;margin:8px 0 4px"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:6px 0"><div id="dabar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dago" type="button">⬇ তেলাওয়াত ডাউনলোড</button><button id="dastop" type="button" hidden>⏹ থামান</button><button id="darm" type="button">🗑 এই ক্বারীর তেলাওয়াত মুছুন</button></div><small style="display:block;margin-top:8px">ওপরের তালিকা থেকে ক্বারী বদলে নিতে পারবেন (নিচের প্লেয়ারের ক্বারী যেটি, সেটিই নামবে)। তেলাওয়াতে জায়গা বেশি লাগে, ওয়াইফাইতে নামানো ভালো। অনুবাদ ও তাফসীরে ইন্টারনেট লাগবে।</small></div><div id="cf" hidden><small>অনুবাদের API লিংক (যেখানে সূরা নম্বরের জায়গায় {sura} আর আয়াত নম্বরের জায়গায় {aya} লিখুন):</small><input id="api" placeholder="https://.../{sura}/{aya}"><button id="sv">সংরক্ষণ</button></div></div>
 <script src="data.js"></script>
 <script>
@@ -97,14 +89,14 @@ const AD=new Set();idbS('a','getAllKeys').then(k=>{k.forEach(x=>AD.add(x))}).cat
 idbOp('getAllKeys').then(k=>{k.forEach(x=>DL.add(+x));updDl()}).catch(()=>{});
 async function imgUrl(p){if(DL.has(p)){try{const b=await idbOp('get',p);if(b)return URL.createObjectURL(b)}catch(e){}}return I[p]}
 const altU=u=>u.indexOf('pages/')>=0?u.replace('pages/','../'):u.replace('../','pages/');
-function setImg(pg,p){const im=new Image();im.alt='';im.onload=()=>fitPg(im);im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src=altU(I[p])}};pg.appendChild(im);if(DL.has(p)){imgUrl(p).then(u=>{if(cur===p)im.src=u})}else im.src=I[p]}
+function setImg(pg,p){const im=new Image();im.alt='';im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src=altU(I[p])}};pg.appendChild(im);if(DL.has(p)){imgUrl(p).then(u=>{if(cur===p)im.src=u})}else im.src=I[p]}
 let DLRUN=false,DLSTOP=false;
 function updDl(){const n=DL.size,t=keys.length;if(!$('dls'))return;$('dls').textContent=`অফলাইনে সেভ: ${bn(n)} / ${bn(t)} পাতা`+(n==t?' ✅ সব পাতা ফোনে আছে':'');$('dlbar').style.width=(t?n/t*100:0)+'%';$('dlgo').hidden=DLRUN||n==t;$('dlstop').hidden=!DLRUN;$('dlrm').hidden=DLRUN||!n}
 async function dlAll(){if(DLRUN)return;DLRUN=true;DLSTOP=false;updDl();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
  const todo=keys.filter(p=>!DL.has(p));let fail=0,i=0;
  async function w(){while(!DLSTOP){const p=todo[i++];if(p==null)return;try{let r=await fetch(I[p]);if(!r.ok)r=await fetch(altU(I[p]));if(!r.ok)throw 0;const b=await r.blob();await idbOp('put',b,p);DL.add(p);updDl()}catch(e){fail++}}}
  await Promise.all([w(),w(),w(),w()]);DLRUN=false;updDl();if(fail)flash(`${bn(fail)}টি পাতা নামেনি, আবার চাপুন`);else if(!DLSTOP)flash('ডাউনলোড সম্পূর্ণ')}
-$('dlb').onclick=()=>{try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('tx').textContent='';$('cf').hidden=true;$('dlp').hidden=false;$('ti').textContent='তেলাওয়াত ডাউনলোড';daFill();daUpd();updDl();$('sh').classList.add('o')};
+$('dlb').onclick=()=>{try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('tx').textContent='';$('cf').hidden=true;$('dlp').hidden=false;$('ti').textContent='অফলাইনে পড়ার জন্য ডাউনলোড';daFill();daUpd();updDl();$('sh').classList.add('o')};
 
 function juzOf(p){let j=1;const T=typeof JZ!=='undefined'?JZ:[2];for(let i=0;i<T.length;i++)if(p>=T[i])j=i+1;return j}
 function ayList(sc){const seen={},out=[];const pg=sc=='p'?[cur]:keys.filter(p=>juzOf(p)==+sc);pg.forEach(p=>D[p].forEach(a=>{const k=a.s+':'+a.a;if(!seen[k]){seen[k]=1;out.push({s:a.s,a:a.a})}}));return out}
@@ -126,40 +118,30 @@ function suraStarts(){const m={};keys.forEach(p=>D[p].forEach(a=>{if(a.a==1&&m[a
 function pbGet(){try{return JSON.parse(localStorage.getItem('hfz_pbm')||'[]')}catch(e){return[]}}
 function pbSet(v){try{localStorage.setItem('hfz_pbm',JSON.stringify(v))}catch(e){}}
 let MT='j';
-function menuOpen(){JSEL=null;$('mnu').classList.add('o');$('mnb').classList.add('o');menuFill()}
+function menuOpen(){$('mnu').classList.add('o');$('mnb').classList.add('o');menuFill()}
 function menuClose(){$('mnu').classList.remove('o');$('mnb').classList.remove('o')}
 function goP(p){menuClose();show(p)}
 function mItem(t,sm,fn,cur){const d=document.createElement('div');d.className='mi'+(cur?' cur':'');const a=document.createElement('span');a.textContent=t;const b=document.createElement('small');b.textContent=sm||'';d.appendChild(a);d.appendChild(b);d.onclick=fn;return d}
-let JSEL=null;
-function pgSuras(p){const r=[];D[p].forEach(a=>{const n=SN[a.s]||'';if(n&&!r.includes(n))r.push(n)});return r.join('، ')}
 function menuFill(){const L=$('mnl');L.innerHTML='';document.querySelectorAll('#mnu .mt button').forEach(b=>b.classList.toggle('on',b.dataset.t==MT));
  let last=NaN;try{last=+localStorage.getItem('hfz_last')}catch(e){}
- if(MT=='j'){
-  if(JSEL!=null){L.appendChild(mItem('← পারা তালিকা','',()=>{JSEL=null;menuFill()},false));
-   const h=document.createElement('div');h.style.cssText='padding:8px 14px;font-weight:700;color:var(--ac)';h.textContent=`পারা ${bn(JSEL)} — পাতার তালিকা`;L.appendChild(h);
-   keys.filter(p=>juzOf(p)==JSEL).forEach(p=>L.appendChild(mItem(`পাতা ${bn(p)}`,pgSuras(p),()=>goP(p),p==cur)))}
-  else{if(keys.includes(last))L.appendChild(mItem('▶ শেষ পড়া',`পাতা ${bn(last)}`,()=>goP(last),false));
-   juzList().forEach(j=>{const r=juzPages(j);L.appendChild(mItem(`পারা ${bn(j)}`,`পাতা ${bn(r[0])}–${bn(r[1])}  ›`,()=>{JSEL=j;menuFill()},juzOf(cur)==j))})}}
+ if(MT=='j'){if(keys.includes(last))L.appendChild(mItem('▶ শেষ পড়া',`পাতা ${bn(last)}`,()=>goP(last),false));
+  juzList().forEach(j=>{const r=juzPages(j);L.appendChild(mItem(`পারা ${bn(j)}`,`পাতা ${bn(r[0])}–${bn(r[1])}`,()=>goP(r[0]),juzOf(cur)==j))})}
  else if(MT=='s'){const st=suraStarts();Object.keys(st).map(Number).sort((a,b)=>a-b).forEach(n=>{L.appendChild(mItem(`${bn(n)}. ${SN[n]||''}`,`পাতা ${bn(st[n])}`,()=>goP(st[n]),false))})}
  else{const b=document.createElement('button');b.type='button';b.className='mb';const v=pbGet();const has=v.includes(cur);b.textContent=has?`🔖 পাতা ${bn(cur)} বুকমার্ক সরান`:`🔖 পাতা ${bn(cur)} বুকমার্ক করুন`;b.onclick=()=>{let x=pbGet();x=x.includes(cur)?x.filter(q=>q!=cur):x.concat([cur]);pbSet(x);menuFill()};L.appendChild(b);
   const ab=bmGet();if(!v.length&&!ab.length){const e=document.createElement('div');e.style.cssText='padding:14px;color:#666;font-size:14px';e.textContent='এখনো কোনো বুকমার্ক নেই। কোনো আয়াতে টেপ করে 🔖 চাপলে আয়াত বুকমার্ক হবে।';L.appendChild(e)}
   v.slice().sort((a,b)=>a-b).forEach(p=>L.appendChild(mItem(`📄 পাতা ${bn(p)}`,`পারা ${bn(juzOf(p))}`,()=>goP(p),false)));
   ab.forEach(x=>L.appendChild(mItem(`🔖 ${SN[x.s]||''}, আয়াত ${bn(x.a)}`,`পাতা ${bn(x.p)}`,()=>{goP(x.p);const i=D[x.p].findIndex(y=>y.s==x.s&&y.a==x.a);if(i>=0)tap(x.p,i)},false)))}}
 $('mn').onclick=menuOpen;$('mnb').onclick=menuClose;
-document.querySelectorAll('#mnu .mt button').forEach(b=>b.onclick=()=>{MT=b.dataset.t;JSEL=null;menuFill()});
+document.querySelectorAll('#mnu .mt button').forEach(b=>b.onclick=()=>{MT=b.dataset.t;menuFill()});
 // zoom + swipe
 let Z=1;
-let BW=0;
-function fitPg(im){const vw=innerWidth,vh=innerHeight;const r=(im&&im.naturalWidth)?im.naturalHeight/im.naturalWidth:1.45;BW=Math.min(vh/r,vw*1.18);applyZ()}
-function applyZ(){const pg=$('pg'),w=BW*Z;if(!BW)return;pg.style.width=w+'px';pg.style.touchAction=Z==1?'pan-y pinch-zoom':'auto';const pw=$('pgw');pw.scrollLeft=Math.max(0,(w-innerWidth)/2);pw.scrollTop=0}
-function setZ(z){Z=Math.max(1,Math.min(3,z));applyZ()}
-addEventListener('resize',()=>{const im=document.querySelector('#pg img');if(im)fitPg(im)});
+function setZ(z){Z=Math.max(1,Math.min(3,z));const pg=$('pg');pg.style.width=Z==1?'100%':(Z*100)+'%';pg.style.maxWidth=Z==1?'1000px':'none';pg.style.margin=Z==1?'0 auto':'0';pg.style.touchAction=Z==1?'pan-y pinch-zoom':'auto';}
 $('zi').onclick=()=>setZ(Z+0.5);$('zo').onclick=()=>setZ(Z-0.5);
 function goNext(){const i=keys.indexOf(cur);if(i<keys.length-1)show(keys[i+1])}
 function goPrev(){const i=keys.indexOf(cur);if(i>0)show(keys[i-1])}
 let TX=null,TY=0,TT=0;
-$('pgw').addEventListener('touchstart',e=>{if(e.touches.length!=1){TX=null;return}TX=e.touches[0].clientX;TY=e.touches[0].clientY;TT=Date.now()},{passive:true});
-$('pgw').addEventListener('touchend',e=>{if(TX==null||Z>1||MODE!='page')return;const t=e.changedTouches[0],dx=t.clientX-TX,dy=t.clientY-TY;TX=null;if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*0.6&&Date.now()-TT<900){dx>0?goNext():goPrev()}},{passive:true});
+$('pg').addEventListener('touchstart',e=>{if(e.touches.length!=1){TX=null;return}TX=e.touches[0].clientX;TY=e.touches[0].clientY;TT=Date.now()},{passive:true});
+$('pg').addEventListener('touchend',e=>{if(TX==null||Z>1||MODE!='page')return;const t=e.changedTouches[0],dx=t.clientX-TX,dy=t.clientY-TY;TX=null;if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*0.6&&Date.now()-TT<900){dx>0?goNext():goPrev()}},{passive:true});
 document.addEventListener('keydown',e=>{if(e.target&&/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;if(e.key=='ArrowLeft')goNext();else if(e.key=='ArrowRight')goPrev()});
 
 const QA='https://api.alquran.cloud/v1/';const rdMem={};let RF=19;try{RF=+localStorage.getItem('hfz_rf')||19}catch(e){}
@@ -187,12 +169,12 @@ async function rdAppend(n,from){RDBUSY=true;const L=$('rdl');const st=document.g
   if(from==1&&d.bis){const b=document.createElement('div');b.className='rdbs';b.textContent=d.bis;L.appendChild(b)}
   for(let i=from-1;i<d.ar.length;i++)L.appendChild(rdBlock(n,i+1,d.ar[i],d.tr[i]));
   rdFont();
-  if(n<LASTS){const s2=document.createElement('div');s2.id='rds';s2.style.height='40px';L.appendChild(s2);if(RDIO)RDIO.observe(s2)}
-  else{const e=document.createElement('div');e.className='rdm';e.textContent='— এই পর্যন্ত যোগ করা সূরা শেষ —';L.appendChild(e)}
+  if(n<114){const s2=document.createElement('div');s2.id='rds';s2.style.height='40px';L.appendChild(s2);if(RDIO)RDIO.observe(s2)}
+  else{const e=document.createElement('div');e.className='rdm';e.textContent='— সমাপ্ত —';L.appendChild(e)}
  }catch(e){m.innerHTML='লোড করা যায়নি। ইন্টারনেট দেখুন।<br><button type="button">আবার চেষ্টা করুন</button>';m.querySelector('button').onclick=()=>{m.remove();rdAppend(n,from)}}
  RDBUSY=false}
 function openRd(s,a){close();$('rd').hidden=false;document.body.style.overflow='hidden';const L=$('rdl');L.innerHTML='';L.scrollTop=0;RDN=s;
- if(RDIO)RDIO.disconnect();RDIO=new IntersectionObserver(es=>{es.forEach(x=>{if(x.isIntersecting&&!RDBUSY&&RDN<LASTS){RDIO.unobserve(x.target);RDN++;rdAppend(RDN,1)}})},{root:L,rootMargin:'400px'});
+ if(RDIO)RDIO.disconnect();RDIO=new IntersectionObserver(es=>{es.forEach(x=>{if(x.isIntersecting&&!RDBUSY&&RDN<114){RDIO.unobserve(x.target);RDN++;rdAppend(RDN,1)}})},{root:L,rootMargin:'400px'});
  if(!RDH){try{history.pushState({rd:1},'');RDH=true}catch(e){}}
  rdAppend(s,a)}
 function rdHide(){$('rd').hidden=true;document.body.style.overflow='';if(RDIO){RDIO.disconnect();RDIO=null}}
@@ -200,7 +182,7 @@ function rdClose(){if(!RDH){rdHide();return}RDSKIP=true;rdHide();RDH=false;try{h
 $('rdx').onclick=rdClose;
 $('rdm').onclick=()=>{RF=Math.max(14,RF-2);try{localStorage.setItem('hfz_rf',RF)}catch(e){}rdFont()};$('rdp').onclick=()=>{RF=Math.min(34,RF+2);try{localStorage.setItem('hfz_rf',RF)}catch(e){}rdFont()};
 window.addEventListener('popstate',()=>{if(RDSKIP){RDSKIP=false;return}if(!$('rd').hidden){rdHide();RDH=false}});
-function show(p){try{localStorage.setItem('hfz_last',p)}catch(e){}MODE=='tr'?showTr(p):showImg(p);$('pgl').textContent=`পারা ${bn(juzOf(p))} · পাতা ${bn(p)}`;const n=keys[keys.indexOf(p)+1];if(n&&!DL.has(n)){const q=new Image();q.src=I[n]}}
+function show(p){try{localStorage.setItem('hfz_last',p)}catch(e){}MODE=='tr'?showTr(p):showImg(p);window.scrollTo(0,0);const n=keys[keys.indexOf(p)+1];if(n&&!DL.has(n)){const q=new Image();q.src=I[n]}}
 function srcList(){return(API&&!DEFS.includes(API))?[API].concat(DEFS):DEFS}
 async function trOf(a){const k=a.s+':'+a.a;if(cache[k])return cache[k];
  for(const t of srcList()){const u=t.replace('{sura}',a.s).replace('{aya}',a.a).replace('{ayah}',a.a);
@@ -266,30 +248,5 @@ $('pv').onclick=()=>{const i=keys.indexOf(cur);if(i>0)show(keys[i-1])};
 $('st').onclick=()=>{$('dlp').hidden=true;try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('cf').hidden=false;$('api').value=API;$('sh').classList.add('o');$('ti').textContent='সেটিং';$('tx').textContent=''};
 $('sv').onclick=()=>{API=$('api').value.trim();try{localStorage.setItem('qapi',API)}catch(e){}cache={};close()};
 $('pg').addEventListener('click',e=>{if(!e.target.classList.contains('h'))close()});
-
-let LASTS=0,GRUN=false,GSTOP=false;
-async function gateRun(mp,mt,sl){if(GRUN)return;GRUN=true;GSTOP=false;$('gtgo').hidden=true;$('gtstop').hidden=false;$('gtm').textContent='';
- const TP=keys.length,TT=sl.length;let dp=TP-mp.length,dt=TT-mt.length,fail=0;
- const upd=()=>{$('gtb').style.width=((dp+dt)/(TP+TT)*100)+'%';$('gts').textContent=`পাতা ${bn(dp)} / ${bn(TP)}  ·  তরজমা ${bn(dt)} / ${bn(TT)} সূরা`};upd();
- try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
- let i=0;async function w(){while(!GSTOP){const p=mp[i++];if(p==null)return;try{let r=await fetch(I[p]);if(!r.ok)r=await fetch(altU(I[p]));if(!r.ok)throw 0;const b=await r.blob();await idbOp('put',b,p);DL.add(p);dp++;upd()}catch(e){fail++}}}
- await Promise.all([w(),w(),w(),w()]);
- let k=0;async function w2(){while(!GSTOP){const n=mt[k++];if(n==null)return;try{await rdGet(n);dt++;upd()}catch(e){fail++}}}
- if(!GSTOP)await Promise.all([w2(),w2()]);
- GRUN=false;$('gtstop').hidden=true;$('gtgo').hidden=false;
- if(GSTOP){$('gtgo').textContent='⬇ আবার শুরু করুন';return}
- if(fail){$('gtm').textContent=`${bn(fail)}টি অংশ নামেনি। ইন্টারনেট ঠিক আছে কি না দেখে আবার চাপুন।`;$('gtgo').textContent='⬇ আবার চেষ্টা করুন';return}
- startApp()}
-function gateShow(mp,mt,sl){const g=$('gt');g.hidden=false;
- $('gtp').textContent='প্রথমবার ব্যবহারের আগে কোরআন ('+bn(keys.length)+'টি পাতা) ও বাংলা তরজমা ফোনে ডাউনলোড করে নিতে হবে। একবার ডাউনলোড হলে ইন্টারনেট ছাড়াই পড়তে পারবেন। ওয়াইফাই থাকলে ভালো।';
- $('gts').textContent=`পাতা ${bn(keys.length-mp.length)} / ${bn(keys.length)}  ·  তরজমা ${bn(sl.length-mt.length)} / ${bn(sl.length)} সূরা`;
- $('gtb').style.width=((keys.length-mp.length+sl.length-mt.length)/(keys.length+sl.length)*100)+'%';
- $('gtgo').onclick=()=>gateRun(keys.filter(p=>!DL.has(p)),mt,sl);$('gtstop').onclick=()=>{GSTOP=true}}
-function startApp(){$('gt').hidden=true;let l=NaN;try{l=+localStorage.getItem('hfz_last')}catch(e){}show(keys.includes(l)?l:keys[0])}
-async function boot(){const sl=Object.keys(suraStarts()).map(Number);LASTS=Math.max.apply(null,sl);
- let mp=keys.slice(),mt=sl.slice();
- try{(await idbOp('getAllKeys')).forEach(x=>DL.add(+x));const t=new Set((await idbS('t','getAllKeys')).map(Number));mp=keys.filter(p=>!DL.has(p));mt=sl.filter(n=>!t.has(n))}catch(e){startApp();return}
- if(!mp.length&&!mt.length){startApp();return}
- gateShow(mp,mt,sl)}
-boot();
+{let l=NaN;try{l=+localStorage.getItem('hfz_last')}catch(e){}show(keys.includes(l)?l:keys[0])}
 </script></body></html>
