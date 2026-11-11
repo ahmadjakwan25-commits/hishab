@@ -12,6 +12,11 @@
 #sh.o{transform:none}#sh h3{margin:0 0 8px;font-size:15px;color:var(--ac)}#tx{font-size:18px;line-height:1.7}
 #sh input{width:100%;padding:8px;margin:6px 0;border:1px solid #999;border-radius:8px;font-size:14px}#sh small{color:#666}
 #au{display:flex;gap:8px;align-items:center;margin:2px 0 10px}#au select{flex:1;min-width:0;padding:7px;border:1px solid #999;border-radius:8px;font-size:14px;background:#fff;color:#1d2b2a}#au button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:16px}#ac{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 4px}#ac button{background:#e9efe9;color:#1d2b2a;border:1px solid #c9d6cc;border-radius:10px;padding:10px 4px;font-size:14px;line-height:1.3}#ac button.on{background:var(--ac);color:#fff}
+#wb:empty{display:none}#wb{margin-top:10px;border-top:1px solid #ddd;padding-top:8px}
+.wbg{direction:rtl;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start}
+.wbw{border:1px solid #d9c9a0;border-radius:10px;padding:5px 7px;min-width:48px;text-align:center;background:#fffaf0;direction:ltr}
+.wbw b{display:block;font-family:"Amiri","Noto Naskh Arabic",serif;font-size:22px;font-weight:400;line-height:1.7;direction:rtl}.wbw span{display:block;font-size:13px;line-height:1.35;color:#333}
+.wbd{margin-top:10px;padding:8px;border:1px dashed #c9d6cc;border-radius:10px;font-size:13px;color:#444;display:flex;flex-direction:column;gap:6px}.wbd button{border:0;border-radius:8px;padding:8px 10px;background:#0f6b57;color:#fff;font-size:14px}.wbd button.x{background:#b33}
 #tf{margin-top:10px;font-size:16px;line-height:1.7;white-space:pre-wrap;border-top:1px solid #ddd;padding-top:8px}#tf:empty{display:none}
 .ti{max-width:520px;margin:8px auto;background:#fffdf7;color:#1d2b2a;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px #0002;cursor:pointer}.ti b{display:block;color:var(--ac);font-size:14px;margin-bottom:4px}.ti div{font-size:17px;line-height:1.7}
 #dlp button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-size:14px}#dlp button#dlrm{background:#9a3b3b}
@@ -50,7 +55,7 @@
 </style></head><body>
 <div class="bar"><button id="mn" aria-label="মেনু">☰</button><button id="nx">‹ পরের</button><select id="sel"></select><button id="pv">আগের ›</button><button id="dlb" title="তেলাওয়াত ডাউনলোড">🎧</button><button id="bk" hidden>🔖</button><button id="st">⚙</button></div>
 <div id="pgw"><div id="pg"></div></div><div id="zm"><button id="zi" type="button" aria-label="বড় করুন">＋</button><button id="zo" type="button" aria-label="ছোট করুন">－</button></div><div id="rd" hidden><div class="rb"><button id="rdx" type="button" aria-label="ফিরে যান">←</button><b>অনুবাদ মোড</b><button id="rdm" type="button">A−</button><button id="rdp" type="button">A+</button></div><div id="rdl"></div></div><div id="pgl"></div><div id="gt" hidden><div class="gc"><h2>হাফেজী কোরআন শরীফ</h2><p id="gtp"></p><div class="gb"><i id="gtb"></i></div><small id="gts"></small><p id="gtm" style="color:#a33;font-size:14px"></p><button id="gtgo" type="button">⬇ ডাউনলোড শুরু করুন</button><button id="gtstop" type="button" hidden>⏹ থামান</button></div></div><div id="tp" hidden><div class="tpb"><div class="tph"><b>তাফসীরের কিতাব বেছে নিন</b><button id="tpc" type="button">✕</button></div><div id="tpl"></div><div class="tpn2">ডাউনলোড করলে ইন্টারনেট ছাড়াই পুরো কোরআনের তাফসীর পড়া যাবে। প্রতিটি কিতাব কয়েক MB নিতে পারে, ওয়াইফাই থাকলে ভালো।</div></div></div><div id="mp" hidden><button id="mpb" type="button">⏸</button><span id="mpt"></span><button id="mpx" type="button" aria-label="বন্ধ">✕</button></div><div id="mnb"></div><div id="mnu"><div class="mh">হাফেজী কোরআন শরীফ</div><div class="mt"><button data-t="j" class="on" type="button">পারা</button><button data-t="s" type="button">সূরা</button><button data-t="b" type="button">বুকমার্ক</button></div><div id="mnl"></div></div>
-<div id="sh"><h3 id="ti"></h3><div id="au"><button id="pl" type="button">▶</button><select id="rc"></select></div><div id="am"></div><small id="tr" style="color:#666">অনুবাদ: মুহিউদ্দীন খান</small><div id="tx"></div><div id="ac"></div><div id="tf"></div><div id="dlp" hidden><div id="dls" style="font-size:15px;line-height:1.7"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:10px 0"><div id="dlbar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dlgo" type="button">⬇ সব পাতা ডাউনলোড</button><button id="dlstop" type="button" hidden>⏹ থামান</button><button id="dlrm" type="button">🗑 মুছুন</button></div><small style="display:block;margin-top:8px">ডাউনলোড হয়ে গেলে ইন্টারনেট ছাড়াই পাতা দেখা যাবে।</small><hr style="margin:14px 0;border:0;border-top:1px solid #ccc"><div style="font-weight:700">🎧 তেলাওয়াত ডাউনলোড</div><small id="dar" style="display:block;margin:4px 0"></small><select id="dasc" style="width:100%;padding:8px;border:1px solid #999;border-radius:8px;font-size:14px;background:#fff;color:#1d2b2a"></select><div id="das" style="font-size:14px;line-height:1.7;margin:8px 0 4px"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:6px 0"><div id="dabar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dago" type="button">⬇ তেলাওয়াত ডাউনলোড</button><button id="dastop" type="button" hidden>⏹ থামান</button><button id="darm" type="button">🗑 এই ক্বারীর তেলাওয়াত মুছুন</button></div><small style="display:block;margin-top:8px">ওপরের তালিকা থেকে ক্বারী বদলে নিতে পারবেন (নিচের প্লেয়ারের ক্বারী যেটি, সেটিই নামবে)। তেলাওয়াতে জায়গা বেশি লাগে, ওয়াইফাইতে নামানো ভালো। অনুবাদ ও তাফসীরে ইন্টারনেট লাগবে।</small></div><div id="cf" hidden><small>অনুবাদের API লিংক (যেখানে সূরা নম্বরের জায়গায় {sura} আর আয়াত নম্বরের জায়গায় {aya} লিখুন):</small><input id="api" placeholder="https://.../{sura}/{aya}"><button id="sv">সংরক্ষণ</button></div></div>
+<div id="sh"><h3 id="ti"></h3><div id="au"><button id="pl" type="button">▶</button><select id="rc"></select></div><div id="am"></div><small id="tr" style="color:#666">অনুবাদ: মুহিউদ্দীন খান</small><div id="tx"></div><div id="ac"></div><div id="tf"></div><div id="wb"></div><div id="dlp" hidden><div id="dls" style="font-size:15px;line-height:1.7"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:10px 0"><div id="dlbar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dlgo" type="button">⬇ সব পাতা ডাউনলোড</button><button id="dlstop" type="button" hidden>⏹ থামান</button><button id="dlrm" type="button">🗑 মুছুন</button></div><small style="display:block;margin-top:8px">ডাউনলোড হয়ে গেলে ইন্টারনেট ছাড়াই পাতা দেখা যাবে।</small><hr style="margin:14px 0;border:0;border-top:1px solid #ccc"><div style="font-weight:700">🎧 তেলাওয়াত ডাউনলোড</div><small id="dar" style="display:block;margin:4px 0"></small><select id="dasc" style="width:100%;padding:8px;border:1px solid #999;border-radius:8px;font-size:14px;background:#fff;color:#1d2b2a"></select><div id="das" style="font-size:14px;line-height:1.7;margin:8px 0 4px"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:6px 0"><div id="dabar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dago" type="button">⬇ তেলাওয়াত ডাউনলোড</button><button id="dastop" type="button" hidden>⏹ থামান</button><button id="darm" type="button">🗑 এই ক্বারীর তেলাওয়াত মুছুন</button></div><small style="display:block;margin-top:8px">ওপরের তালিকা থেকে ক্বারী বদলে নিতে পারবেন (নিচের প্লেয়ারের ক্বারী যেটি, সেটিই নামবে)। তেলাওয়াতে জায়গা বেশি লাগে, ওয়াইফাইতে নামানো ভালো। অনুবাদ ও তাফসীরে ইন্টারনেট লাগবে।</small></div><div id="cf" hidden><small>অনুবাদের API লিংক (যেখানে সূরা নম্বরের জায়গায় {sura} আর আয়াত নম্বরের জায়গায় {aya} লিখুন):</small><input id="api" placeholder="https://.../{sura}/{aya}"><button id="sv">সংরক্ষণ</button></div></div>
 <script src="data.js"></script>
 <script>
 
@@ -86,12 +91,12 @@ let rcSel=RC[0][0];try{const v=localStorage.getItem('qrc');if(v&&RC.some(r=>r[0]
 $('rc').innerHTML=RC.map(r=>`<option value="${r[0]}">${r[1]}</option>`).join('');$('rc').value=rcSel;
 const p3=n=>String(n).padStart(3,'0');
 function auUrl(a){return `https://everyayah.com/data/${rcSel}/${p3(a.s)}${p3(a.a)}.mp3`}
-function prepAy(a){$('cf').hidden=true;$('dlp').hidden=true;curA=a;AUK=null;try{AU.pause()}catch(e){}$('tf').textContent='';$('am').textContent='';acBuild()}
+function prepAy(a){$('cf').hidden=true;$('dlp').hidden=true;curA=a;AUK=null;try{AU.pause()}catch(e){}$('tf').textContent='';$('wb').innerHTML='';$('am').textContent='';acBuild()}
 let AUK=null;
 let ATK=0,aoUrl=null;
 function akey(a,rc){return (rc||rcSel)+'/'+p3(a.s)+p3(a.a)}
 async function audSrc(a){const k=akey(a);if(AD.has(k)){try{const b=await idbS('a','get',k);if(b){if(aoUrl)URL.revokeObjectURL(aoUrl);aoUrl=URL.createObjectURL(b);return aoUrl}}catch(e){}}return auUrl(a)}
-function playAy(a){AUK=a.s+':'+a.a;curA=a;$('tf').textContent='';acBuild();$('am').textContent='';const tk=++ATK;audSrc(a).then(u=>{if(tk!==ATK)return;AU.src=u;AU.play().catch(()=>{})})}
+function playAy(a){AUK=a.s+':'+a.a;curA=a;$('tf').textContent='';$('wb').innerHTML='';acBuild();$('am').textContent='';const tk=++ATK;audSrc(a).then(u=>{if(tk!==ATK)return;AU.src=u;AU.play().catch(()=>{})})}
 AU.onplay=()=>{$('pl').textContent='⏸'};AU.onpause=()=>{$('pl').textContent='▶'};AU.onended=()=>{$('pl').textContent='▶';if(AUTO)nextAy()};
 let AURT=0;AU.onerror=()=>{$('pl').textContent='▶';const a=curA;if(a&&AURT!==ATK){AURT=ATK;const tk=ATK;setTimeout(()=>{if(tk===ATK&&curA===a){AU.src=auUrl(a)+'?r='+Date.now();AU.play().catch(()=>{})}},800);return}$('am').textContent='তেলাওয়াত আনা যায়নি'+(a?` (সূরা ${a.s}, আয়াত ${a.a})`:'')+'। ইন্টারনেট দেখুন বা অন্য ক্বারী বেছে নিন।'};
 $('pl').onclick=()=>{if(!curA)return;if(AUK!==curA.s+':'+curA.a){playAy(curA);return}if(AU.ended){playAy(curA);return}if(AU.paused){AU.play().catch(()=>{})}else AU.pause()};
@@ -112,7 +117,7 @@ async function dlAll(){if(DLRUN)return;DLRUN=true;DLSTOP=false;updDl();try{navig
  const todo=keys.filter(p=>!DL.has(p));let fail=0,i=0;
  async function w(){while(!DLSTOP){const p=todo[i++];if(p==null)return;try{let r=await fetch(I[p]);if(!r.ok)r=await fetch(altU(I[p]));if(!r.ok)throw 0;const b=await r.blob();await idbOp('put',b,p);DL.add(p);updDl()}catch(e){fail++}}}
  await Promise.all([w(),w(),w(),w()]);DLRUN=false;updDl();if(fail)flash(`${bn(fail)}টি পাতা নামেনি, আবার চাপুন`);else if(!DLSTOP)flash('ডাউনলোড সম্পূর্ণ')}
-$('dlb').onclick=()=>{try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('tx').textContent='';$('cf').hidden=true;$('dlp').hidden=false;$('ti').textContent='তেলাওয়াত ডাউনলোড';daFill();daUpd();updDl();$('sh').classList.add('o')};
+$('dlb').onclick=()=>{try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('wb').innerHTML='';$('tx').textContent='';$('cf').hidden=true;$('dlp').hidden=false;$('ti').textContent='তেলাওয়াত ডাউনলোড';daFill();daUpd();updDl();$('sh').classList.add('o')};
 
 function juzOf(p){let j=1;const T=typeof JZ!=='undefined'?JZ:[2];for(let i=0;i<T.length;i++)if(p>=T[i])j=i+1;return j}
 function ayList(sc){const seen={},out=[];const pg=sc=='p'?[cur]:keys.filter(p=>juzOf(p)==+sc);pg.forEach(p=>D[p].forEach(a=>{const k=a.s+':'+a.a;if(!seen[k]){seen[k]=1;out.push({s:a.s,a:a.a})}}));return out}
@@ -190,8 +195,10 @@ function rdBlock(n,a,ar,tr){const d=document.createElement('div');d.className='r
  const T=document.createElement('div');T.className='rdt';T.textContent=tr;
  const B=document.createElement('button');B.type='button';B.className='rdb';B.textContent='📜 তাফসীর দেখুন';
  const F=document.createElement('div');F.className='rdf';F.hidden=true;
+ const B2=document.createElement('button');B2.type='button';B2.className='rdb';B2.style.marginLeft='6px';B2.textContent='🔤 শব্দে শব্দে';const F2=document.createElement('div');F2.className='rdf';F2.hidden=true;F2.style.whiteSpace='normal';
+ B2.onclick=()=>{if(!F2.hidden){F2.hidden=true;F2.innerHTML='';B2.textContent='🔤 শব্দে শব্দে';return}F2.hidden=false;B2.textContent='🔼 শব্দে শব্দে লুকান';wbShow(n,a,F2)};
  B.onclick=()=>{if(!F.hidden){F.hidden=true;B.textContent='📜 তাফসীর দেখুন';return}tfPick(slug=>{F.hidden=false;B.textContent='🔼 তাফসীর লুকান';tfShow(slug,n,a,F)})};
- d.appendChild(h);d.appendChild(A);d.appendChild(T);d.appendChild(B);d.appendChild(F);return d}
+ d.appendChild(h);d.appendChild(A);d.appendChild(T);d.appendChild(B);d.appendChild(B2);d.appendChild(F);d.appendChild(F2);return d}
 async function rdAppend(n,from){RDBUSY=true;const L=$('rdl');const st=document.getElementById('rds');if(st)st.remove();
  const m=document.createElement('div');m.className='rdm';m.id='rdload';m.textContent='লোড হচ্ছে…';L.appendChild(m);
  try{const d=await rdGet(n);m.remove();
@@ -234,7 +241,7 @@ function bmGet(){try{return JSON.parse(localStorage.getItem('qbm')||'[]')}catch(
 function bmSet(v){try{localStorage.setItem('qbm',JSON.stringify(v))}catch(e){}}
 const isBm=a=>bmGet().some(b=>b.s==a.s&&b.a==a.a);
 function bmToggle(){if(!curA)return;let v=bmGet();if(isBm(curA))v=v.filter(b=>!(b.s==curA.s&&b.a==curA.a));else v.push({s:curA.s,a:curA.a,p:cur});bmSet(v);acBuild()}
-$('bk').onclick=()=>{$('dlp').hidden=true;try{AU.pause()}catch(e){}curA=null;$('cf').hidden=true;$('ac').innerHTML='';$('tf').textContent='';const v=bmGet();$('ti').textContent='বুকমার্ক';$('tx').innerHTML='';
+$('bk').onclick=()=>{$('dlp').hidden=true;try{AU.pause()}catch(e){}curA=null;$('cf').hidden=true;$('ac').innerHTML='';$('tf').textContent='';$('wb').innerHTML='';const v=bmGet();$('ti').textContent='বুকমার্ক';$('tx').innerHTML='';
  if(!v.length)$('tx').textContent='এখনো কোনো বুকমার্ক নেই। কোনো আয়াতে টেপ করে 🔖 চাপুন।';
  v.forEach(b=>{const d=document.createElement('div');d.style.cssText='padding:8px 0;border-bottom:1px solid #ddd;cursor:pointer';d.textContent=`🔖 ${ttl(b)} (পাতা ${bn(b.p)})`;d.onclick=()=>{show(b.p);const i=D[b.p].findIndex(x=>x.s==b.s&&x.a==b.a);if(i>=0)tap(b.p,i)};$('tx').appendChild(d)});
  $('sh').classList.add('o')};
@@ -304,6 +311,35 @@ function tfPick(cb){TFSTOP=false;$('tp').hidden=false;tfRender(cb)}
 $('tpc').onclick=()=>{$('tp').hidden=true};
 function doTafsir(){if(!curA)return;const a=curA;tfPick(slug=>tfShow(slug,a.s,a.a,$('tf')))}
 
+const WB_U='https://api.quran.com/api/v4/verses/by_chapter/';
+const wbMem={};let WBRUN=false,WBSTOP=false;
+const hasBn=t=>{for(const c of String(t||''))if(c.charCodeAt(0)>=2432&&c.charCodeAt(0)<=2559)return true;return false};
+async function wbFetch(n){const out=[];let bnOk=false;
+ for(let pg=1;pg<=12;pg++){const c=new AbortController();const tm=setTimeout(()=>c.abort(),20000);
+  try{const r=await fetch(`${WB_U}${n}?language=bn&words=true&word_fields=text_uthmani&fields=verse_key&per_page=50&page=${pg}`,{signal:c.signal});if(!r.ok)throw 0;const j=await r.json();
+   (j.verses||[]).forEach(v=>{const ay=+String(v.verse_key).split(':')[1];out[ay-1]=(v.words||[]).filter(w=>w.char_type_name=='word').map(w=>{const t=(w.translation&&w.translation.text)||'';if(hasBn(t))bnOk=true;return[w.text_uthmani||w.text||'',t]})});
+   const nx=j.pagination&&j.pagination.next_page;if(!nx)break}finally{clearTimeout(tm)}}
+ if(!out.length)throw new Error('খালি');if(!bnOk)throw new Error('বাংলা শব্দার্থ নেই');
+ for(let i=0;i<out.length;i++)if(!out[i])out[i]=[];return out}
+async function wbSura(n,net){if(wbMem[n])return wbMem[n];try{const c=await idbS('t','get','w:'+n);if(c){wbMem[n]=c;return c}}catch(e){}
+ if(!net)return null;const o=await wbFetch(n);wbMem[n]=o;try{await idbS('t','put',o,'w:'+n)}catch(e){}return o}
+async function wbCount(){let c=0;try{const ks=await idbS('t','getAllKeys');for(const k of ks)if(typeof k=='string'&&k.startsWith('w:'))c++}catch(e){}return c}
+async function wbShow(s,a,el){const tk=el._tk=(el._tk||0)+1;el.innerHTML='';const m=document.createElement('div');m.textContent='শব্দে শব্দে লোড হচ্ছে…';el.appendChild(m);
+ try{const d=await wbSura(s,true);if(el._tk!==tk)return;const ws=d[a-1]||[];el.innerHTML='';
+  if(!ws.length){m.textContent='এই আয়াতের শব্দার্থ পাওয়া যায়নি।';el.appendChild(m)}
+  else{const g=document.createElement('div');g.className='wbg';ws.forEach(w=>{const x=document.createElement('div');x.className='wbw';const b=document.createElement('b');b.textContent=w[0];const sp=document.createElement('span');sp.textContent=w[1];x.appendChild(b);x.appendChild(sp);g.appendChild(x)});el.appendChild(g)}
+  wbBar(el)}
+ catch(e){if(el._tk!==tk)return;el.innerHTML='';m.textContent='শব্দে শব্দে আনা যায়নি'+(e&&e.message?' ('+e.message+')':'')+'। ইন্টারনেট দেখুন, অথবা ডাউনলোড করে নিন।';el.appendChild(m);wbBar(el)}}
+async function wbBar(el){const c=await wbCount();const bar=document.createElement('div');bar.className='wbd';const t=document.createElement('div');
+ t.textContent=c>=114?'শব্দে শব্দে: পুরো কোরআন অফলাইনে আছে ✓':c?`শব্দে শব্দে অফলাইনে ${bn(c)} / ${bn(114)} সূরা`:'শব্দে শব্দে ডাউনলোড করা নেই';bar.appendChild(t);
+ if(c<114){const b=document.createElement('button');b.type='button';b.textContent=WBRUN?'⏹ থামান':c?'⬇ বাকিটা নামান':'⬇ পুরো কোরআনের শব্দে শব্দে ডাউনলোড';
+  b.onclick=()=>{if(WBRUN){WBSTOP=true;return}WBSTOP=false;WBRUN=true;b.textContent='⏹ থামান';let ok=0,fail=0,k=0,last='';
+   async function w(){while(!WBSTOP){const n=++k;if(n>114)return;try{await wbSura(n,true);ok++}catch(e){fail++;last=e&&e.message||''}t.textContent=`নামছে… ${bn(ok+fail)} / ${bn(114)} সূরা`}}
+   Promise.all([w(),w()]).then(()=>{WBRUN=false;t.textContent=WBSTOP?'থামানো হয়েছে':fail?`${bn(fail)}টি সূরা নামেনি`+(last?' ('+last+')':'')+', আবার চেষ্টা করুন':'ডাউনলোড সম্পূর্ণ ✓';b.textContent='⬇ আবার চেষ্টা/বাকিটা নামান';if(!fail&&!WBSTOP)b.hidden=true})};bar.appendChild(b)}
+ if(c){const r=document.createElement('button');r.type='button';r.className='x';r.textContent='🗑 মুছুন';r.onclick=async()=>{if(!confirm('ডাউনলোড করা শব্দে শব্দে মুছবেন?'))return;try{const ks=await idbS('t','getAllKeys');for(const q of ks)if(typeof q=='string'&&q.startsWith('w:')){await idbS('t','delete',q);delete wbMem[+q.slice(2)]}}catch(e){}bar.remove();wbBar(el)};bar.appendChild(r)}
+ el.appendChild(bar)}
+function doWbw(){if(!curA)return;const a=curA;const el=$('wb');if(el.firstChild){el.innerHTML='';return}wbShow(a.s,a.a,el)}
+
 let AP=2;
 function nextAy(){if(!curA)return;const a=curA;let p=(D[AP]&&D[AP].some(x=>x.s==a.s&&x.a==a.a))?AP:cur,i=D[p].findIndex(x=>x.s==a.s&&x.a==a.a);if(i<0)return;
  let np=p,ni=i+1;
@@ -312,12 +348,12 @@ function nextAy(){if(!curA)return;const a=curA;let p=(D[AP]&&D[AP].some(x=>x.s==
  const wasOpen=$('sh').classList.contains('o');if(np!=cur)show(np);tap(np,ni,!wasOpen);playAy(D[np][ni]);
  setTimeout(()=>{const e=document.querySelector('.h.on, .ti');if(e)try{e.scrollIntoView({block:'start',behavior:'smooth'})}catch(x){}},150)}
 function acBuild(){if(!curA){$('ac').innerHTML='';return}const fs=!!(document.fullscreenElement||document.webkitFullscreenElement);
- const B=[[isBm(curA)?'🔖 বুকমার্ক করা':'🔖 বুকমার্ক',bmToggle,isBm(curA)],[fs?'⛶ ফুলস্ক্রিন বন্ধ':'⛶ ফুলস্ক্রিন',fsToggle,fs],['📜 তাফসীর দেখুন',doTafsir],[AUTO?'🔁 ধারাবাহিক: চালু':'🔁 ধারাবাহিক: বন্ধ',()=>{AUTO=!AUTO;try{localStorage.setItem('qauto',AUTO?'1':'0')}catch(e){}acBuild()},AUTO],['📝 অনুবাদ মোডে যান',()=>openRd(curA.s,curA.a)],['📋 কপি করুন',doCopy],['📤 শেয়ার করুন',doShare],['🖼 ছবি হিসেবে শেয়ার',doImg]];
+ const B=[[isBm(curA)?'🔖 বুকমার্ক করা':'🔖 বুকমার্ক',bmToggle,isBm(curA)],[fs?'⛶ ফুলস্ক্রিন বন্ধ':'⛶ ফুলস্ক্রিন',fsToggle,fs],['📜 তাফসীর দেখুন',doTafsir],['🔤 শব্দে শব্দে অনুবাদ',doWbw],[AUTO?'🔁 ধারাবাহিক: চালু':'🔁 ধারাবাহিক: বন্ধ',()=>{AUTO=!AUTO;try{localStorage.setItem('qauto',AUTO?'1':'0')}catch(e){}acBuild()},AUTO],['📝 অনুবাদ মোডে যান',()=>openRd(curA.s,curA.a)],['📋 কপি করুন',doCopy],['📤 শেয়ার করুন',doShare],['🖼 ছবি হিসেবে শেয়ার',doImg]];
  $('ac').innerHTML='';B.forEach(b=>{const e=document.createElement('button');e.type='button';e.textContent=b[0];if(b[2])e.className='on';e.onclick=b[1];$('ac').appendChild(e)})}
 $('sel').onchange=e=>show(+e.target.value);
 $('nx').onclick=()=>{const i=keys.indexOf(cur);if(i<keys.length-1)show(keys[i+1])};
 $('pv').onclick=()=>{const i=keys.indexOf(cur);if(i>0)show(keys[i-1])};
-$('st').onclick=()=>{$('dlp').hidden=true;try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('cf').hidden=false;$('api').value=API;$('sh').classList.add('o');$('ti').textContent='সেটিং';$('tx').textContent=''};
+$('st').onclick=()=>{$('dlp').hidden=true;try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('wb').innerHTML='';$('cf').hidden=false;$('api').value=API;$('sh').classList.add('o');$('ti').textContent='সেটিং';$('tx').textContent=''};
 $('sv').onclick=()=>{API=$('api').value.trim();try{localStorage.setItem('qapi',API)}catch(e){}cache={};close()};
 $('pg').addEventListener('click',e=>{if(!e.target.classList.contains('h'))close()});
 
