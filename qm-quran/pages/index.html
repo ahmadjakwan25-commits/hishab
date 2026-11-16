@@ -1,0 +1,96 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>কোরআন মাজীদ (১৫ লাইন)</title>
+<style>
+:root{--ac:#0f6b57;--bg:#f1f5f2}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);font-family:system-ui,"Noto Sans Bengali",sans-serif;color:#14261c}
+#app{display:flex;flex-direction:column;height:100%}
+.bar{display:flex;gap:6px;align-items:center;padding:6px 8px;background:#fff;border-bottom:1px solid #dbe5de;flex-wrap:wrap}
+.bar select,.bar input,.bar button{font:inherit;font-size:15px;border:1px solid #cfdcd3;border-radius:8px;background:#fff;padding:6px 8px;color:inherit}
+.bar button{background:var(--ac);color:#fff;border-color:var(--ac)}
+.bar select{max-width:34vw}.bar input{width:64px;text-align:center}
+#w{flex:1;overflow:auto;position:relative;background:#e9efe9;-webkit-overflow-scrolling:touch;text-align:center}
+#pw{position:relative;margin:0 auto;width:100%;max-width:900px}#im{display:block;width:100%;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
+.h{position:absolute;cursor:pointer}.h.on{background:rgba(15,107,87,.28)}
+#sh{position:fixed;left:0;right:0;bottom:0;max-height:55vh;overflow:auto;background:#fff;border-top:3px solid var(--ac);box-shadow:0 -4px 16px #0003;padding:10px 14px 16px;z-index:5;display:none}#sh.o{display:block}
+#sh h3{margin:0 0 6px;font-size:17px;color:var(--ac);display:flex;justify-content:space-between;align-items:center;gap:8px}
+#sh button{font:inherit;font-size:15px;border:1px solid var(--ac);background:#fff;color:var(--ac);border-radius:8px;padding:5px 10px}
+#sx{white-space:nowrap}#tl{display:block;font-size:12px;color:#5d7066;margin:6px 0;cursor:pointer;text-decoration:underline}#tx{font-size:18px;line-height:1.8}
+.n{position:fixed;top:50%;transform:translateY(-50%);width:34px;height:70px;border:0;border-radius:10px;background:#0f6b5788;color:#fff;font-size:28px;z-index:3}
+#nx{left:4px}#pv{right:4px}
+#st{font-size:13px;color:#5d7066;padding:2px 10px;background:#fff;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#dlp{display:none;font-size:13px;padding:6px 10px;background:#fff8df;color:#3b2e08}
+@media(max-width:480px){.n{display:none}}
+</style></head><body><div id="app">
+<div class="bar"><select id="ju" aria-label="পারা"></select><select id="su" aria-label="সূরা"></select><input id="go" type="number" min="1" max="611" inputmode="numeric" placeholder="পৃষ্ঠা"><button id="gb" type="button">যান</button><button id="zm" type="button">🔍</button><button id="dl" type="button">⬇ অফলাইন</button></div>
+<div id="dlp"></div>
+<div id="w"><div id="pw"><img id="im" alt="কোরআনের পৃষ্ঠা" draggable="false"></div></div>
+<div id="sh"><h3><span id="ti"></span><span><button id="pl" type="button">▶ শুনুন</button> <button id="sx" type="button">✕</button></span></h3><small id="tl"></small><div id="tx"></div></div>
+<div id="st"><span id="pn"></span><span id="jn"></span></div>
+<button class="n" id="nx" type="button" aria-label="পরের পৃষ্ঠা">‹</button><button class="n" id="pv" type="button" aria-label="আগের পৃষ্ঠা">›</button>
+</div>
+<script>
+const N=612,JZ=[2,23,43,63,83,103,123,143,163,183,203,223,243,263,283,303,323,343,363,383,403,423,443,463,483,503,523,543,563,587];
+const SJ={"1":2,"2":3,"3":51,"4":78,"5":107,"6":129,"7":152,"8":178,"9":188,"10":209,"11":222,"12":236,"13":250,"14":256,"15":262,"16":268,"17":283,"18":294,"19":306,"20":313,"21":323,"22":332,"23":343,"24":351,"25":360,"26":367,"27":377,"28":386,"29":397,"30":405,"31":412,"32":416,"33":419,"34":429,"35":435,"36":441,"37":446,"38":453,"39":459,"40":468,"41":478,"42":484,"43":490,"44":496,"45":499,"46":503,"47":507,"48":512,"49":516,"50":519,"51":521,"52":524,"53":527,"54":529,"55":532,"56":535,"57":538,"58":543,"59":546,"60":550,"61":552,"62":554,"63":555,"64":557,"65":559,"66":561,"67":563,"68":565,"69":568,"70":570,"71":572,"72":574,"73":577,"74":579,"75":581,"76":583,"77":585,"78":587,"79":588,"80":590,"81":591,"82":592,"83":593,"84":595,"85":596,"86":597,"87":598,"88":598,"89":599,"90":601,"91":601,"92":602,"93":603,"94":603,"95":604,"96":604,"97":605,"98":605,"99":606,"100":606,"101":607,"102":607,"103":608,"104":608,"105":608,"106":609,"107":609,"108":609,"109":609,"110":610,"111":610,"112":610,"113":611,"114":611};
+const SN=['','আল-ফাতিহা','আল-বাকারা','আল-ইমরান','আন-নিসা','আল-মায়িদা','আল-আনআম','আল-আরাফ','আল-আনফাল','আত-তাওবা','ইউনুস','হুদ','ইউসুফ','আর-রাদ','ইবরাহীম','আল-হিজর','আন-নাহল','বনী ইসরাঈল','আল-কাহফ','মারইয়াম','ত্বা-হা','আল-আম্বিয়া','আল-হাজ্জ','আল-মুমিনূন','আন-নূর','আল-ফুরকান','আশ-শুআরা','আন-নামল','আল-কাসাস','আল-আনকাবূত','আর-রূম','লুকমান','আস-সাজদা','আল-আহযাব','সাবা','ফাতির','ইয়াসীন','আস-সাফফাত','সোয়াদ','আয-যুমার','গাফির','হা-মীম সাজদা','আশ-শূরা','আয-যুখরুফ','আদ-দুখান','আল-জাসিয়া','আল-আহকাফ','মুহাম্মাদ','আল-ফাতহ','আল-হুজুরাত','কাফ','আয-যারিয়াত','আত-তূর','আন-নাজম','আল-কামার','আর-রহমান','আল-ওয়াকিয়া','আল-হাদীদ','আল-মুজাদালা','আল-হাশর','আল-মুমতাহিনা','আস-সাফ','আল-জুমুআ','আল-মুনাফিকূন','আত-তাগাবুন','আত-তালাক','আত-তাহরীম','আল-মুলক','আল-কলম','আল-হাক্কা','আল-মাআরিজ','নূহ','আল-জিন','আল-মুযযাম্মিল','আল-মুদ্দাসসির','আল-কিয়ামাহ','আদ-দাহর','আল-মুরসালাত','আন-নাবা','আন-নাযিআত','আবাসা','আত-তাকবীর','আল-ইনফিতার','আল-মুতাফফিফীন','আল-ইনশিকাক','আল-বুরুজ','আত-তারিক','আল-আলা','আল-গাশিয়া','আল-ফাজর','আল-বালাদ','আশ-শামস','আল-লাইল','আদ-দুহা','আল-ইনশিরাহ','আত-তীন','আল-আলাক','আল-কদর','আল-বাইয়্যিনাহ','আয-যিলযাল','আল-আদিয়াত','আল-কারিআ','আত-তাকাসুর','আল-আসর','আল-হুমাযা','আল-ফীল','কুরাইশ','আল-মাউন','আল-কাউসার','আল-কাফিরূন','আন-নাসর','আল-লাহাব','আল-ইখলাস','আল-ফালাক','আন-নাস'];
+const $=id=>document.getElementById(id);const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const jbn=['','প্রথম','দ্বিতীয়','তৃতীয়','চতুর্থ','পঞ্চম','ষষ্ঠ','সপ্তম','অষ্টম','নবম','দশম','একাদশ','দ্বাদশ','ত্রয়োদশ','চতুর্দশ','পঞ্চদশ','ষোড়শ','সপ্তদশ','অষ্টাদশ','ঊনবিংশ','বিংশ','একবিংশ','দ্বাবিংশ','ত্রয়োবিংশ','চতুর্বিংশ','পঞ্চবিংশ','ষড়বিংশ','সপ্তবিংশ','অষ্টাবিংশ','ঊনত্রিংশ','ত্রিশতম'];
+const url=i=>'pages/qm'+i+(i==1?'.jpg':'.png');
+let cur=2,zoom=0;try{cur=+localStorage.getItem('qmq_p')||2}catch(e){}
+if(cur<1||cur>N)cur=2;
+$('ju').innerHTML='<option value="">পারা…</option>'+JZ.map((p,i)=>'<option value="'+(p+1)+'">পারা '+bn(i+1)+'</option>').join('');
+$('su').innerHTML='<option value="">সূরা…</option>'+SN.map((n,i)=>i?'<option value="'+(SJ[i]+1)+'">'+bn(i)+'. '+n+'</option>':'').join('');
+function juzOf(i){const p=i-1;let j=0;for(let k=0;k<30;k++)if(JZ[k]<=p)j=k+1;return j}
+function show(i){i=Math.max(1,Math.min(N,i));cur=i;$('im').src=url(i);$('w').scrollTop=0;closeSh();drawOv();
+ const p=i-1;$('pn').textContent=i==1?'প্রচ্ছদ':(i==2?'অলংকরণ':'পৃষ্ঠা '+bn(p)+' / ৬১১');const j=juzOf(i);$('jn').textContent=j?'পারা '+bn(j):'';
+ $('go').value=i>2?p:'';try{localStorage.setItem('qmq_p',i)}catch(e){}
+ [i+1,i+2,i-1].forEach(k=>{if(k>=1&&k<=N){const m=new Image();m.src=url(k)}})}
+const next=()=>show(cur+1),prev=()=>show(cur-1);
+$('nx').onclick=next;$('pv').onclick=prev;
+$('ju').onchange=e=>{if(e.target.value)show(+e.target.value);e.target.value=''};
+$('su').onchange=e=>{if(e.target.value)show(+e.target.value);e.target.value=''};
+$('gb').onclick=()=>{const v=+$('go').value;if(v>=1&&v<=611)show(v+1)};$('go').onkeydown=e=>{if(e.key=='Enter')$('gb').click()};
+function setZoom(z){zoom=z;const im=$('pw');im.style.width=[100,160,230][z]+'%';im.style.maxWidth=z?'none':'900px'}
+$('zm').onclick=()=>setZoom((zoom+1)%3);
+let TX=null,TY=0,TT=0,LT=0;const w=$('w');
+w.addEventListener('touchstart',e=>{if(e.touches.length!=1){TX=null;return}TX=e.touches[0].clientX;TY=e.touches[0].clientY;TT=Date.now()},{passive:true});
+w.addEventListener('touchend',e=>{if(TX==null||zoom)return;const t=e.changedTouches[0],dx=t.clientX-TX,dy=t.clientY-TY;TX=null;
+ if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*.6&&Date.now()-TT<900){dx>0?next():prev()}
+ },{passive:true});
+document.addEventListener('keydown',e=>{if(e.target.tagName=='INPUT'||e.target.tagName=='SELECT')return;
+ if(e.key=='ArrowLeft'){next();e.preventDefault()}else if(e.key=='ArrowRight'){prev();e.preventDefault()}});
+try{navigator.serviceWorker&&navigator.serviceWorker.register('sw.js')}catch(e){}
+let DL=false;$('dl').onclick=async()=>{if(DL)return;DL=true;const p=$('dlp');p.style.display='block';
+ try{const c=await caches.open('qmq-pages-v1');let done=0,fail=0,k=1;
+  const worker=async()=>{while(k<=N){const i=k++;const u=url(i);try{if(!(await c.match(u))){const r=await fetch(u);if(!r.ok)throw 0;await c.put(u,r)}}catch(e){fail++}done++;p.textContent='ডাউনলোড হচ্ছে… '+bn(done)+' / '+bn(N)}};
+  await Promise.all([worker(),worker(),worker(),worker()]);
+  p.textContent=fail?('শেষ, কিন্তু '+bn(fail)+'টি পৃষ্ঠা আসেনি। ইন্টারনেট ঠিক করে আবার চাপুন।'):'✅ সব পৃষ্ঠা অফলাইনের জন্য রাখা হয়েছে।'}
+ catch(e){p.textContent='এই ব্রাউজারে অফলাইন সংরক্ষণ চলছে না।'}DL=false};
+const p3=n=>String(n).padStart(3,'0');
+let QDL=null;function ldQD(){if(window.QD)return Promise.resolve();return QDL||(QDL=new Promise(r=>{const s=document.createElement('script');s.src='qd.js';s.onload=r;s.onerror=()=>{QDL=null;r()};document.head.appendChild(s)}))}
+let SEL=null,AU=new Audio(),PL=false;
+function drawOv(){document.querySelectorAll('.h').forEach(e=>e.remove());const i=cur;ldQD().then(()=>{if(i!=cur||!window.QD)return;const L=QD[i]||[];const pw=$('pw');
+ L.forEach((a,k)=>a.r.forEach(r=>{const d=document.createElement('div');d.className='h';d.dataset.k=k;d.style.cssText='left:'+r[0]+'%;top:'+r[1]+'%;width:'+r[2]+'%;height:'+r[3]+'%';d.onclick=ev=>{ev.stopPropagation();pick(k)};pw.appendChild(d)}));
+ if(SEL&&SEL.pg==i){hl(SEL.k)}})}
+function hl(k){document.querySelectorAll('.h').forEach(e=>e.classList.toggle('on',e.dataset.k==k))}
+let TR='mk';try{TR=localStorage.getItem('hfz_tr')=='tu'?'tu':'mk'}catch(e){}
+let TUD=null;async function tuGet(){if(TUD)return TUD;const c=await caches.open('qmq-data');let r=await c.match('taqi.json');if(!r){r=await fetch('taqi.json');if(!r.ok)throw 0;await c.put('taqi.json',r.clone())}TUD=await r.json();return TUD}
+function trLab(){$('tl').textContent=TR=='tu'?'অনুবাদ: মুফতী তাকী উসমানী · বদলাতে এখানে ট্যাপ করুন':'অনুবাদ: মুহিউদ্দীন খান · বদলাতে এখানে ট্যাপ করুন'}
+const TC={};
+async function getTx(s,a){const k=s+':'+a+':'+TR;if(TC[k])return TC[k];
+ if(TR=='tu'){try{const t=await tuGet();const x=t[s]&&t[s][a-1];if(x){TC[k]=x;return x}}catch(e){}}
+ const r=await fetch('https://api.alquran.cloud/v1/ayah/'+s+':'+a+'/bn.bengali');if(!r.ok)throw 0;const j=await r.json();const x=j.data&&j.data.text;if(!x)throw 0;TC[k]=x;return x}
+async function pick(k){const a=QD[cur][k];SEL={pg:cur,k,s:a.s,a:a.a};hl(k);$('sh').classList.add('o');$('ti').textContent='সূরা '+SN[a.s]+', আয়াত '+bn(a.a);trLab();$('pl').textContent='▶ শুনুন';stopAu();
+ $('tx').textContent='লোড হচ্ছে…';try{const x=await getTx(a.s,a.a);if(SEL&&SEL.s==a.s&&SEL.a==a.a)$('tx').textContent=x}catch(e){if(SEL&&SEL.s==a.s&&SEL.a==a.a)$('tx').textContent='অনুবাদ আনা যায়নি। ইন্টারনেট দেখুন।'}}
+function closeSh(){$('sh').classList.remove('o');SEL=null;stopAu();hl(-1)}
+$('sx').onclick=closeSh;
+$('tl').onclick=()=>{TR=TR=='tu'?'mk':'tu';try{localStorage.setItem('hfz_tr',TR)}catch(e){};trLab();if(SEL){const s=SEL.s,a=SEL.a;$('tx').textContent='লোড হচ্ছে…';getTx(s,a).then(x=>{if(SEL&&SEL.s==s&&SEL.a==a)$('tx').textContent=x}).catch(()=>{$('tx').textContent='অনুবাদ আনা যায়নি।'})}};
+function stopAu(){PL=false;try{AU.pause()}catch(e){}}
+function playSel(){if(!SEL)return;PL=true;$('pl').textContent='⏸ থামান';AU.src='https://everyayah.com/data/Alafasy_128kbps/'+p3(SEL.s)+p3(SEL.a)+'.mp3';AU.play().catch(()=>{PL=false;$('pl').textContent='▶ শুনুন'})}
+$('pl').onclick=()=>{if(PL){stopAu();$('pl').textContent='▶ শুনুন'}else playSel()};
+AU.onended=async()=>{if(!PL||!SEL)return;const L=QD[SEL.pg];let k=SEL.k+1;const cs=SEL.s,ca=SEL.a;
+ while(k<L.length&&L[k].s==cs&&L[k].a==ca)k++;
+ if(k<L.length){await pick2(k);return}
+ if(SEL.pg<N){show(SEL.pg+1);await ldQD();const L2=QD[cur]||[];let j=0;while(j<L2.length&&L2[j].s==cs&&L2[j].a==ca)j++;if(j<L2.length){await pick2(j)}}};
+async function pick2(k){await pick(k);playSel()}
+show(cur);
+</script></body></html>
