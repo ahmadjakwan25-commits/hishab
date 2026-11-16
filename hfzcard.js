@@ -29,6 +29,7 @@ function openChooser(origTarget){
  +'<div class="hz-body"><div class="hz-grid">'
  +'<button type="button" class="hz-c" data-w="old"><div class="hz-th">📖</div><b>কোরআন মাজিদ</b><small>পড়ুন ও শুনুন</small></button>'
  +'<button type="button" class="hz-c hz-g" data-w="hfz"><div class="hz-th"><img src="hafezi-quran/pages/p002.jpg" alt="হাফেজী কোরআন, প্রথম পাতা"></div><b>হাফেজী কোরআন শরীফ</b><small>প্রথম পাতা থেকে<br>পড়ুন ও শুনুন</small></button>'
+ +'<button type="button" class="hz-c" data-w="hf2"><div class="hz-th"><img src="qm-quran/pages/qm4.png" alt="কোরআন শরীফ, সূরা বাকারার প্রথম পাতা"></div><b>কোরআন শরীফ (১৫ লাইন)</b><small>পারা ও সূরা দিয়ে<br>পড়ুন</small></button>'
  +'</div></div>';
  document.body.appendChild(el);chEl=el;document.documentElement.style.overflow='hidden';pushH();
  el.querySelector('.hz-x').onclick=function(){closeAll()};
@@ -37,11 +38,12 @@ function openChooser(origTarget){
   back(function(){bypass=1;try{origTarget.click()}catch(e){}bypass=0});
  };
  el.querySelector('[data-w="hfz"]').onclick=function(){openViewer(true)};
+ el.querySelector('[data-w="hf2"]').onclick=function(){openViewer(true,'qm-quran/index.html','কোরআন শরীফ (১৫ লাইন)')};
 }
-function openViewer(fromChooser){
+function openViewer(fromChooser,src,title){src=src||'hafezi-quran/index.html';title=title||'হাফেজী কোরআন শরীফ';
  if(vEl)return;
  var ov=document.createElement('div');ov.id='hz-ov';
- ov.innerHTML='<div class="hz-top"><button type="button" class="hz-x" aria-label="বন্ধ">←</button><b>হাফেজী কোরআন শরীফ</b></div><iframe src="hafezi-quran/index.html" allowfullscreen allow="fullscreen"></iframe>';
+ ov.innerHTML='<div class="hz-top"><button type="button" class="hz-x" aria-label="বন্ধ">←</button><b>'+title+'</b></div><iframe src="'+src+'" allowfullscreen allow="fullscreen"></iframe>';
  document.body.appendChild(ov);vEl=ov;document.documentElement.style.overflow='hidden';
  if(fromChooser){rm(chEl);chEl=null}else pushH();
  ov.querySelector('.hz-x').onclick=function(){closeAll()};
