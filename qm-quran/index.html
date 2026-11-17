@@ -1,96 +1,448 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>কোরআন মাজীদ (১৫ লাইন)</title>
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>কোরআন শরীফ (১৫ লাইন)</title>
 <style>
-:root{--ac:#0f6b57;--bg:#f1f5f2}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);font-family:system-ui,"Noto Sans Bengali",sans-serif;color:#14261c}
-#app{display:flex;flex-direction:column;height:100%}
-.bar{display:flex;gap:6px;align-items:center;padding:6px 8px;background:#fff;border-bottom:1px solid #dbe5de;flex-wrap:wrap}
-.bar select,.bar input,.bar button{font:inherit;font-size:15px;border:1px solid #cfdcd3;border-radius:8px;background:#fff;padding:6px 8px;color:inherit}
-.bar button{background:var(--ac);color:#fff;border-color:var(--ac)}
-.bar select{max-width:34vw}.bar input{width:64px;text-align:center}
-#w{flex:1;overflow:auto;position:relative;background:#e9efe9;-webkit-overflow-scrolling:touch;text-align:center}
-#pw{position:relative;margin:0 auto;width:100%;max-width:900px}#im{display:block;width:100%;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
-.h{position:absolute;cursor:pointer}.h.on{background:rgba(15,107,87,.28)}
-#sh{position:fixed;left:0;right:0;bottom:0;max-height:55vh;overflow:auto;background:#fff;border-top:3px solid var(--ac);box-shadow:0 -4px 16px #0003;padding:10px 14px 16px;z-index:5;display:none}#sh.o{display:block}
-#sh h3{margin:0 0 6px;font-size:17px;color:var(--ac);display:flex;justify-content:space-between;align-items:center;gap:8px}
-#sh button{font:inherit;font-size:15px;border:1px solid var(--ac);background:#fff;color:var(--ac);border-radius:8px;padding:5px 10px}
-#sx{white-space:nowrap}#tl{display:block;font-size:12px;color:#5d7066;margin:6px 0;cursor:pointer;text-decoration:underline}#tx{font-size:18px;line-height:1.8}
-.n{position:fixed;top:50%;transform:translateY(-50%);width:34px;height:70px;border:0;border-radius:10px;background:#0f6b5788;color:#fff;font-size:28px;z-index:3}
-#nx{left:4px}#pv{right:4px}
-#st{font-size:13px;color:#5d7066;padding:2px 10px;background:#fff;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-#dlp{display:none;font-size:13px;padding:6px 10px;background:#fff8df;color:#3b2e08}
-@media(max-width:480px){.n{display:none}}
-</style></head><body><div id="app">
-<div class="bar"><select id="ju" aria-label="পারা"></select><select id="su" aria-label="সূরা"></select><input id="go" type="number" min="1" max="611" inputmode="numeric" placeholder="পৃষ্ঠা"><button id="gb" type="button">যান</button><button id="zm" type="button">🔍</button><button id="dl" type="button">⬇ অফলাইন</button></div>
-<div id="dlp"></div>
-<div id="w"><div id="pw"><img id="im" alt="কোরআনের পৃষ্ঠা" draggable="false"></div></div>
-<div id="sh"><h3><span id="ti"></span><span><button id="pl" type="button">▶ শুনুন</button> <button id="sx" type="button">✕</button></span></h3><small id="tl"></small><div id="tx"></div></div>
-<div id="st"><span id="pn"></span><span id="jn"></span></div>
-<button class="n" id="nx" type="button" aria-label="পরের পৃষ্ঠা">‹</button><button class="n" id="pv" type="button" aria-label="আগের পৃষ্ঠা">›</button>
-</div>
+:root{--bg:#f4efe3;--fg:#1d2b2a;--ac:#0f6b57}
+@media(prefers-color-scheme:dark){:root{--bg:#161a19;--fg:#e8e6df}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:"Tiro Bangla","Noto Sans Bengali",system-ui,sans-serif}button,select,input{font-family:inherit}
+.bar{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--ac);color:#fff}
+.bar button,.bar select{background:#fff2;color:#fff;border:1px solid #fff6;border-radius:8px;padding:6px 12px;font-size:15px}.bar select option{color:#000}
+#pgw{position:fixed;left:0;top:0;right:0;bottom:0;overflow:auto;display:flex;background:#fff;-webkit-overflow-scrolling:touch}#pg{position:relative;flex:none;margin:auto;touch-action:pan-y pinch-zoom}#pg img{width:100%;display:block;filter:none}
+#pg .h{position:absolute;cursor:pointer;-webkit-tap-highlight-color:transparent}#pg .h.on{background:#0f6b5744;outline:1px solid #0f6b57}
+#dbg{position:absolute;inset:0;pointer-events:none}
+#sh{position:fixed;left:0;right:0;bottom:0;max-height:55vh;overflow:auto;background:#fffdf7;color:#1d2b2a;border-radius:16px 16px 0 0;box-shadow:0 -4px 20px #0004;padding:14px 16px 20px;transform:translateY(105%);transition:.2s;z-index:9}
+#sh.o{transform:none}#sh h3{margin:0 0 8px;font-size:15px;color:var(--ac)}#tx{font-size:18px;line-height:1.7}
+#sh input{width:100%;padding:8px;margin:6px 0;border:1px solid #999;border-radius:8px;font-size:14px}#sh small{color:#666}
+#au{display:flex;gap:8px;align-items:center;margin:2px 0 10px}#au select{flex:1;min-width:0;padding:7px;border:1px solid #999;border-radius:8px;font-size:14px;background:#fff;color:#1d2b2a}#au button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:16px}#ac{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 4px}#ac button{background:#e9efe9;color:#1d2b2a;border:1px solid #c9d6cc;border-radius:10px;padding:10px 4px;font-size:14px;line-height:1.3}#ac button.on{background:var(--ac);color:#fff}
+#wb:empty{display:none}#wb{margin-top:10px;border-top:1px solid #ddd;padding-top:8px}
+.wbg{direction:rtl;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start}
+.wbw{border:1px solid #d9c9a0;border-radius:10px;padding:5px 7px;min-width:48px;text-align:center;background:#fffaf0;direction:ltr}
+.wbw b{display:block;font-family:"Amiri","Noto Naskh Arabic",serif;font-size:22px;font-weight:400;line-height:1.7;direction:rtl}.wbw span{display:block;font-size:13px;line-height:1.35;color:#333}
+.wbd{margin-top:10px;padding:8px;border:1px dashed #c9d6cc;border-radius:10px;font-size:13px;color:#444;display:flex;flex-direction:column;gap:6px}.wbd button{border:0;border-radius:8px;padding:8px 10px;background:#0f6b57;color:#fff;font-size:14px}.wbd button.x{background:#b33}
+#tf{margin-top:10px;font-size:16px;line-height:1.7;white-space:pre-wrap;border-top:1px solid #ddd;padding-top:8px}#tf:empty{display:none}
+.ti{max-width:520px;margin:8px auto;background:#fffdf7;color:#1d2b2a;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px #0002;cursor:pointer}.ti b{display:block;color:var(--ac);font-size:14px;margin-bottom:4px}.ti div{font-size:17px;line-height:1.7}
+#dlp button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-size:14px}#dlp button#dlrm{background:#9a3b3b}
+.bar{position:fixed;top:0;left:0;right:0;z-index:6;background:none;padding:calc(6px + env(safe-area-inset-top,0px)) 8px 6px;pointer-events:none;justify-content:flex-start;gap:8px}
+.bar button{pointer-events:auto;width:40px;height:40px;padding:0;border-radius:50%;background:#0f6b57cc;border:1px solid #fff5;color:#fff;font-size:18px;box-shadow:0 2px 6px #0004}
+#nx,#pv,#sel,#bk{display:none!important}#dlb{margin-left:auto}
+#pgl{position:fixed;left:50%;bottom:6px;transform:translateX(-50%);z-index:5;background:#0f6b57cc;color:#fff;font-size:12px;padding:2px 12px;border-radius:12px;pointer-events:none}
+#dls,#dls + div,#dls + div + div,#dls + div + div + small{display:none}
+#gt{position:fixed;left:0;top:0;right:0;bottom:0;z-index:40;background:var(--bg);color:var(--fg);display:flex;align-items:center;justify-content:center;padding:20px}#gt[hidden]{display:none}
+#gt .gc{max-width:420px;width:100%;text-align:center;background:#fffdf7;color:#1d2b2a;border-radius:18px;padding:22px 18px;box-shadow:0 4px 20px #0003;border:2px solid #d9b34a}
+#gt h2{margin:0 0 4px;font-size:22px;color:var(--ac)}#gt p{margin:8px 0;line-height:1.7;font-size:15px}#gt .gb{height:12px;background:#ddd;border-radius:7px;overflow:hidden;margin:10px 0 4px}#gt .gb i{display:block;height:100%;width:0;background:var(--ac)}
+#gt button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 20px;font-size:16px;margin:6px 4px}#gt button[hidden]{display:none}#gt small{color:#666;display:block;font-size:13px}
+#mnb{position:fixed;left:0;top:0;right:0;bottom:0;background:#0007;z-index:19;display:none}#mnb.o{display:block}
+#mnu{position:fixed;left:0;top:0;bottom:0;width:min(84vw,330px);background:#fffdf7;color:#1d2b2a;z-index:20;transform:translateX(-105%);transition:.2s;display:flex;flex-direction:column;box-shadow:4px 0 20px #0005}#mnu.o{transform:none}
+#mnu .mh{background:var(--ac);color:#fff;padding:12px 14px;font-size:17px;font-weight:700}
+#mnu .mt{display:flex;border-bottom:1px solid #ddd}#mnu .mt button{flex:1;padding:11px 4px;border:0;background:none;font-size:15px;color:#1d2b2a;border-bottom:3px solid transparent}#mnu .mt button.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:700}
+#mnl{flex:1;overflow:auto}.mi{display:flex;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid #eee;font-size:16px;cursor:pointer}.mi small{color:#666;white-space:nowrap}.mi.cur{background:#e7f2ec}
+#mnl .mb{margin:10px 14px;padding:10px;width:calc(100% - 28px);border:0;border-radius:8px;background:var(--ac);color:#fff;font-size:15px}
+
+/* ইউআই ২ */
+#st,#zm{display:none!important}
+#mnu{background:linear-gradient(180deg,#f3faf6 0%,#fffaf0 100%);box-shadow:6px 0 28px #0f3d2833;border-radius:0 22px 22px 0}
+#mnu .mh{background:linear-gradient(135deg,#d6efe3,#eaf6ee);color:#0f5a43;padding:16px 16px 14px;font-size:18px;border-radius:0 22px 0 0;border-bottom:1px solid #cfe5d8}
+#mnu .mt{gap:6px;padding:10px 10px 6px;border-bottom:0}
+#mnu .mt button{border:1px solid #cfe5d8;border-radius:999px;background:#fff;color:#35544a;padding:8px 4px;font-size:14.5px;border-bottom:1px solid #cfe5d8}
+#mnu .mt button.on{background:#0f6b57;color:#fff;border-color:#0f6b57;font-weight:700}
+#mnl{padding:6px 10px 14px}
+.mi{border:1px solid #e3efe7;border-bottom:1px solid #e3efe7;border-radius:14px;background:#fff;margin:7px 0;padding:12px 14px;transition:background .15s,transform .1s}
+.mi:hover{background:#f0f8f3}.mi:active{transform:scale(.98)}
+.mi small{color:#6a8a7e}.mi.cur{background:#dff2e8;border-color:#9fd1b8;color:#0f5a43;font-weight:700}
+#mnl .mb{border-radius:14px;background:#e1f3ea;color:#0f5a43;border:1px solid #b9dcc9;margin:8px 0;width:100%}
+#sbn,#sbp{display:none}
+@media (hover:hover) and (pointer:fine) and (min-width:700px){
+ #sbn,#sbp{display:flex;position:fixed;top:50%;transform:translateY(-50%);z-index:7;width:52px;height:96px;align-items:center;justify-content:center;border:0;border-radius:16px;background:#0f6b57cc;color:#fff;font-size:34px;cursor:pointer;opacity:.55;transition:opacity .15s}
+ #sbn{left:14px}#sbp{right:14px}#sbn:hover,#sbp:hover{opacity:1}
+}
+#zm{position:fixed;right:12px;bottom:14px;z-index:8;display:flex;flex-direction:column;gap:8px}#zm button{width:44px;height:44px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:22px;box-shadow:0 2px 8px #0004;opacity:.9}
+#rd{position:fixed;left:0;top:0;right:0;bottom:0;z-index:30;background:var(--bg);color:var(--fg);display:flex;flex-direction:column}#rd[hidden]{display:none}
+#rd .rb{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--ac);color:#fff}#rd .rb b{flex:1;font-size:16px}#rd .rb button{background:#fff2;color:#fff;border:1px solid #fff6;border-radius:8px;padding:6px 12px;font-size:15px}
+#rdl{flex:1;overflow:auto;padding:10px 12px 40px;-webkit-overflow-scrolling:touch}
+.rdsb{margin:14px 0 8px;padding:10px;text-align:center;font-weight:700;font-size:18px;color:#fff;background:var(--ac);border-radius:12px}.rdbs{text-align:center;font-family:"Amiri","Noto Naskh Arabic",serif;font-size:26px;margin:8px 0}
+.rdi{background:#fffdf7;color:#1d2b2a;border-radius:14px;padding:12px 14px;margin:10px 0;box-shadow:0 1px 4px #0002}.rdh{font-size:12px;color:var(--ac);font-weight:700;margin-bottom:6px}
+.rda{direction:rtl;text-align:right;font-family:"Amiri","Noto Naskh Arabic","Scheherazade New",serif;line-height:2.1}.rdt{margin-top:8px;line-height:1.8}
+.rdb{margin-top:8px;background:#e9efe9;color:#1d2b2a;border:1px solid #c9d6cc;border-radius:10px;padding:7px 12px;font-size:14px}.rdf{margin-top:8px;padding-top:8px;border-top:1px solid #ddd;white-space:pre-wrap;line-height:1.8;font-size:15px}
+.rdm{text-align:center;color:#666;padding:16px;font-size:14px}.rdm button{margin-top:8px;background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px}
+#tp{position:fixed;inset:0;z-index:50;background:#0008;display:flex;align-items:flex-end;justify-content:center}#tp[hidden]{display:none}
+.tpb{background:#fffdf7;color:#1d2b2a;width:100%;max-width:560px;max-height:85vh;overflow:auto;border-radius:16px 16px 0 0;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.tph{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.tph b{font-size:17px;color:#0f6b57}.tph button{border:0;background:#0001;width:34px;height:34px;border-radius:50%;font-size:16px}
+.tpr{border:1px solid #d9c9a0;border-radius:12px;padding:10px;margin:8px 0;display:flex;flex-direction:column;gap:6px}
+.tpn{border:0;background:none;text-align:left;font-size:16px;font-weight:700;color:#1d2b2a;padding:2px 0}.tpn small{display:block;font-weight:400;font-size:12.5px;color:#666}
+.tpd,.tpx{border:0;border-radius:8px;padding:9px 12px;font-size:14px;background:#0f6b57;color:#fff}.tpd:disabled{background:#9bb;opacity:.8}.tpx{background:#b33}.tpm{font-size:12.5px;color:#555}.tpn2{font-size:12.5px;color:#666;margin-top:6px}
+#mp{position:fixed;left:10px;bottom:34px;right:70px;z-index:8;display:flex;align-items:center;gap:8px;background:#0f6b57ee;color:#fff;border-radius:24px;padding:6px 10px;box-shadow:0 2px 8px #0005}#mp[hidden]{display:none}#mp button{background:#fff2;border:0;color:#fff;width:34px;height:34px;border-radius:50%;font-size:16px;flex:none}#mpt{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#am{font-size:12px;color:#a33;min-height:0}
+</style></head><body>
+<div class="bar"><button id="mn" aria-label="মেনু">☰</button><button id="nx">‹ পরের</button><select id="sel"></select><button id="pv">আগের ›</button><button id="dlb" title="তেলাওয়াত ডাউনলোড">🎧</button><button id="bk" hidden>🔖</button><button id="st">⚙</button></div>
+<div id="pgw"><div id="pg"></div></div><button id="sbn" type="button" aria-label="পরের পৃষ্ঠা" title="পরের পৃষ্ঠা (← কী)">‹</button><button id="sbp" type="button" aria-label="আগের পৃষ্ঠা" title="আগের পৃষ্ঠা (→ কী)">›</button><div id="zm"><button id="zi" type="button" aria-label="বড় করুন">＋</button><button id="zo" type="button" aria-label="ছোট করুন">－</button></div><div id="rd" hidden><div class="rb"><button id="rdx" type="button" aria-label="ফিরে যান">←</button><b>অনুবাদ মোড</b><button id="rdm" type="button">A−</button><button id="rdp" type="button">A+</button><button id="rdtr" type="button"></button></div><div id="rdl"></div></div><div id="pgl"></div><div id="gt" hidden><div class="gc"><h2>কোরআন শরীফ (১৫ লাইন)</h2><p id="gtp"></p><div class="gb"><i id="gtb"></i></div><small id="gts"></small><p id="gtm" style="color:#a33;font-size:14px"></p><button id="gtgo" type="button">⬇ ডাউনলোড শুরু করুন</button><button id="gtstop" type="button" hidden>⏹ থামান</button></div></div><div id="tp" hidden><div class="tpb"><div class="tph"><b>তাফসীরের কিতাব বেছে নিন</b><button id="tpc" type="button">✕</button></div><div id="tpl"></div><div class="tpn2">ডাউনলোড করলে ইন্টারনেট ছাড়াই পুরো কোরআনের তাফসীর পড়া যাবে। প্রতিটি কিতাব কয়েক MB নিতে পারে, ওয়াইফাই থাকলে ভালো।</div></div></div><div id="mp" hidden><button id="mpb" type="button">⏸</button><span id="mpt"></span><button id="mpx" type="button" aria-label="বন্ধ">✕</button></div><div id="mnb"></div><div id="mnu"><div class="mh">কোরআন শরীফ (১৫ লাইন)</div><div class="mt"><button data-t="j" class="on" type="button">পারা</button><button data-t="s" type="button">সূরা</button><button data-t="b" type="button">বুকমার্ক</button></div><div id="mnl"></div></div>
+<div id="sh"><h3 id="ti"></h3><div id="au"><button id="pl" type="button">▶</button><select id="rc"></select></div><div id="am"></div><small id="tr" style="color:#666">অনুবাদ: মুহিউদ্দীন খান</small><div id="tx"></div><div id="ac"></div><div id="tf"></div><div id="wb"></div><div id="dlp" hidden><div id="dls" style="font-size:15px;line-height:1.7"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:10px 0"><div id="dlbar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dlgo" type="button">⬇ সব পাতা ডাউনলোড</button><button id="dlstop" type="button" hidden>⏹ থামান</button><button id="dlrm" type="button">🗑 মুছুন</button></div><small style="display:block;margin-top:8px">ডাউনলোড হয়ে গেলে ইন্টারনেট ছাড়াই পাতা দেখা যাবে।</small><hr style="margin:14px 0;border:0;border-top:1px solid #ccc"><div style="font-weight:700">🎧 তেলাওয়াত ডাউনলোড</div><small id="dar" style="display:block;margin:4px 0"></small><select id="dasc" style="width:100%;padding:8px;border:1px solid #999;border-radius:8px;font-size:14px;background:#fff;color:#1d2b2a"></select><div id="das" style="font-size:14px;line-height:1.7;margin:8px 0 4px"></div><div style="height:10px;background:#ddd;border-radius:6px;overflow:hidden;margin:6px 0"><div id="dabar" style="height:100%;width:0;background:var(--ac)"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="dago" type="button">⬇ তেলাওয়াত ডাউনলোড</button><button id="dastop" type="button" hidden>⏹ থামান</button><button id="darm" type="button">🗑 এই ক্বারীর তেলাওয়াত মুছুন</button></div><small style="display:block;margin-top:8px">ওপরের তালিকা থেকে ক্বারী বদলে নিতে পারবেন (নিচের প্লেয়ারের ক্বারী যেটি, সেটিই নামবে)। তেলাওয়াতে জায়গা বেশি লাগে, ওয়াইফাইতে নামানো ভালো। অনুবাদ ও তাফসীরে ইন্টারনেট লাগবে।</small></div><div id="cf" hidden><small>অনুবাদের API লিংক (যেখানে সূরা নম্বরের জায়গায় {sura} আর আয়াত নম্বরের জায়গায় {aya} লিখুন):</small><input id="api" placeholder="https://.../{sura}/{aya}"><button id="sv">সংরক্ষণ</button></div></div>
+<script src="data.js"></script>
 <script>
-const N=612,JZ=[2,23,43,63,83,103,123,143,163,183,203,223,243,263,283,303,323,343,363,383,403,423,443,463,483,503,523,543,563,587];
-const SJ={"1":2,"2":3,"3":51,"4":78,"5":107,"6":129,"7":152,"8":178,"9":188,"10":209,"11":222,"12":236,"13":250,"14":256,"15":262,"16":268,"17":283,"18":294,"19":306,"20":313,"21":323,"22":332,"23":343,"24":351,"25":360,"26":367,"27":377,"28":386,"29":397,"30":405,"31":412,"32":416,"33":419,"34":429,"35":435,"36":441,"37":446,"38":453,"39":459,"40":468,"41":478,"42":484,"43":490,"44":496,"45":499,"46":503,"47":507,"48":512,"49":516,"50":519,"51":521,"52":524,"53":527,"54":529,"55":532,"56":535,"57":538,"58":543,"59":546,"60":550,"61":552,"62":554,"63":555,"64":557,"65":559,"66":561,"67":563,"68":565,"69":568,"70":570,"71":572,"72":574,"73":577,"74":579,"75":581,"76":583,"77":585,"78":587,"79":588,"80":590,"81":591,"82":592,"83":593,"84":595,"85":596,"86":597,"87":598,"88":598,"89":599,"90":601,"91":601,"92":602,"93":603,"94":603,"95":604,"96":604,"97":605,"98":605,"99":606,"100":606,"101":607,"102":607,"103":608,"104":608,"105":608,"106":609,"107":609,"108":609,"109":609,"110":610,"111":610,"112":610,"113":611,"114":611};
-const SN=['','আল-ফাতিহা','আল-বাকারা','আল-ইমরান','আন-নিসা','আল-মায়িদা','আল-আনআম','আল-আরাফ','আল-আনফাল','আত-তাওবা','ইউনুস','হুদ','ইউসুফ','আর-রাদ','ইবরাহীম','আল-হিজর','আন-নাহল','বনী ইসরাঈল','আল-কাহফ','মারইয়াম','ত্বা-হা','আল-আম্বিয়া','আল-হাজ্জ','আল-মুমিনূন','আন-নূর','আল-ফুরকান','আশ-শুআরা','আন-নামল','আল-কাসাস','আল-আনকাবূত','আর-রূম','লুকমান','আস-সাজদা','আল-আহযাব','সাবা','ফাতির','ইয়াসীন','আস-সাফফাত','সোয়াদ','আয-যুমার','গাফির','হা-মীম সাজদা','আশ-শূরা','আয-যুখরুফ','আদ-দুখান','আল-জাসিয়া','আল-আহকাফ','মুহাম্মাদ','আল-ফাতহ','আল-হুজুরাত','কাফ','আয-যারিয়াত','আত-তূর','আন-নাজম','আল-কামার','আর-রহমান','আল-ওয়াকিয়া','আল-হাদীদ','আল-মুজাদালা','আল-হাশর','আল-মুমতাহিনা','আস-সাফ','আল-জুমুআ','আল-মুনাফিকূন','আত-তাগাবুন','আত-তালাক','আত-তাহরীম','আল-মুলক','আল-কলম','আল-হাক্কা','আল-মাআরিজ','নূহ','আল-জিন','আল-মুযযাম্মিল','আল-মুদ্দাসসির','আল-কিয়ামাহ','আদ-দাহর','আল-মুরসালাত','আন-নাবা','আন-নাযিআত','আবাসা','আত-তাকবীর','আল-ইনফিতার','আল-মুতাফফিফীন','আল-ইনশিকাক','আল-বুরুজ','আত-তারিক','আল-আলা','আল-গাশিয়া','আল-ফাজর','আল-বালাদ','আশ-শামস','আল-লাইল','আদ-দুহা','আল-ইনশিরাহ','আত-তীন','আল-আলাক','আল-কদর','আল-বাইয়্যিনাহ','আয-যিলযাল','আল-আদিয়াত','আল-কারিআ','আত-তাকাসুর','আল-আসর','আল-হুমাযা','আল-ফীল','কুরাইশ','আল-মাউন','আল-কাউসার','আল-কাফিরূন','আন-নাসর','আল-লাহাব','আল-ইখলাস','আল-ফালাক','আন-নাস'];
-const $=id=>document.getElementById(id);const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
-const jbn=['','প্রথম','দ্বিতীয়','তৃতীয়','চতুর্থ','পঞ্চম','ষষ্ঠ','সপ্তম','অষ্টম','নবম','দশম','একাদশ','দ্বাদশ','ত্রয়োদশ','চতুর্দশ','পঞ্চদশ','ষোড়শ','সপ্তদশ','অষ্টাদশ','ঊনবিংশ','বিংশ','একবিংশ','দ্বাবিংশ','ত্রয়োবিংশ','চতুর্বিংশ','পঞ্চবিংশ','ষড়বিংশ','সপ্তবিংশ','অষ্টাবিংশ','ঊনত্রিংশ','ত্রিশতম'];
-const url=i=>'pages/qm'+i+(i==1?'.jpg':'.png');
-let cur=2,zoom=0;try{cur=+localStorage.getItem('qmq_p')||2}catch(e){}
-if(cur<1||cur>N)cur=2;
-$('ju').innerHTML='<option value="">পারা…</option>'+JZ.map((p,i)=>'<option value="'+(p+1)+'">পারা '+bn(i+1)+'</option>').join('');
-$('su').innerHTML='<option value="">সূরা…</option>'+SN.map((n,i)=>i?'<option value="'+(SJ[i]+1)+'">'+bn(i)+'. '+n+'</option>':'').join('');
-function juzOf(i){const p=i-1;let j=0;for(let k=0;k<30;k++)if(JZ[k]<=p)j=k+1;return j}
-function show(i){i=Math.max(1,Math.min(N,i));cur=i;$('im').src=url(i);$('w').scrollTop=0;closeSh();drawOv();
- const p=i-1;$('pn').textContent=i==1?'প্রচ্ছদ':(i==2?'অলংকরণ':'পৃষ্ঠা '+bn(p)+' / ৬১১');const j=juzOf(i);$('jn').textContent=j?'পারা '+bn(j):'';
- $('go').value=i>2?p:'';try{localStorage.setItem('qmq_p',i)}catch(e){}
- [i+1,i+2,i-1].forEach(k=>{if(k>=1&&k<=N){const m=new Image();m.src=url(k)}})}
-const next=()=>show(cur+1),prev=()=>show(cur-1);
-$('nx').onclick=next;$('pv').onclick=prev;
-$('ju').onchange=e=>{if(e.target.value)show(+e.target.value);e.target.value=''};
-$('su').onchange=e=>{if(e.target.value)show(+e.target.value);e.target.value=''};
-$('gb').onclick=()=>{const v=+$('go').value;if(v>=1&&v<=611)show(v+1)};$('go').onkeydown=e=>{if(e.key=='Enter')$('gb').click()};
-function setZoom(z){zoom=z;const im=$('pw');im.style.width=[100,160,230][z]+'%';im.style.maxWidth=z?'none':'900px'}
-$('zm').onclick=()=>setZoom((zoom+1)%3);
-let TX=null,TY=0,TT=0,LT=0;const w=$('w');
-w.addEventListener('touchstart',e=>{if(e.touches.length!=1){TX=null;return}TX=e.touches[0].clientX;TY=e.touches[0].clientY;TT=Date.now()},{passive:true});
-w.addEventListener('touchend',e=>{if(TX==null||zoom)return;const t=e.changedTouches[0],dx=t.clientX-TX,dy=t.clientY-TY;TX=null;
- if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*.6&&Date.now()-TT<900){dx>0?next():prev()}
- },{passive:true});
-document.addEventListener('keydown',e=>{if(e.target.tagName=='INPUT'||e.target.tagName=='SELECT')return;
- if(e.key=='ArrowLeft'){next();e.preventDefault()}else if(e.key=='ArrowRight'){prev();e.preventDefault()}});
-try{navigator.serviceWorker&&navigator.serviceWorker.register('sw.js')}catch(e){}
-let DL=false;$('dl').onclick=async()=>{if(DL)return;DL=true;const p=$('dlp');p.style.display='block';
- try{const c=await caches.open('qmq-pages-v1');let done=0,fail=0,k=1;
-  const worker=async()=>{while(k<=N){const i=k++;const u=url(i);try{if(!(await c.match(u))){const r=await fetch(u);if(!r.ok)throw 0;await c.put(u,r)}}catch(e){fail++}done++;p.textContent='ডাউনলোড হচ্ছে… '+bn(done)+' / '+bn(N)}};
-  await Promise.all([worker(),worker(),worker(),worker()]);
-  p.textContent=fail?('শেষ, কিন্তু '+bn(fail)+'টি পৃষ্ঠা আসেনি। ইন্টারনেট ঠিক করে আবার চাপুন।'):'✅ সব পৃষ্ঠা অফলাইনের জন্য রাখা হয়েছে।'}
- catch(e){p.textContent='এই ব্রাউজারে অফলাইন সংরক্ষণ চলছে না।'}DL=false};
+
+const SN={1:'আল-ফাতিহা',2:'আল-বাকারা',3:'আল-ইমরান',4:'আন-নিসা',5:'আল-মায়িদা',6:'আল-আনআম',7:'আল-আরাফ',8:'আল-আনফাল',9:'আত-তাওবা',10:'ইউনুস',11:'হুদ',12:'ইউসুফ',13:'আর-রাদ',14:'ইবরাহীম',15:'আল-হিজর',16:'আন-নাহল',17:'বনী ইসরাঈল',18:'আল-কাহফ',19:'মারইয়াম',20:'ত্বা-হা',21:'আল-আম্বিয়া',22:'আল-হাজ্জ',23:'আল-মুমিনূন',24:'আন-নূর',25:'আল-ফুরকান',26:'আশ-শুআরা',27:'আন-নামল',28:'আল-কাসাস',29:'আল-আনকাবূত',30:'আর-রূম',31:'লুকমান',32:'আস-সাজদা',33:'আল-আহযাব',34:'সাবা',35:'ফাতির',36:'ইয়াসীন',37:'আস-সাফফাত',38:'সোয়াদ',39:'আয-যুমার',40:'গাফির',41:'ফুসসিলাত',42:'আশ-শূরা',43:'আয-যুখরুফ',44:'আদ-দুখান',45:'আল-জাসিয়া',46:'আল-আহকাফ',47:'মুহাম্মাদ',48:'আল-ফাতহ',49:'আল-হুজুরাত',50:'কাফ',51:'আয-যারিয়াত',52:'আত-তূর',53:'আন-নাজম',54:'আল-কামার',55:'আর-রহমান',56:'আল-ওয়াকিয়া',57:'আল-হাদীদ',58:'আল-মুজাদালা',59:'আল-হাশর',60:'আল-মুমতাহিনা',61:'আস-সাফ',62:'আল-জুমুআ',63:'আল-মুনাফিকূন',64:'আত-তাগাবুন',65:'আত-তালাক',66:'আত-তাহরীম',67:'আল-মুলক',68:'আল-কলম',69:'আল-হাক্কাহ',70:'আল-মাআরিজ',71:'নূহ',72:'আল-জিন',73:'আল-মুযযাম্মিল',74:'আল-মুদ্দাসসির',75:'আল-কিয়ামাহ',76:'আদ-দাহর',77:'আল-মুরসালাত',78:'আন-নাবা',79:'আন-নাযিআত',80:'আবাসা',81:'আত-তাকবীর',82:'আল-ইনফিতার',83:'আল-মুতাফফিফীন',84:'আল-ইনশিকাক',85:'আল-বুরূজ',86:'আত-তারিক',87:"আল-আ'লা",88:'আল-গাশিয়া',89:'আল-ফাজর',90:'আল-বালাদ',91:'আশ-শামস',92:'আল-লাইল',93:'আদ-দুহা',94:'আল-ইনশিরাহ',95:'আত-তীন',96:'আল-আলাক',97:'আল-কদর',98:'আল-বাইয়্যিনাহ',99:'আয-যিলযাল',100:'আল-আদিয়াত',101:'আল-কারিআহ',102:'আত-তাকাসুর',103:'আল-আসর',104:'আল-হুমাযাহ',105:'আল-ফীল',106:'কুরাইশ',107:'আল-মাউন',108:'আল-কাওসার',109:'আল-কাফিরূন',110:'আন-নাসর',111:'আল-মাসাদ',112:'আল-ইখলাস',113:'আল-ফালাক',114:'আন-নাস'};const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const keys=Object.keys(I).map(Number).sort((a,b)=>a-b);let cur=2,cache={};
+const $=id=>document.getElementById(id);
+const DEFS=['https://api.alquran.cloud/v1/ayah/{sura}:{aya}/bn.bengali','https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/ben-muhiuddinkhan/{sura}/{aya}.json','https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/ben-muhiuddinkhan/{sura}/{aya}.min.json'];let API='';try{API=localStorage.getItem('qapi')||''}catch(e){}
+let TR='mk';try{TR=localStorage.getItem('qmz_tr')=='tu'?'tu':'mk'}catch(e){}
+let TUD=null;
+async function tuGet(){if(TUD)return TUD;try{const c=await idbS('t','get','tu');if(c){TUD=c;return c}}catch(e){}
+ const r=await fetch('taqi.json?v=1');if(!r.ok)throw 0;TUD=await r.json();try{await idbS('t','put',TUD,'tu')}catch(e){}return TUD}
+function trLab(){$('tr').textContent=TR=='tu'?'অনুবাদ: মুফতী তাকী উসমানী (তাওযীহুল কুরআন) · বদলাতে এখানে ট্যাপ করুন':'অনুবাদ: মুহিউদ্দীন খান · বদলাতে এখানে ট্যাপ করুন'}
+async function showTx(a){const k=a.s+':'+a.a+':tu';if(cache[k]){$('tx').textContent=cache[k];return true}
+ try{const t=await tuGet();const x=t[a.s]&&t[a.s][a.a-1];if(x){cache[k]=x;if(!curA||curA===a)$('tx').textContent=x;return true}}catch(e){}
+ $('tr').textContent='তাকী উসমানীর অনুবাদ আনা যায়নি (ইন্টারনেট দেখুন); মুহিউদ্দীন খান দেখানো হচ্ছে';return false}
+{const g={};keys.forEach(p=>{const j=juzOf(p);(g[j]=g[j]||[]).push(p)});$('sel').innerHTML=Object.keys(g).map(j=>`<optgroup label="পারা ${bn(j)}">`+g[j].map((p,ix)=>`<option value="${p}">পৃষ্ঠা ${bn(ix+1)}</option>`).join('')+'</optgroup>').join('')}
+function showImg(p){cur=p;$('sel').value=p;const pg=$('pg');pg.innerHTML='';setImg(pg,p);
+ D[p].forEach((a,i)=>a.r.forEach(r=>{const d=document.createElement('div');d.className='h';d.dataset.i=i;
+  d.style.cssText=`left:${r[0]}%;top:${r[1]}%;width:${r[2]}%;height:${r[3]}%`;d.onclick=()=>tap(p,i);pg.appendChild(d)}));close()}
+function close(){$('sh').classList.remove('o')}
+function pick(j){if(j==null)return'';if(typeof j=='string')return j;if(Array.isArray(j)){for(const x of j){const v=pick(x);if(v)return v}return''}
+ for(const k of['translation','text','bangla','bn','body']){if(typeof j[k]=='string'&&j[k])return j[k]}
+ if(j.data){const v=pick(j.data);if(v)return v}
+ for(const k in j){const v=pick(j[k]);if(v)return v}return''}
+async function tap(p,i,quiet){const a=D[p][i];AP=p;document.querySelectorAll('.h').forEach(e=>e.classList.toggle('on',e.dataset.i==i));
+ $('ti').textContent=`সূরা ${SN[a.s]}, আয়াত ${bn(a.a)}`+(p==2&&a.a==7?' (শেষ দুই আয়াত একসাথে)':'');if(!quiet)$('sh').classList.add('o');prepAy(a);if(quiet)return;
+ const k=a.s+':'+a.a+':mk';trLab();
+ if(TR=='tu'&&await showTx(a))return;
+ if(cache[k]){$('tx').textContent=cache[k];return}
+ $('tx').textContent='লোড হচ্ছে…';
+ try{const d=rdMem[a.s]||await idbS('t','get',a.s);if(d&&d.tr&&d.tr[a.a-1]){cache[k]=d.tr[a.a-1];if(!curA||curA===a)$('tx').textContent=cache[k];return}}catch(e){}
+ const src=(API&&!DEFS.includes(API))?[API].concat(DEFS):DEFS;let err='';
+ for(const t of src){const u=t.replace('{sura}',a.s).replace('{aya}',a.a).replace('{ayah}',a.a);
+  try{const c=new AbortController();const tm=setTimeout(()=>c.abort(),8000);const r=await fetch(u,{signal:c.signal});clearTimeout(tm);
+   if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();const x=pick(j);if(x){cache[k]=x;$('tx').textContent=x;return}err='খালি উত্তর'}
+  catch(e){err=String(e&&e.message||e)}}
+ $('tx').textContent='অনুবাদ আনা যায়নি। ইন্টারনেট দেখুন বা ফাইলটা ব্রাউজারে খুলুন। ('+err+')'}
+
+const RC=[['Alafasy_128kbps','মিশারী রাশেদ আল-আফাসী'],['Abdul_Basit_Murattal_192kbps','আব্দুল বাসিত (মুরাত্তাল)'],['Abdurrahmaan_As-Sudais_192kbps','আব্দুর রহমান আস-সুদাইস'],['Saood_ash-Shuraym_128kbps','সাউদ আশ-শুরাইম'],['Husary_128kbps','মাহমুদ খলিল আল-হুসারী'],['Minshawy_Murattal_128kbps','আল-মিনশাবী (মুরাত্তাল)'],['MaherAlMuaiqly128kbps','মাহের আল-মুয়াইকিলি'],['Abu_Bakr_Ash-Shatri_128kbps','আবু বকর আশ-শাতরী'],['Hudhaify_128kbps','আলী আল-হুযাইফী']];
+const AU=new Audio();AU.preload='auto';let curA=null;let AUTO=true;try{AUTO=localStorage.getItem('qauto')!='0'}catch(e){}
+let rcSel=RC[0][0];try{const v=localStorage.getItem('qrc');if(v&&RC.some(r=>r[0]==v))rcSel=v}catch(e){}
+$('rc').innerHTML=RC.map(r=>`<option value="${r[0]}">${r[1]}</option>`).join('');$('rc').value=rcSel;
 const p3=n=>String(n).padStart(3,'0');
-let QDL=null;function ldQD(){if(window.QD)return Promise.resolve();return QDL||(QDL=new Promise(r=>{const s=document.createElement('script');s.src='qd.js';s.onload=r;s.onerror=()=>{QDL=null;r()};document.head.appendChild(s)}))}
-let SEL=null,AU=new Audio(),PL=false;
-function drawOv(){document.querySelectorAll('.h').forEach(e=>e.remove());const i=cur;ldQD().then(()=>{if(i!=cur||!window.QD)return;const L=QD[i]||[];const pw=$('pw');
- L.forEach((a,k)=>a.r.forEach(r=>{const d=document.createElement('div');d.className='h';d.dataset.k=k;d.style.cssText='left:'+r[0]+'%;top:'+r[1]+'%;width:'+r[2]+'%;height:'+r[3]+'%';d.onclick=ev=>{ev.stopPropagation();pick(k)};pw.appendChild(d)}));
- if(SEL&&SEL.pg==i){hl(SEL.k)}})}
-function hl(k){document.querySelectorAll('.h').forEach(e=>e.classList.toggle('on',e.dataset.k==k))}
-let TR='mk';try{TR=localStorage.getItem('hfz_tr')=='tu'?'tu':'mk'}catch(e){}
-let TUD=null;async function tuGet(){if(TUD)return TUD;const c=await caches.open('qmq-data');let r=await c.match('taqi.json');if(!r){r=await fetch('taqi.json');if(!r.ok)throw 0;await c.put('taqi.json',r.clone())}TUD=await r.json();return TUD}
-function trLab(){$('tl').textContent=TR=='tu'?'অনুবাদ: মুফতী তাকী উসমানী · বদলাতে এখানে ট্যাপ করুন':'অনুবাদ: মুহিউদ্দীন খান · বদলাতে এখানে ট্যাপ করুন'}
-const TC={};
-async function getTx(s,a){const k=s+':'+a+':'+TR;if(TC[k])return TC[k];
- if(TR=='tu'){try{const t=await tuGet();const x=t[s]&&t[s][a-1];if(x){TC[k]=x;return x}}catch(e){}}
- const r=await fetch('https://api.alquran.cloud/v1/ayah/'+s+':'+a+'/bn.bengali');if(!r.ok)throw 0;const j=await r.json();const x=j.data&&j.data.text;if(!x)throw 0;TC[k]=x;return x}
-async function pick(k){const a=QD[cur][k];SEL={pg:cur,k,s:a.s,a:a.a};hl(k);$('sh').classList.add('o');$('ti').textContent='সূরা '+SN[a.s]+', আয়াত '+bn(a.a);trLab();$('pl').textContent='▶ শুনুন';stopAu();
- $('tx').textContent='লোড হচ্ছে…';try{const x=await getTx(a.s,a.a);if(SEL&&SEL.s==a.s&&SEL.a==a.a)$('tx').textContent=x}catch(e){if(SEL&&SEL.s==a.s&&SEL.a==a.a)$('tx').textContent='অনুবাদ আনা যায়নি। ইন্টারনেট দেখুন।'}}
-function closeSh(){$('sh').classList.remove('o');SEL=null;stopAu();hl(-1)}
-$('sx').onclick=closeSh;
-$('tl').onclick=()=>{TR=TR=='tu'?'mk':'tu';try{localStorage.setItem('hfz_tr',TR)}catch(e){};trLab();if(SEL){const s=SEL.s,a=SEL.a;$('tx').textContent='লোড হচ্ছে…';getTx(s,a).then(x=>{if(SEL&&SEL.s==s&&SEL.a==a)$('tx').textContent=x}).catch(()=>{$('tx').textContent='অনুবাদ আনা যায়নি।'})}};
-function stopAu(){PL=false;try{AU.pause()}catch(e){}}
-function playSel(){if(!SEL)return;PL=true;$('pl').textContent='⏸ থামান';AU.src='https://everyayah.com/data/Alafasy_128kbps/'+p3(SEL.s)+p3(SEL.a)+'.mp3';AU.play().catch(()=>{PL=false;$('pl').textContent='▶ শুনুন'})}
-$('pl').onclick=()=>{if(PL){stopAu();$('pl').textContent='▶ শুনুন'}else playSel()};
-AU.onended=async()=>{if(!PL||!SEL)return;const L=QD[SEL.pg];let k=SEL.k+1;const cs=SEL.s,ca=SEL.a;
- while(k<L.length&&L[k].s==cs&&L[k].a==ca)k++;
- if(k<L.length){await pick2(k);return}
- if(SEL.pg<N){show(SEL.pg+1);await ldQD();const L2=QD[cur]||[];let j=0;while(j<L2.length&&L2[j].s==cs&&L2[j].a==ca)j++;if(j<L2.length){await pick2(j)}}};
-async function pick2(k){await pick(k);playSel()}
-show(cur);
+function auUrl(a){return `https://everyayah.com/data/${rcSel}/${p3(a.s)}${p3(a.a)}.mp3`}
+function prepAy(a){$('cf').hidden=true;$('dlp').hidden=true;curA=a;AUK=null;try{AU.pause()}catch(e){}$('tf').textContent='';$('wb').innerHTML='';$('am').textContent='';acBuild()}
+let AUK=null;
+let ATK=0,aoUrl=null;
+function akey(a,rc){return (rc||rcSel)+'/'+p3(a.s)+p3(a.a)}
+async function audSrc(a){const k=akey(a);if(AD.has(k)){try{const b=await idbS('a','get',k);if(b){if(aoUrl)URL.revokeObjectURL(aoUrl);aoUrl=URL.createObjectURL(b);return aoUrl}}catch(e){}}return auUrl(a)}
+function playAy(a){AUK=a.s+':'+a.a;curA=a;$('tf').textContent='';$('wb').innerHTML='';acBuild();$('am').textContent='';const tk=++ATK;audSrc(a).then(u=>{if(tk!==ATK)return;AU.src=u;AU.play().catch(()=>{})})}
+AU.onplay=()=>{$('pl').textContent='⏸'};AU.onpause=()=>{$('pl').textContent='▶'};AU.onended=()=>{$('pl').textContent='▶';if(AUTO)nextAy()};
+let AURT=0;AU.onerror=()=>{$('pl').textContent='▶';const a=curA;if(a&&AURT!==ATK){AURT=ATK;const tk=ATK;setTimeout(()=>{if(tk===ATK&&curA===a){AU.src=auUrl(a)+'?r='+Date.now();AU.play().catch(()=>{})}},800);return}$('am').textContent='তেলাওয়াত আনা যায়নি'+(a?` (সূরা ${a.s}, আয়াত ${a.a})`:'')+'। ইন্টারনেট দেখুন বা অন্য ক্বারী বেছে নিন।'};
+$('pl').onclick=()=>{if(!curA)return;if(AUK!==curA.s+':'+curA.a){playAy(curA);return}if(AU.ended){playAy(curA);return}if(AU.paused){AU.play().catch(()=>{})}else AU.pause()};
+$('rc').onchange=e=>{rcSel=e.target.value;try{localStorage.setItem('qrc',rcSel)}catch(x){}if(curA&&AUK)playAy(curA)};
+
+const DL=new Set();let dbp=null;
+function idb(){if(dbp)return dbp;dbp=new Promise((ok,no)=>{try{const r=indexedDB.open('qmzq',3);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains('p'))d.createObjectStore('p');if(!d.objectStoreNames.contains('a'))d.createObjectStore('a');if(!d.objectStoreNames.contains('t'))d.createObjectStore('t')};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}catch(e){no(e)}});return dbp}
+async function idbS(st,m,...a){const d=await idb();return new Promise((ok,no)=>{const t=d.transaction(st,m=='get'||m=='getAllKeys'||m=='count'?'readonly':'readwrite');const r=t.objectStore(st)[m](...a);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+const idbOp=(m,...a)=>idbS('p',m,...a);
+const AD=new Set();idbS('a','getAllKeys').then(k=>{k.forEach(x=>AD.add(x))}).catch(()=>{});
+idbOp('getAllKeys').then(k=>{k.forEach(x=>DL.add(+x));updDl()}).catch(()=>{});
+async function imgUrl(p){if(DL.has(p)){try{const b=await idbOp('get',p);if(b)return URL.createObjectURL(b)}catch(e){}}return I[p]}
+const altU=u=>u;
+function setImg(pg,p){const im=new Image();im.alt='';im.onload=()=>fitPg(im);im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src=altU(I[p])}};pg.appendChild(im);if(DL.has(p)){imgUrl(p).then(u=>{if(cur===p)im.src=u})}else im.src=I[p]}
+let DLRUN=false,DLSTOP=false;
+function updDl(){const n=DL.size,t=keys.length;if(!$('dls'))return;$('dls').textContent=`অফলাইনে সেভ: ${bn(n)} / ${bn(t)} পাতা`+(n==t?' ✅ সব পাতা ফোনে আছে':'');$('dlbar').style.width=(t?n/t*100:0)+'%';$('dlgo').hidden=DLRUN||n==t;$('dlstop').hidden=!DLRUN;$('dlrm').hidden=DLRUN||!n}
+async function dlAll(){if(DLRUN)return;DLRUN=true;DLSTOP=false;updDl();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+ const todo=keys.filter(p=>!DL.has(p));let fail=0,i=0;
+ async function w(){while(!DLSTOP){const p=todo[i++];if(p==null)return;try{let r=await fetch(I[p]);if(!r.ok)r=await fetch(altU(I[p]));if(!r.ok)throw 0;const b=await r.blob();await idbOp('put',b,p);DL.add(p);updDl()}catch(e){fail++}}}
+ await Promise.all([w(),w(),w(),w()]);DLRUN=false;updDl();if(fail)flash(`${bn(fail)}টি পাতা নামেনি, আবার চাপুন`);else if(!DLSTOP)flash('ডাউনলোড সম্পূর্ণ')}
+$('dlb').onclick=()=>{try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('wb').innerHTML='';$('tx').textContent='';$('cf').hidden=true;$('dlp').hidden=false;$('ti').textContent='তেলাওয়াত ডাউনলোড';daFill();daUpd();updDl();$('sh').classList.add('o')};
+
+function juzOf(p){let j=1;const T=typeof JZ!=='undefined'?JZ:[2];for(let i=0;i<T.length;i++)if(p>=T[i])j=i+1;return j}
+function ayList(sc){const seen={},out=[];const pg=sc=='p'?[cur]:keys.filter(p=>juzOf(p)==+sc);pg.forEach(p=>D[p].forEach(a=>{const k=a.s+':'+a.a;if(!seen[k]){seen[k]=1;out.push({s:a.s,a:a.a})}}));return out}
+let DARUN=false,DASTOP=false,DABYTES=0;
+function daFill(){const sel=$('dasc');const v=sel.value||'p';let h=`<option value="p">এই পাতা (পাতা ${bn(cur)})</option>`;juzList().forEach(j=>{h+=`<option value="${j}">পারা ${bn(j)}</option>`});sel.innerHTML=h;sel.value=v}
+function daUpd(){const rc=rcSel;const nm=(RC.find(r=>r[0]==rc)||[])[1]||rc;$('dar').textContent='ক্বারী: '+nm;const l=ayList($('dasc').value||'p');let n=0;l.forEach(a=>{if(AD.has(akey(a,rc)))n++});const t=l.length;$('das').textContent=`ফোনে আছে: ${bn(n)} / ${bn(t)} আয়াত`+(n==t&&t?' ✅':'')+(DARUN&&DABYTES?` · ${(DABYTES/1048576).toFixed(1)} MB নামানো হলো`:'');$('dabar').style.width=(t?n/t*100:0)+'%';$('dago').hidden=DARUN||n==t;$('dastop').hidden=!DARUN;$('darm').hidden=DARUN;$('dasc').disabled=DARUN}
+async function fetchRetry(u,n){let e0;for(let t=0;t<(n||3);t++){const c=new AbortController();const tm=setTimeout(()=>c.abort(),25000);
+  try{const r=await fetch(u,{signal:c.signal});clearTimeout(tm);if(r.ok){const b=await r.blob();if(b.size>200)return b;e0='empty'}else e0='HTTP '+r.status;if(r.status==404)break}catch(e){clearTimeout(tm);e0=String(e&&e.message||e)}
+  await new Promise(z=>setTimeout(z,700*(t+1)))}throw new Error(e0||'fail')}
+async function daGo(){if(DARUN)return;DARUN=true;DASTOP=false;DABYTES=0;const rc=rcSel,l=ayList($('dasc').value||'p').filter(a=>!AD.has(akey(a,rc)));let i=0,fail=0;const fl=[];daUpd();try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+ async function w(){while(!DASTOP){const a=l[i++];if(!a)return;try{const b=await fetchRetry(`https://everyayah.com/data/${rc}/${p3(a.s)}${p3(a.a)}.mp3`,3);await idbS('a','put',b,akey(a,rc));AD.add(akey(a,rc));DABYTES+=b.size;daUpd()}catch(e){fail++;fl.push(a.s+':'+a.a+(e&&e.message?' ('+e.message+')':''))}}}
+ await Promise.all([w(),w()]);DARUN=false;daUpd();if(fail){flash(`${bn(fail)}টি আয়াত নামেনি, আবার চাপুন`);$('das').textContent+=' · নামেনি (সূরা:আয়াত): '+fl.slice(0,6).join(', ')+(fl.length>6?'…':'')}else if(!DASTOP)flash('তেলাওয়াত ডাউনলোড সম্পূর্ণ')}
+$('dago').onclick=daGo;$('dastop').onclick=()=>{DASTOP=true};$('dasc').onchange=daUpd;
+$('darm').onclick=async()=>{if(!confirm('এই ক্বারীর ডাউনলোড করা সব তেলাওয়াত মুছবেন?'))return;const pre=rcSel+'/';try{const ks=await idbS('a','getAllKeys');for(const k of ks)if(String(k).startsWith(pre)){await idbS('a','delete',k);AD.delete(k)}}catch(e){}daUpd()};
+$('dlgo').onclick=dlAll;$('dlstop').onclick=()=>{DLSTOP=true};
+$('dlrm').onclick=async()=>{if(!confirm('ফোন থেকে ডাউনলোড করা সব পাতা মুছবেন?'))return;try{await idbOp('clear')}catch(e){}DL.clear();updDl()};
+let MODE='page';
+
+function juzList(){const r=[];keys.forEach(p=>{const j=juzOf(p);if(!r.includes(j))r.push(j)});return r}
+function pjN(p){const j=juzOf(p);return keys.filter(q=>juzOf(q)==j).indexOf(p)+1}
+function pjL(p){return `পারা ${bn(juzOf(p))}, পৃষ্ঠা ${bn(pjN(p))}`}
+function juzPages(j){const a=keys.filter(p=>juzOf(p)==j);return [a[0],a[a.length-1]]}
+function suraStarts(){const m={};keys.forEach(p=>D[p].forEach(a=>{if(a.a==1&&m[a.s]==null)m[a.s]=p}));keys.forEach(p=>D[p].forEach(a=>{if(m[a.s]==null)m[a.s]=p}));return m}
+function pbGet(){try{return JSON.parse(localStorage.getItem('qmz_pbm')||'[]')}catch(e){return[]}}
+function pbSet(v){try{localStorage.setItem('qmz_pbm',JSON.stringify(v))}catch(e){}}
+let MT='j';
+function menuOpen(){JSEL=null;$('mnu').classList.add('o');$('mnb').classList.add('o');menuFill()}
+function menuClose(){$('mnu').classList.remove('o');$('mnb').classList.remove('o')}
+function goP(p){menuClose();show(p)}
+function mItem(t,sm,fn,cur){const d=document.createElement('div');d.className='mi'+(cur?' cur':'');const a=document.createElement('span');a.textContent=t;const b=document.createElement('small');b.textContent=sm||'';d.appendChild(a);d.appendChild(b);d.onclick=fn;return d}
+let JSEL=null;
+function pgSuras(p){const r=[];D[p].forEach(a=>{const n=SN[a.s]||'';if(n&&!r.includes(n))r.push(n)});return r.join('، ')}
+function menuFill(){const L=$('mnl');L.innerHTML='';document.querySelectorAll('#mnu .mt button').forEach(b=>b.classList.toggle('on',b.dataset.t==MT));
+ let last=NaN;try{last=+localStorage.getItem('qmz_last')}catch(e){}
+ if(MT=='j'){
+  if(JSEL!=null){L.appendChild(mItem('← পারা তালিকা','',()=>{JSEL=null;menuFill()},false));
+   const h=document.createElement('div');h.style.cssText='padding:8px 14px;font-weight:700;color:var(--ac)';h.textContent=`পারা ${bn(JSEL)} — পৃষ্ঠার তালিকা`;L.appendChild(h);
+   keys.filter(p=>juzOf(p)==JSEL).forEach(p=>L.appendChild(mItem(`পৃষ্ঠা ${bn(pjN(p))}`,pgSuras(p),()=>goP(p),p==cur)))}
+  else{if(keys.includes(last))L.appendChild(mItem('▶ শেষ পড়া',pjL(last),()=>goP(last),false));
+   juzList().forEach(j=>{const r=juzPages(j);L.appendChild(mItem(`পারা ${bn(j)}`,`${bn(keys.filter(q=>juzOf(q)==j).length)}টি পৃষ্ঠা  ›`,()=>{JSEL=j;menuFill()},juzOf(cur)==j))})}}
+ else if(MT=='s'){const st=suraStarts();Object.keys(st).map(Number).sort((a,b)=>a-b).forEach(n=>{L.appendChild(mItem(`${bn(n)}. ${SN[n]||''}`,pjL(st[n]),()=>goP(st[n]),false))})}
+ else{const b=document.createElement('button');b.type='button';b.className='mb';const v=pbGet();const has=v.includes(cur);b.textContent=has?`🔖 পাতা ${bn(cur)} বুকমার্ক সরান`:`🔖 পাতা ${bn(cur)} বুকমার্ক করুন`;b.onclick=()=>{let x=pbGet();x=x.includes(cur)?x.filter(q=>q!=cur):x.concat([cur]);pbSet(x);menuFill()};L.appendChild(b);
+  const ab=bmGet();if(!v.length&&!ab.length){const e=document.createElement('div');e.style.cssText='padding:14px;color:#666;font-size:14px';e.textContent='এখনো কোনো বুকমার্ক নেই। কোনো আয়াতে টেপ করে 🔖 চাপলে আয়াত বুকমার্ক হবে।';L.appendChild(e)}
+  v.slice().sort((a,b)=>a-b).forEach(p=>L.appendChild(mItem(`📄 ${pjL(p)}`,pgSuras(p),()=>goP(p),false)));
+  ab.forEach(x=>L.appendChild(mItem(`🔖 ${SN[x.s]||''}, আয়াত ${bn(x.a)}`,pjL(x.p),()=>{goP(x.p);const i=D[x.p].findIndex(y=>y.s==x.s&&y.a==x.a);if(i>=0)tap(x.p,i)},false)))}}
+$('mn').onclick=menuOpen;$('mnb').onclick=menuClose;
+document.querySelectorAll('#mnu .mt button').forEach(b=>b.onclick=()=>{MT=b.dataset.t;JSEL=null;menuFill()});
+// zoom + swipe
+let Z=1;
+let BW=0;
+function fitPg(im){const vw=innerWidth,vh=innerHeight;const r=(im&&im.naturalWidth)?im.naturalHeight/im.naturalWidth:1.45;BW=Math.min(vh/r,vw*1.18);applyZ()}
+function applyZ(){const pg=$('pg'),w=BW*Z;if(!BW)return;pg.style.width=w+'px';pg.style.touchAction=Z==1?'pan-y pinch-zoom':'auto';const pw=$('pgw');pw.scrollLeft=Math.max(0,(w-innerWidth)/2);pw.scrollTop=0}
+function setZ(z){Z=Math.max(1,Math.min(3,z));applyZ()}
+addEventListener('resize',()=>{const im=document.querySelector('#pg img');if(im)fitPg(im)});
+$('zi').onclick=()=>setZ(Z+0.5);$('zo').onclick=()=>setZ(Z-0.5);
+function goNext(){const i=keys.indexOf(cur);if(i<keys.length-1)show(keys[i+1])}
+function goPrev(){const i=keys.indexOf(cur);if(i>0)show(keys[i-1])}
+let TX=null,TY=0,TT=0;
+$('pgw').addEventListener('touchstart',e=>{if(e.touches.length!=1){TX=null;return}TX=e.touches[0].clientX;TY=e.touches[0].clientY;TT=Date.now()},{passive:true});
+$('pgw').addEventListener('touchend',e=>{if(TX==null||Z>1||MODE!='page')return;const t=e.changedTouches[0],dx=t.clientX-TX,dy=t.clientY-TY;TX=null;if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*0.6&&Date.now()-TT<900){dx>0?goNext():goPrev()}},{passive:true});
+
+
+const QA='https://api.alquran.cloud/v1/';const rdMem={};let RF=19;try{RF=+localStorage.getItem('qmz_rf')||19}catch(e){}
+function stripD(t){let o='';for(const c of t){const n=c.charCodeAt(0);if(!((n>=1611&&n<=1631)||n==1648||(n>=1750&&n<=1773)))o+=c}return o}
+async function rdGet(n){const o=await rdGet0(n);if(TR=='tu'){try{const t=(await tuGet())[n];if(t&&t.length==o.ar.length)return Object.assign({},o,{tr:t})}catch(e){}}return o}
+async function rdTrUpd(){for(const e of document.querySelectorAll('#rdl .rdt')){const s=+e.dataset.s,a=+e.dataset.a;if(!s)continue;let x;if(TR=='tu'){try{x=(await tuGet())[s][a-1]}catch(_){}}if(!x){try{x=(await rdGet0(s)).tr[a-1]}catch(_){}}if(x)e.textContent=x}}
+async function rdGet0(n){if(rdMem[n])return rdMem[n];try{const c=await idbS('t','get',n);if(c){rdMem[n]=c;return c}}catch(e){}
+ const g=u=>fetch(u).then(r=>{if(!r.ok)throw 0;return r.json()});const [a,b]=await Promise.all([g(QA+'surah/'+n+'/quran-uthmani'),g(QA+'surah/'+n+'/bn.bengali')]);
+ const ar=a.data.ayahs.map(x=>x.text),tr=b.data.ayahs.map(x=>x.text);if(!ar.length||ar.length!=tr.length)throw 0;
+ let bis='';if(n!=1&&n!=9){const w=ar[0].split(' ');if(w.length>4&&stripD(w[0])==='بسم'){bis=w.slice(0,4).join(' ');ar[0]=w.slice(4).join(' ')}}
+ const o={ar,tr,bis};rdMem[n]=o;try{await idbS('t','put',o,n)}catch(e){}return o}
+let RDN=0,RDBUSY=false,RDIO=null,RDH=false,RDSKIP=false;const tfMem={};
+function rdFont(){document.querySelectorAll('#rdl .rda').forEach(e=>e.style.fontSize=(RF+9)+'px');document.querySelectorAll('#rdl .rdt').forEach(e=>e.style.fontSize=RF+'px')}
+function rdBlock(n,a,ar,tr){const d=document.createElement('div');d.className='rdi';
+ const h=document.createElement('div');h.className='rdh';h.textContent=`${SN[n]||''} · আয়াত ${bn(a)}`;
+ const A=document.createElement('div');A.className='rda';A.textContent=ar+' ﴿'+bn(a)+'﴾';
+ const T=document.createElement('div');T.className='rdt';T.dataset.s=n;T.dataset.a=a;T.textContent=tr;
+ const B=document.createElement('button');B.type='button';B.className='rdb';B.textContent='📜 তাফসীর দেখুন';
+ const F=document.createElement('div');F.className='rdf';F.hidden=true;
+ const B2=document.createElement('button');B2.type='button';B2.className='rdb';B2.style.marginLeft='6px';B2.textContent='🔤 শব্দে শব্দে';const F2=document.createElement('div');F2.className='rdf';F2.hidden=true;F2.style.whiteSpace='normal';
+ B2.onclick=()=>{if(!F2.hidden){F2.hidden=true;F2.innerHTML='';B2.textContent='🔤 শব্দে শব্দে';return}F2.hidden=false;B2.textContent='🔼 শব্দে শব্দে লুকান';wbShow(n,a,F2)};
+ B.onclick=()=>{if(!F.hidden){F.hidden=true;B.textContent='📜 তাফসীর দেখুন';return}tfPick(slug=>{F.hidden=false;B.textContent='🔼 তাফসীর লুকান';tfShow(slug,n,a,F)})};
+ d.appendChild(h);d.appendChild(A);d.appendChild(T);d.appendChild(B);d.appendChild(B2);d.appendChild(F);d.appendChild(F2);return d}
+async function rdAppend(n,from){RDBUSY=true;const L=$('rdl');const st=document.getElementById('rds');if(st)st.remove();
+ const m=document.createElement('div');m.className='rdm';m.id='rdload';m.textContent='লোড হচ্ছে…';L.appendChild(m);
+ try{const d=await rdGet(n);m.remove();
+  const sb=document.createElement('div');sb.className='rdsb';sb.textContent=`সূরা ${bn(n)}. ${SN[n]||''}`;L.appendChild(sb);
+  if(from==1&&d.bis){const b=document.createElement('div');b.className='rdbs';b.textContent=d.bis;L.appendChild(b)}
+  for(let i=from-1;i<d.ar.length;i++)L.appendChild(rdBlock(n,i+1,d.ar[i],d.tr[i]));
+  rdFont();
+  if(n<LASTS){const s2=document.createElement('div');s2.id='rds';s2.style.height='40px';L.appendChild(s2);if(RDIO)RDIO.observe(s2)}
+  else{const e=document.createElement('div');e.className='rdm';e.textContent='— এই পর্যন্ত যোগ করা সূরা শেষ —';L.appendChild(e)}
+ }catch(e){m.innerHTML='লোড করা যায়নি। ইন্টারনেট দেখুন।<br><button type="button">আবার চেষ্টা করুন</button>';m.querySelector('button').onclick=()=>{m.remove();rdAppend(n,from)}}
+ RDBUSY=false}
+function openRd(s,a){close();$('rd').hidden=false;document.body.style.overflow='hidden';const L=$('rdl');L.innerHTML='';L.scrollTop=0;RDN=s;
+ if(RDIO)RDIO.disconnect();RDIO=new IntersectionObserver(es=>{es.forEach(x=>{if(x.isIntersecting&&!RDBUSY&&RDN<LASTS){RDIO.unobserve(x.target);RDN++;rdAppend(RDN,1)}})},{root:L,rootMargin:'400px'});
+ if(!RDH){try{history.pushState({rd:1},'');RDH=true}catch(e){}}
+ rdAppend(s,a)}
+function rdHide(){$('rd').hidden=true;document.body.style.overflow='';if(RDIO){RDIO.disconnect();RDIO=null}}
+function rdClose(){if(!RDH){rdHide();return}RDSKIP=true;rdHide();RDH=false;try{history.back()}catch(e){RDSKIP=false}}
+$('rdx').onclick=rdClose;
+$('rdm').onclick=()=>{RF=Math.max(14,RF-2);try{localStorage.setItem('qmz_rf',RF)}catch(e){}rdFont()};$('rdp').onclick=()=>{RF=Math.min(34,RF+2);try{localStorage.setItem('qmz_rf',RF)}catch(e){}rdFont()};
+window.addEventListener('popstate',()=>{if(RDSKIP){RDSKIP=false;return}if(!$('rd').hidden){rdHide();RDH=false}});
+
+function mpUpd(){const open=$('sh').classList.contains('o');const on=!!AUK&&!open&&!!curA;$('mp').hidden=!on;if(on){$('mpt').textContent=`${SN[curA.s]||''} · আয়াত ${bn(curA.a)}`;$('mpb').textContent=AU.paused?'▶':'⏸'}}
+['play','pause','ended','emptied','playing'].forEach(ev=>AU.addEventListener(ev,mpUpd));
+new MutationObserver(mpUpd).observe($('sh'),{attributes:true,attributeFilter:['class']});
+$('mpb').onclick=()=>{if(!curA)return;if(AU.ended){playAy(curA);return}AU.paused?AU.play().catch(()=>{}):AU.pause()};
+$('mpx').onclick=()=>{try{AU.pause()}catch(e){}AUK=null;mpUpd()};
+function show(p){try{localStorage.setItem('qmz_last',p)}catch(e){}MODE=='tr'?showTr(p):showImg(p);$('pgl').textContent=`পারা ${bn(juzOf(p))} · পৃষ্ঠা ${bn(pjN(p))}`;const n=keys[keys.indexOf(p)+1];if(n&&!DL.has(n)){const q=new Image();q.src=I[n]}}
+function srcList(){return(API&&!DEFS.includes(API))?[API].concat(DEFS):DEFS}
+async function trOf(a){const k=a.s+':'+a.a;if(cache[k])return cache[k];
+ for(const t of srcList()){const u=t.replace('{sura}',a.s).replace('{aya}',a.a).replace('{ayah}',a.a);
+  try{const c=new AbortController();const tm=setTimeout(()=>c.abort(),8000);const r=await fetch(u,{signal:c.signal});clearTimeout(tm);if(!r.ok)continue;const x=pick(await r.json());if(x){cache[k]=x;return x}}catch(e){}}
+ return''}
+const ttl=a=>`সূরা ${SN[a.s]}, আয়াত ${bn(a.a)}`;
+let TRTOKEN=0;
+async function showTr(p){cur=p;$('sel').value=p;const pg=$('pg');pg.innerHTML='';close();const tk=++TRTOKEN;const seen={};
+ const items=[];D[p].forEach((a,i)=>{const k=a.s+':'+a.a;if(seen[k])return;seen[k]=1;const d=document.createElement('div');d.className='ti';d.innerHTML='<b></b><div>লোড হচ্ছে…</div>';d.firstChild.textContent=ttl(a);d.onclick=()=>tap(p,i);pg.appendChild(d);items.push([a,d])});
+ for(const [a,d] of items){if(tk!=TRTOKEN)return;const x=await trOf(a);d.lastChild.textContent=x||'অনুবাদ আনা যায়নি।'}}
+// bookmarks
+function bmGet(){try{return JSON.parse(localStorage.getItem('qbm')||'[]')}catch(e){return[]}}
+function bmSet(v){try{localStorage.setItem('qbm',JSON.stringify(v))}catch(e){}}
+const isBm=a=>bmGet().some(b=>b.s==a.s&&b.a==a.a);
+function bmToggle(){if(!curA)return;let v=bmGet();if(isBm(curA))v=v.filter(b=>!(b.s==curA.s&&b.a==curA.a));else v.push({s:curA.s,a:curA.a,p:cur});bmSet(v);acBuild()}
+$('bk').onclick=()=>{$('dlp').hidden=true;try{AU.pause()}catch(e){}curA=null;$('cf').hidden=true;$('ac').innerHTML='';$('tf').textContent='';$('wb').innerHTML='';const v=bmGet();$('ti').textContent='বুকমার্ক';$('tx').innerHTML='';
+ if(!v.length)$('tx').textContent='এখনো কোনো বুকমার্ক নেই। কোনো আয়াতে টেপ করে 🔖 চাপুন।';
+ v.forEach(b=>{const d=document.createElement('div');d.style.cssText='padding:8px 0;border-bottom:1px solid #ddd;cursor:pointer';d.textContent=`🔖 ${ttl(b)} (পাতা ${bn(b.p)})`;d.onclick=()=>{show(b.p);const i=D[b.p].findIndex(x=>x.s==b.s&&x.a==b.a);if(i>=0)tap(b.p,i)};$('tx').appendChild(d)});
+ $('sh').classList.add('o')};
+// actions
+async function fullText(a){const x=cache[a.s+':'+a.a]||await trOf(a);return ttl(a)+'\n'+(x||'')+'\n(আল-মিফতাহ)'}
+async function doCopy(){if(!curA)return;const t=await fullText(curA);try{await navigator.clipboard.writeText(t)}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(x){}ta.remove()}flash('কপি হয়েছে')}
+async function doShare(){if(!curA)return;const t=await fullText(curA);if(navigator.share){try{await navigator.share({title:ttl(curA),text:t})}catch(e){}}else{try{await navigator.clipboard.writeText(t);flash('শেয়ার সমর্থিত নয়, লেখা কপি হয়েছে')}catch(e){flash('শেয়ার সমর্থিত নয়')}}}
+function flash(m){$('am').textContent=m;setTimeout(()=>{if($('am').textContent==m)$('am').textContent=''},2500)}
+function fsToggle(){const d=document;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const e=d.documentElement,f=e.requestFullscreen||e.webkitRequestFullscreen;if(f)f.call(e);else flash('এই ব্রাউজারে ফুলস্ক্রিন সমর্থিত নয়')}}
+document.addEventListener('fullscreenchange',()=>{if(curA)acBuild()});
+function wrap(ctx,t,w){const out=[];let line='';for(const wd of t.split(/\s+/)){const tst=line?line+' '+wd:wd;if(ctx.measureText(tst).width>w&&line){out.push(line);line=wd}else line=tst}if(line)out.push(line);return out}
+function loadImg(src){return new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=src})}
+async function doImg(){if(!curA)return;flash('ছবি বানানো হচ্ছে…');const a=curA;const tr=cache[a.s+':'+a.a]||await trOf(a);
+ try{const p=cur;let im;try{im=await loadImg(await imgUrl(p))}catch(e){im=await loadImg(altU(I[p]))}const W=im.naturalWidth,H=im.naturalHeight;const k=860/(0.76*W);
+  const rs=(D[p].find(x=>x.s==a.s&&x.a==a.a)||{r:[]}).r;
+  const CW=1000,pad=40;const c0=document.createElement('canvas').getContext('2d');c0.font='34px "Noto Sans Bengali",system-ui,sans-serif';const lines=wrap(c0,tr||'',CW-2*pad);
+  let ah=0;rs.forEach(r=>ah+=r[3]/100*H*k+6);
+  const th=lines.length*52;const CH=Math.round(pad+60+20+ah+30+th+70+pad);
+  const cv=document.createElement('canvas');cv.width=CW;cv.height=CH;const g=cv.getContext('2d');
+  g.fillStyle='#fffdf7';g.fillRect(0,0,CW,CH);g.strokeStyle='#0f6b57';g.lineWidth=6;g.strokeRect(12,12,CW-24,CH-24);
+  g.fillStyle='#0f6b57';g.font='bold 32px "Noto Sans Bengali",system-ui,sans-serif';g.textAlign='center';g.fillText(ttl(a),CW/2,pad+40);g.textAlign='left';
+  let y=pad+60+20;const x0=(CW-860)/2;
+  rs.forEach(r=>{const sx=r[0]/100*W,sy=r[1]/100*H,sw=r[2]/100*W,sh=r[3]/100*H;g.drawImage(im,sx,sy,sw,sh,x0+(r[0]-12)/100*W*k,y,sw*k,sh*k);y+=sh*k+6});
+  y+=30;g.fillStyle='#1d2b2a';g.font='34px "Noto Sans Bengali",system-ui,sans-serif';lines.forEach(l=>{y+=52;g.fillText(l,pad,y-12)});
+  g.fillStyle='#0f6b57';g.font='24px "Noto Sans Bengali",system-ui,sans-serif';g.textAlign='center';g.fillText('আল-মিফতাহ',CW/2,CH-pad-8);
+  const blob=await new Promise(r=>cv.toBlob(r,'image/png'));const f=new File([blob],`ayah-${a.s}-${a.a}.png`,{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:ttl(a)})}catch(e){}flash('')}
+  else{const u=URL.createObjectURL(blob);const l=document.createElement('a');l.href=u;l.download=f.name;document.body.appendChild(l);l.click();l.remove();flash('ছবি ডাউনলোড হয়েছে')}
+ }catch(e){flash('ছবি বানানো যায়নি')}}
+const TFU='https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/bn-tafseer-ibn-e-kaseer/{sura}/{aya}.json';
+async function doTafsirOld(){if(!curA)return;const a=curA;const el=$('tf');el.textContent='তাফসীর লোড হচ্ছে…';
+ try{const c=new AbortController();const tm=setTimeout(()=>c.abort(),12000);const r=await fetch(TFU.replace('{sura}',a.s).replace('{aya}',a.a),{signal:c.signal});clearTimeout(tm);if(r.ok){const j=await r.json();let h=pick(j);if(h){const d=document.createElement('div');d.innerHTML=String(h).replace(/<br\s*\/?>/gi,'\n').replace(/<\/p>/gi,'\n');const tx=(d.textContent||'').trim();if(tx){if(curA===a)el.textContent='[তাফসীরে ইবনে কাসীর]\n'+tx;return}}}}catch(e){}
+ if(curA===a)el.textContent='তাফসীর আনা যায়নি। ইন্টারনেট দেখুন, অথবা এই আয়াতের তাফসীর এই উৎসে নেই।'}
+
+
+const TFB_U='https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/';
+const TFB=[{s:'bn-tafseer-ibn-e-kaseer',n:'তাফসীরে ইবনে কাসীর',N:114},{s:'tz1',n:'তাফসীরে তাওযীহুল কুরআন (১ম ও ২য় খণ্ড: সূরা ফাতিহা–আনকাবূত)',N:29,note:'টীকাগুলো স্ক্যান থেকে নেওয়া, তাই কিছু শব্দ বা আরবি অংশ ভাঙা থাকতে পারে এবং কিছু টীকা উদ্ধার করা যায়নি। কোন আয়াতে কোন টীকা, তা তরজমার টীকা-নম্বর দিয়ে ঠিক করা।'}];
+const tfMem2={};let TFSTOP=false,TFRUN=false;
+function tfName(s){const b=TFB.find(x=>x.s==s);return b?b.n:s}
+function tfText(x){const d=document.createElement('div');d.innerHTML=String(x).replace(/<br\s*\/?>/gi,'\n').replace(/<\/p>/gi,'\n');return(d.textContent||'').trim()}
+function tfParse(j){const m={};const arr=Array.isArray(j)?j:(j&&(j.ayahs||j.data)||[]);arr.forEach((x,i)=>{const n=+(x.ayah||x.ayah_number||x.verse||i+1);const t=typeof x.text=='string'?x.text:pick(x);if(t)m[n]=t});return m}
+async function tfSura(slug,n,net){const k='tf:'+slug+':'+n;if(tfMem2[k])return tfMem2[k];try{const c=await idbS('t','get',k);if(c){tfMem2[k]=c;return c}}catch(e){}
+ if(!net)return null;const c=new AbortController();const tm=setTimeout(()=>c.abort(),20000);
+ try{const r=await fetch(TFB_U+slug+'/'+n+'.json',{signal:c.signal});if(!r.ok)throw 0;const m=tfParse(await r.json());if(!Object.keys(m).length)throw 0;tfMem2[k]=m;try{await idbS('t','put',m,k)}catch(e){}return m}finally{clearTimeout(tm)}}
+let TZD=null;
+async function tzLoad(net){if(TZD)return TZD;try{const c=await idbS('t','get','tz12b');if(c){TZD=c;return c}}catch(e){}
+ if(!net)return null;const r=await fetch('tawzih12.json?v=2');if(!r.ok)throw 0;TZD=await r.json();try{await idbS('t','put',TZD,'tz12b')}catch(e){}return TZD}
+async function tzHas(){try{return !!(await idbS('t','get','tz12b'))}catch(e){return false}}
+async function tzGet(s,a){if(s>29)return 'এই কিতাবের এখন পর্যন্ত শুধু সূরা ফাতিহা থেকে আনকাবূত (১–২৯) আছে। পরের সূরার জন্য পরের খণ্ডের অপেক্ষা করুন, অথবা অন্য কিতাব বেছে নিন।';
+ const d=await tzLoad(true);const S=d[s]||{};const fmt=x=>'('+bn(x[0])+') '+(x[1]||'এই টীকাটি স্ক্যান থেকে উদ্ধার করা যায়নি।');const own=S[a]||[];
+ return own.length?'টীকা (আয়াত '+bn(a)+'):\n'+own.map(fmt).join('\n\n'):'এই আয়াতে কোনো টীকা নেই।'}
+async function tfGet(slug,s,a){if(slug=='tz1')return tzGet(s,a);let m=null;try{m=await tfSura(slug,s,true)}catch(e){}
+ if(m)return m[a]?tfText(m[a]):'';
+ const r=await fetch(TFB_U+slug+'/'+s+'/'+a+'.json');if(!r.ok)throw 0;const x=pick(await r.json());if(!x)throw 0;return tfText(x)}
+async function tfShow(slug,s,a,el){const tk=el._tk=(el._tk||0)+1;el.textContent='তাফসীর লোড হচ্ছে…';
+ try{const t=await tfGet(slug,s,a);if(el._tk!==tk)return;el.textContent='['+tfName(slug)+']\n'+(t||'এই আয়াতের আলাদা তাফসীর এই কিতাবে নেই (আগের আয়াতের তাফসীরের সাথে মিলিয়ে থাকতে পারে)। অন্য কিতাব বেছে দেখুন।')}
+ catch(e){if(el._tk===tk)el.textContent='তাফসীর আনা যায়নি। ইন্টারনেট দেখুন, অথবা কিতাবটি ডাউনলোড করে নিন।'}}
+async function tfCount(slug){let c=0;try{const ks=await idbS('t','getAllKeys');const pre='tf:'+slug+':';for(const k of ks)if(typeof k=='string'&&k.startsWith(pre))c++}catch(e){}return c}
+async function tfDl(b,msg,done){if(TFRUN)return;TFRUN=true;TFSTOP=false;let ok=0,fail=0,k=0;const N=114;
+ const todo=[];for(let n=1;n<=N;n++)todo.push(n);
+ async function w(){while(!TFSTOP){const n=todo[k++];if(n==null)return;try{await tfSura(b.s,n,true);ok++}catch(e){fail++}msg.textContent=`নামছে… ${bn(ok+fail)} / ${bn(N)} সূরা`}}
+ await Promise.all([w(),w(),w()]);TFRUN=false;msg.textContent=TFSTOP?'থামানো হয়েছে':fail?`${bn(fail)}টি সূরা নামেনি, আবার চেষ্টা করুন`:'ডাউনলোড সম্পূর্ণ ✓';done()}
+async function tfRender(cb){const L=$('tpl');L.innerHTML='';
+ for(const b of TFB){const loc=b.s=='tz1';const c=loc?((await tzHas())?b.N:0):await tfCount(b.s);const row=document.createElement('div');row.className='tpr';
+  const nm=document.createElement('button');nm.type='button';nm.className='tpn';nm.textContent=b.n;const sm=document.createElement('small');sm.textContent=c>=b.N?'অফলাইনে আছে ✓':c?`অফলাইনে ${bn(c)} / ${bn(b.N)} সূরা`:'ডাউনলোড করা নেই';nm.appendChild(sm);
+  if(b.note){const sn=document.createElement('small');sn.textContent=b.note;sn.style.color='#a55';nm.appendChild(sn)}
+  nm.onclick=()=>{try{localStorage.setItem('qmz_tfb',b.s)}catch(e){}$('tp').hidden=true;cb(b.s)};
+  const msg=document.createElement('div');msg.className='tpm';
+  const dl=document.createElement('button');dl.type='button';dl.className='tpd';dl.textContent=c>=b.N?'✓ ডাউনলোড করা':c?'⬇ বাকিটা নামান':(loc?'⬇ ডাউনলোড (সূরা ১–৯)':'⬇ পুরো কোরআনের তাফসীর ডাউনলোড');dl.disabled=c>=b.N;
+  dl.onclick=()=>{if(loc){dl.disabled=true;msg.textContent='নামছে…';tzLoad(true).then(()=>{msg.textContent='ডাউনলোড সম্পূর্ণ ✓';tfRender(cb)}).catch(()=>{dl.disabled=false;msg.textContent='নামেনি, ইন্টারনেট দেখে আবার চেষ্টা করুন'});return}
+   if(TFRUN){TFSTOP=true;return}dl.textContent='⏹ থামান';tfDl(b,msg,()=>tfRender(cb))};
+  row.appendChild(nm);row.appendChild(dl);row.appendChild(msg);
+  if(c){const rm=document.createElement('button');rm.type='button';rm.className='tpx';rm.textContent='🗑 মুছুন';rm.onclick=async()=>{if(!confirm('এই কিতাবের ডাউনলোড করা তাফসীর মুছবেন?'))return;
+    try{if(loc){await idbS('t','delete','tz12b');TZD=null}else{const ks=await idbS('t','getAllKeys');const pre='tf:'+b.s+':';for(const q of ks)if(typeof q=='string'&&q.startsWith(pre)){await idbS('t','delete',q);delete tfMem2[q]}}}catch(e){}tfRender(cb)};row.appendChild(rm)}
+  L.appendChild(row)}}
+function tfPick(cb){TFSTOP=false;$('tp').hidden=false;tfRender(cb)}
+$('tpc').onclick=()=>{$('tp').hidden=true};
+function doTafsir(){if(!curA)return;const a=curA;tfPick(slug=>tfShow(slug,a.s,a.a,$('tf')))}
+
+const WB_U='https://api.quran.com/api/v4/verses/by_chapter/';
+const wbMem={};let WBRUN=false,WBSTOP=false;
+const hasBn=t=>{for(const c of String(t||''))if(c.charCodeAt(0)>=2432&&c.charCodeAt(0)<=2559)return true;return false};
+async function wbFetch(n){const out=[];let bnOk=false;
+ for(let pg=1;pg<=12;pg++){const c=new AbortController();const tm=setTimeout(()=>c.abort(),20000);
+  try{const r=await fetch(`${WB_U}${n}?language=bn&words=true&word_fields=text_uthmani&fields=verse_key&per_page=50&page=${pg}`,{signal:c.signal});if(!r.ok)throw 0;const j=await r.json();
+   (j.verses||[]).forEach(v=>{const ay=+String(v.verse_key).split(':')[1];out[ay-1]=(v.words||[]).filter(w=>w.char_type_name=='word').map(w=>{const t=(w.translation&&w.translation.text)||'';if(hasBn(t))bnOk=true;return[w.text_uthmani||w.text||'',t]})});
+   const nx=j.pagination&&j.pagination.next_page;if(!nx)break}finally{clearTimeout(tm)}}
+ if(!out.length)throw new Error('খালি');if(!bnOk)throw new Error('বাংলা শব্দার্থ নেই');
+ for(let i=0;i<out.length;i++)if(!out[i])out[i]=[];return out}
+async function wbSura(n,net){if(wbMem[n])return wbMem[n];try{const c=await idbS('t','get','w:'+n);if(c){wbMem[n]=c;return c}}catch(e){}
+ if(!net)return null;const o=await wbFetch(n);wbMem[n]=o;try{await idbS('t','put',o,'w:'+n)}catch(e){}return o}
+async function wbCount(){let c=0;try{const ks=await idbS('t','getAllKeys');for(const k of ks)if(typeof k=='string'&&k.startsWith('w:'))c++}catch(e){}return c}
+async function wbShow(s,a,el){const tk=el._tk=(el._tk||0)+1;el.innerHTML='';const m=document.createElement('div');m.textContent='শব্দে শব্দে লোড হচ্ছে…';el.appendChild(m);
+ try{const d=await wbSura(s,true);if(el._tk!==tk)return;const ws=d[a-1]||[];el.innerHTML='';
+  if(!ws.length){m.textContent='এই আয়াতের শব্দার্থ পাওয়া যায়নি।';el.appendChild(m)}
+  else{const g=document.createElement('div');g.className='wbg';ws.forEach(w=>{const x=document.createElement('div');x.className='wbw';const b=document.createElement('b');b.textContent=w[0];const sp=document.createElement('span');sp.textContent=w[1];x.appendChild(b);x.appendChild(sp);g.appendChild(x)});el.appendChild(g)}
+  wbBar(el)}
+ catch(e){if(el._tk!==tk)return;el.innerHTML='';m.textContent='শব্দে শব্দে আনা যায়নি'+(e&&e.message?' ('+e.message+')':'')+'। ইন্টারনেট দেখুন, অথবা ডাউনলোড করে নিন।';el.appendChild(m);wbBar(el)}}
+async function wbBar(el){const c=await wbCount();const bar=document.createElement('div');bar.className='wbd';const t=document.createElement('div');
+ t.textContent=c>=114?'শব্দে শব্দে: পুরো কোরআন অফলাইনে আছে ✓':c?`শব্দে শব্দে অফলাইনে ${bn(c)} / ${bn(114)} সূরা`:'শব্দে শব্দে ডাউনলোড করা নেই';bar.appendChild(t);
+ if(c<114){const b=document.createElement('button');b.type='button';b.textContent=WBRUN?'⏹ থামান':c?'⬇ বাকিটা নামান':'⬇ পুরো কোরআনের শব্দে শব্দে ডাউনলোড';
+  b.onclick=()=>{if(WBRUN){WBSTOP=true;return}WBSTOP=false;WBRUN=true;b.textContent='⏹ থামান';let ok=0,fail=0,k=0,last='';
+   async function w(){while(!WBSTOP){const n=++k;if(n>114)return;try{await wbSura(n,true);ok++}catch(e){fail++;last=e&&e.message||''}t.textContent=`নামছে… ${bn(ok+fail)} / ${bn(114)} সূরা`}}
+   Promise.all([w(),w()]).then(()=>{WBRUN=false;t.textContent=WBSTOP?'থামানো হয়েছে':fail?`${bn(fail)}টি সূরা নামেনি`+(last?' ('+last+')':'')+', আবার চেষ্টা করুন':'ডাউনলোড সম্পূর্ণ ✓';b.textContent='⬇ আবার চেষ্টা/বাকিটা নামান';if(!fail&&!WBSTOP)b.hidden=true})};bar.appendChild(b)}
+ if(c){const r=document.createElement('button');r.type='button';r.className='x';r.textContent='🗑 মুছুন';r.onclick=async()=>{if(!confirm('ডাউনলোড করা শব্দে শব্দে মুছবেন?'))return;try{const ks=await idbS('t','getAllKeys');for(const q of ks)if(typeof q=='string'&&q.startsWith('w:')){await idbS('t','delete',q);delete wbMem[+q.slice(2)]}}catch(e){}bar.remove();wbBar(el)};bar.appendChild(r)}
+ el.appendChild(bar)}
+function doWbw(){if(!curA)return;const a=curA;const el=$('wb');if(el.firstChild){el.innerHTML='';return}wbShow(a.s,a.a,el)}
+
+let AP=2;
+function nextAy(){if(!curA)return;const a=curA;let p=(D[AP]&&D[AP].some(x=>x.s==a.s&&x.a==a.a))?AP:cur,i=D[p].findIndex(x=>x.s==a.s&&x.a==a.a);if(i<0)return;
+ let np=p,ni=i+1;
+ const same=(q,j)=>D[q][j]&&D[q][j].s==a.s&&D[q][j].a==a.a;
+ for(;;){if(ni>=D[np].length){const k=keys.indexOf(np);if(k<0||k>=keys.length-1){flash('এই অংশের শেষ আয়াত');return}np=keys[k+1];ni=0;continue}if(same(np,ni)){ni++;continue}break}
+ const wasOpen=$('sh').classList.contains('o');if(np!=cur)show(np);tap(np,ni,!wasOpen);playAy(D[np][ni]);
+ setTimeout(()=>{const e=document.querySelector('.h.on, .ti');if(e)try{e.scrollIntoView({block:'start',behavior:'smooth'})}catch(x){}},150)}
+function acBuild(){if(!curA){$('ac').innerHTML='';return}const fs=!!(document.fullscreenElement||document.webkitFullscreenElement);
+ const B=[[isBm(curA)?'🔖 বুকমার্ক করা':'🔖 বুকমার্ক',bmToggle,isBm(curA)],[fs?'⛶ ফুলস্ক্রিন বন্ধ':'⛶ ফুলস্ক্রিন',fsToggle,fs],['📜 তাফসীর দেখুন',doTafsir],['🔤 শব্দে শব্দে অনুবাদ',doWbw],[AUTO?'🔁 ধারাবাহিক: চালু':'🔁 ধারাবাহিক: বন্ধ',()=>{AUTO=!AUTO;try{localStorage.setItem('qauto',AUTO?'1':'0')}catch(e){}acBuild()},AUTO],['📝 অনুবাদ মোডে যান',()=>openRd(curA.s,curA.a)],['📋 কপি করুন',doCopy],['📤 শেয়ার করুন',doShare],['🖼 ছবি হিসেবে শেয়ার',doImg]];
+ $('ac').innerHTML='';B.forEach(b=>{const e=document.createElement('button');e.type='button';e.textContent=b[0];if(b[2])e.className='on';e.onclick=b[1];$('ac').appendChild(e)})}
+
+$('sbn').onclick=()=>$('nx').click();$('sbp').onclick=()=>$('pv').click();
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target&&e.target.tagName;if(t=='INPUT'||t=='SELECT'||t=='TEXTAREA')return;
+ if(!$('gt').hidden||!$('rd').hidden)return;
+ if(e.key=='Escape'){if($('mnu').classList.contains('o'))menuClose();else close();return}
+ if($('mnu').classList.contains('o'))return;
+ if(e.key=='ArrowLeft'||e.key=='PageDown'){e.preventDefault();$('nx').click()}
+ else if(e.key=='ArrowRight'||e.key=='PageUp'){e.preventDefault();$('pv').click()}});
+$('sel').onchange=e=>show(+e.target.value);
+$('nx').onclick=()=>{const i=keys.indexOf(cur);if(i<keys.length-1)show(keys[i+1])};
+$('pv').onclick=()=>{const i=keys.indexOf(cur);if(i>0)show(keys[i-1])};
+$('st').onclick=()=>{$('dlp').hidden=true;try{AU.pause()}catch(e){}curA=null;$('ac').innerHTML='';$('tf').textContent='';$('wb').innerHTML='';$('cf').hidden=false;$('api').value=API;$('sh').classList.add('o');$('ti').textContent='সেটিং';$('tx').textContent=''};
+$('sv').onclick=()=>{API=$('api').value.trim();try{localStorage.setItem('qapi',API)}catch(e){}cache={};close()};
+$('pg').addEventListener('click',e=>{if(!e.target.classList.contains('h'))close()});
+
+let LASTS=0,GRUN=false,GSTOP=false;
+async function gateRun(mp,mt,sl){if(GRUN)return;GRUN=true;GSTOP=false;$('gtgo').hidden=true;$('gtstop').hidden=false;$('gtm').textContent='';
+ const TP=keys.length,TT=sl.length;let dp=TP-mp.length,dt=TT-mt.length,fail=0;
+ const upd=()=>{$('gtb').style.width=((dp+dt)/(TP+TT)*100)+'%';$('gts').textContent=`পাতা ${bn(dp)} / ${bn(TP)}  ·  তরজমা ${bn(dt)} / ${bn(TT)} সূরা`};upd();
+ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+ let i=0;async function w(){while(!GSTOP){const p=mp[i++];if(p==null)return;try{let r=await fetch(I[p]);if(!r.ok)r=await fetch(altU(I[p]));if(!r.ok)throw 0;const b=await r.blob();await idbOp('put',b,p);DL.add(p);dp++;upd()}catch(e){fail++}}}
+ await Promise.all([w(),w(),w(),w()]);
+ let k=0;async function w2(){while(!GSTOP){const n=mt[k++];if(n==null)return;try{await rdGet(n);dt++;upd()}catch(e){fail++}}}
+ if(!GSTOP)await Promise.all([w2(),w2()]);
+ GRUN=false;$('gtstop').hidden=true;$('gtgo').hidden=false;
+ if(GSTOP){$('gtgo').textContent='⬇ আবার শুরু করুন';return}
+ if(fail){$('gtm').textContent=`${bn(fail)}টি অংশ নামেনি। ইন্টারনেট ঠিক আছে কি না দেখে আবার চাপুন।`;$('gtgo').textContent='⬇ আবার চেষ্টা করুন';return}
+ startApp()}
+function gateShow(mp,mt,sl){const g=$('gt');g.hidden=false;
+ $('gtp').textContent='প্রথমবার ব্যবহারের আগে কোরআন ('+bn(keys.length)+'টি পাতা) ও বাংলা তরজমা ফোনে ডাউনলোড করে নিতে হবে। একবার ডাউনলোড হলে ইন্টারনেট ছাড়াই পড়তে পারবেন। ওয়াইফাই থাকলে ভালো।';
+ $('gts').textContent=`পাতা ${bn(keys.length-mp.length)} / ${bn(keys.length)}  ·  তরজমা ${bn(sl.length-mt.length)} / ${bn(sl.length)} সূরা`;
+ $('gtb').style.width=((keys.length-mp.length+sl.length-mt.length)/(keys.length+sl.length)*100)+'%';
+ $('gtgo').onclick=()=>gateRun(keys.filter(p=>!DL.has(p)),mt,sl);$('gtstop').onclick=()=>{GSTOP=true}}
+function startApp(){$('gt').hidden=true;let l=NaN;try{l=+localStorage.getItem('qmz_last')}catch(e){}show(keys.includes(l)?l:keys[0])}
+
+const FCSS='https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tiro+Bangla&display=swap';
+async function fontsApply(list){for(const f of list){try{const ff=new FontFace(f.fam,f.buf,{weight:f.w,style:f.st,unicodeRange:f.ur||'U+0-10FFFF'});await ff.load();document.fonts.add(ff)}catch(e){}}}
+async function fontsFetch(){const css=await (await fetch(FCSS)).text();const out=[];const re=/\/\*\s*([\w-]+)\s*\*\/\s*@font-face\s*\{([^}]*)\}/g;let m;
+ while((m=re.exec(css))){if(['arabic','bengali','latin'].indexOf(m[1])<0)continue;const b=m[2];const fam=(b.match(/font-family:\s*'([^']+)'/)||[])[1],w=(b.match(/font-weight:\s*(\d+)/)||[])[1]||'400',st=(b.match(/font-style:\s*(\w+)/)||[])[1]||'normal',url=(b.match(/url\(([^)]+)\)/)||[])[1],ur=(b.match(/unicode-range:\s*([^;]+)/)||[])[1];
+  if(!fam||!url)continue;const r=await fetch(url.replace(/['"]/g,''));if(!r.ok)continue;out.push({fam:fam,w:w,st:st,ur:ur,buf:await r.arrayBuffer()})}
+ if(!out.length)throw 0;try{await idbS('t','put',out,'fonts')}catch(e){}return out}
+async function fontsEnsure(){let l=null;try{l=await idbS('t','get','fonts')}catch(e){}
+ if(l&&l.length){await fontsApply(l);return}
+ try{await fontsApply(await fontsFetch())}catch(e){}}
+async function boot(){fontsEnsure();const sl=Object.keys(suraStarts()).map(Number);LASTS=Math.max.apply(null,sl);
+ let mp=keys.slice(),mt=sl.slice();
+ try{(await idbOp('getAllKeys')).forEach(x=>DL.add(+x));const t=new Set((await idbS('t','getAllKeys')).map(Number));mp=keys.filter(p=>!DL.has(p));mt=sl.filter(n=>!t.has(n))}catch(e){startApp();return}
+ if(!mp.length&&!mt.length){startApp();return}
+ gateShow(mp,mt,sl)}
+boot();
+
+{const rb=()=>{$('rdtr').textContent=TR=='tu'?'তরজমা: তাকী':'তরজমা: মুহি'};rb();trLab();
+ const sw=()=>{TR=TR=='tu'?'mk':'tu';try{localStorage.setItem('qmz_tr',TR)}catch(e){};rb();trLab();rdTrUpd();
+  if(curA){const a=curA;if(TR=='tu')showTx(a);else{const k=a.s+':'+a.a+':mk';if(cache[k])$('tx').textContent=cache[k];else{const i=D[AP]?D[AP].indexOf(a):-1;if(i>=0)tap(AP,i)}}}};
+ $('tr').style.cursor='pointer';$('tr').onclick=sw;$('rdtr').onclick=sw;
+ setTimeout(()=>{if(navigator.onLine)tuGet().catch(()=>{})},4000)}
 </script></body></html>
