@@ -3957,7 +3957,8 @@
  ],
  "th": {
   "bgc": "#ffffff",
-  "pt": "glow"
+  "pt": "glow",
+  "hd": "grad"
  },
  "font": "tb",
  "tilawat": [
