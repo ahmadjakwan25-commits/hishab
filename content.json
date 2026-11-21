@@ -3956,7 +3956,8 @@
   }
  ],
  "th": {
-  "bgc": "#ffffff"
+  "bgc": "#ffffff",
+  "pt": "dots"
  },
  "font": "tb",
  "tilawat": [
