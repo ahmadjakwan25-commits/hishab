@@ -627,6 +627,44 @@ html body{background-attachment:scroll!important}
 html.scr .hero *,html.scr .hero *::before,html.scr .hero *::after{animation-play-state:paused!important}
 html.scr .hc .wf::before{animation-play-state:paused!important}
 </style>
+<style id="vd-css">
+.vdh{display:flex;align-items:center;gap:12px;border-radius:20px;padding:14px;margin-bottom:12px;color:#fff;border:1.5px solid #d9b34a;position:relative;overflow:hidden;background:radial-gradient(circle at 100% 0,rgba(246,221,140,.4),transparent 55%),repeating-linear-gradient(0deg,transparent 0 17px,rgba(255,255,255,.08) 17px 18px),linear-gradient(135deg,#0b5a3c,#14845a 60%,#35b57e);box-shadow:0 12px 22px -14px rgba(0,0,0,.6)}
+.vdh b{display:block;font-size:18px;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.vdh small{display:block;font-size:12px;color:rgba(255,255,255,.9);margin-top:2px;line-height:1.35}
+.vdhi{flex:none;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.5),rgba(255,255,255,.12));box-shadow:0 0 0 2px rgba(246,221,140,.85)}
+.vdt{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:5px;margin-bottom:12px}
+.vdt button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;color:var(--ink);font:inherit;font-weight:700;font-size:13px;padding:8px 2px;border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.vdt button span{font-size:20px}
+.vdt button.on{background:linear-gradient(135deg,var(--g2),var(--g));color:#fff;box-shadow:0 6px 12px -6px rgba(0,0,0,.5)}
+.vdsec{font-weight:800;margin:6px 2px 8px;color:var(--ink)}
+.vdst{display:grid;gap:8px;margin-bottom:6px}
+.vds{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-left:4px solid var(--g);border-radius:14px;padding:10px 12px}
+.vds>span{flex:none;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;background:color-mix(in srgb,var(--g) 14%,transparent)}
+.vds>div{flex:1;min-width:0}.vds b{display:block;font-size:14.5px}.vds small{color:var(--mut)}.vds i{font-style:normal;color:var(--g);font-weight:800}
+.vdnote{color:var(--mut);display:block;margin:6px 2px 12px;font-size:11.5px}
+.vdsr{width:100%;box-sizing:border-box;margin:2px 0 10px}
+.vdg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
+@media(max-width:340px){.vdg{grid-template-columns:1fr}}
+.vdc{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 8px 16px -12px rgba(0,0,0,.5);-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.vdc:active{transform:scale(.97)}
+.vdth{position:relative;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(circle at 100% 0,rgba(246,221,140,.4),transparent 55%),linear-gradient(135deg,#0b5a3c,#14845a 60%,#35b57e)}
+.vdth img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vdem{position:absolute;font-size:34px;opacity:.55}
+.vdp{position:relative;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.55);border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;padding-left:3px;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+.vdlv{position:absolute;top:6px;left:6px;background:#e53935;color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px}
+.vdi{padding:8px 10px 10px}
+.vdi b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13.5px;line-height:1.35}
+.vdi small{display:block;color:var(--mut);margin-top:2px;font-size:11.5px}
+.vdemp{text-align:center;padding:30px 12px;border:1.5px dashed var(--line);border-radius:16px;color:var(--mut)}
+.vdemp span{display:block;font-size:40px;margin-bottom:6px}
+.vdm{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))}
+.vdmb{width:100%;max-width:720px;background:var(--card);border-radius:16px;overflow:hidden;color:var(--ink)}
+.vdmt{display:flex;align-items:center;gap:8px;padding:10px 12px}.vdmt b{flex:1;font-size:14.5px}
+.vdmt button{border:0;background:var(--line);color:var(--ink);width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer}
+.vdm iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+.vdma{padding:8px 12px 0;color:var(--mut);font-size:13px}
+.vdmo{display:block;text-align:center;padding:12px;font-weight:700;color:var(--g);text-decoration:none}
+</style>
 </head>
 <body>
 <header><button id="mb" aria-label="মেনু">☰</button><button id="nb" aria-label="নোটিফিকেশন">🔔<span id="nbadge"></span></button><h1>আল-মিফতাহ</h1><p id="hsub">ইবাদত ও হিসাব এক জায়গায়</p></header>
@@ -1566,16 +1604,70 @@ function listInit(kind){
   else b.innerHTML=topicBtns(kind,a)||'<div class="empty">শীঘ্রই এখানে যোগ করা হবে, ইনশাআল্লাহ।</div>';
  });
 }
-function liveHtml(){
- var L=[['🕋 মক্কা লাইভ (মাসজিদুল হারাম)','https://makkahlive.net/tvhd.aspx'],['🕌 মদিনা লাইভ (মাসজিদুন নববী)','https://makkahlive.net/en/live/madinah'],['▶️ Saudi Quran TV (ইউটিউবে খুঁজুন)','https://www.youtube.com/results?search_query=Saudi+Quran+TV+live+Makkah']];
- var h=hdH('ইসলামিক লাইভ')+'<div class="panel"><b>মক্কা ও মদিনার সরাসরি সম্প্রচার</b><small style="color:var(--mut);display:block;margin-bottom:6px">বাটন চাপলে নতুন ট্যাবে খুলবে। সম্প্রচার সৌদি সরকারি চ্যানেলের। কিছু লিংক তৃতীয় পক্ষের সাইটে যায়।</small>';
- L.forEach(function(x){h+='<a class="btn" href="'+x[1]+'" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">'+x[0]+'</a>'});
- return h+'</div><div id="lvx"></div>';
+/* ===== ইসলামিক ভিডিও: লাইভ / ওয়াজ / গজল ===== */
+var vdTab='live',VDC=null;
+var VDT=[['live','📡','ইসলামিক লাইভ','লাইভ'],['waz','🎙️','ওয়াজ','ওয়াজ'],['gojol','🎶','গজল','গজল']];
+var VDS=[['🕋','মক্কা লাইভ','মাসজিদুল হারাম','https://makkahlive.net/tvhd.aspx'],['🕌','মদিনা লাইভ','মাসজিদুন নববী','https://makkahlive.net/en/live/madinah'],['▶️','Saudi Quran TV','ইউটিউবে খুঁজুন','https://www.youtube.com/results?search_query=Saudi+Quran+TV+live+Makkah']];
+function vdYt(u){var m=/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/|v\/))([\w-]{11})/i.exec(u||'');return m?m[1]:''}
+function vdAll(c,tab){return ((c&&c[tab])||[]).filter(function(x){return x&&okUrl(x.url)})}
+function vdCard(x,i,tab,isLive){
+ var id=vdYt(x.url),th=/^https?:\/\//i.test(x.thumb||'')?x.thumb:(id?'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg':'');
+ return '<div class="vdc fi" role="button" tabindex="0" data-vd="'+tab+':'+i+'"><div class="vdth">'+(th?'<img class="vdimg" loading="lazy" alt="" src="'+esc(th)+'">':'<span class="vdem">'+(tab==='gojol'?'🎶':tab==='waz'?'🎙️':'📡')+'</span>')+(isLive?'<span class="vdlv">● LIVE</span>':'')+'<span class="vdp">▶</span></div><div class="vdi"><b>'+esc(x.title||'ভিডিও')+'</b>'+(x.author?'<small>'+esc(x.author)+'</small>':'')+'</div></div>';
 }
-function liveInit(){loadContent(function(c){var a=c.live||[],h='';a.forEach(function(x){if(okUrl(x.url))h+='<a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;background:var(--g2)">'+esc(x.title||'লাইভ')+'</a>'});var b=$('lvx');if(b&&h)b.innerHTML='<div class="panel"><b>আরও</b>'+h+'</div>'})}
+function vdRender(){
+ var b=$('vdx');if(!b)return;
+ var tb=document.querySelectorAll('#vdtabs [data-vt]'),k;
+ for(k=0;k<tb.length;k++)tb[k].className=tb[k].getAttribute('data-vt')===vdTab?'on':'';
+ var a=vdAll(VDC,vdTab),h='';
+ if(ghTok())h+='<div style="margin-bottom:10px"><button class="chip" data-h="ad:go:'+vdTab+'">✏️ এই বিভাগে ভিডিও যোগ বা সম্পাদনা</button></div>';
+ if(vdTab==='live'){
+  h+='<div class="vdsec">সৌদি আরবের সরাসরি সম্প্রচার</div><div class="vdst">';
+  VDS.forEach(function(x){h+='<a class="vds" href="'+x[3]+'" target="_blank" rel="noopener"><span>'+x[0]+'</span><div><b>'+x[1]+'</b><small>'+x[2]+'</small></div><i>↗</i></a>'});
+  h+='</div><small class="vdnote">বাটন চাপলে নতুন ট্যাবে খুলবে। কিছু লিংক তৃতীয় পক্ষের সাইটে যায়।</small>';
+  if(a.length)h+='<div class="vdsec">আরও লাইভ ও ভিডিও</div>';
+ }
+ if(a.length){
+  h+='<input data-fl="1" class="vdsr" placeholder="🔍 ভিডিও খুঁজুন"><div class="vdg">';
+  a.forEach(function(x,i){h+=vdCard(x,i,vdTab,vdTab==='live')});
+  h+='</div>';
+ }else if(vdTab!=='live'){
+  h+='<div class="vdemp"><span>'+(vdTab==='gojol'?'🎶':'🎙️')+'</span><b>শীঘ্রই এখানে ভিডিও যোগ করা হবে, ইনশাআল্লাহ।</b></div>';
+ }
+ b.innerHTML=h;
+}
+function liveHtml(){
+ var h=hdH('ইসলামিক ভিডিও')+'<div class="vdh"><div class="vdhi">🎬</div><div><b>ইসলামিক ভিডিও</b><small>লাইভ সম্প্রচার, ওয়াজ মাহফিল ও সুন্দর গজল — এক জায়গায়</small></div></div><div class="vdt" id="vdtabs">';
+ VDT.forEach(function(t){h+='<button type="button" data-vt="'+t[0]+'" class="'+(vdTab===t[0]?'on':'')+'"><span>'+t[1]+'</span>'+t[2]+'</button>'});
+ return h+'</div><div id="vdx"><div class="empty">লোড হচ্ছে…</div></div><small class="vdnote" style="display:block;text-align:center">ভিডিও দেখতে ইন্টারনেট লাগবে।</small>';
+}
+function liveInit(){vdRender();loadContent(function(c){VDC=c;vdRender()})}
+function vdClose(){var m=document.getElementById('vdmod');if(m)m.remove()}
+function vdOpen(tab,i){
+ var a=vdAll(VDC,tab),x=a[i];if(!x)return;
+ var id=vdYt(x.url);
+ if(navigator.onLine===false){toast('ভিডিও দেখতে ইন্টারনেট লাগবে');return}
+ if(!id){window.open(x.url,'_blank','noopener');return}
+ vdClose();
+ var m=document.createElement('div');m.id='vdmod';m.className='vdm';
+ m.innerHTML='<div class="vdmb"><div class="vdmt"><b>'+esc(x.title||'ভিডিও')+'</b><button type="button" data-vc="1" aria-label="বন্ধ করুন">✕</button></div><iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&playsinline=1&autoplay=1" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'+(x.author?'<div class="vdma">'+esc(x.author)+'</div>':'')+'<a class="vdmo" href="'+esc(x.url)+'" target="_blank" rel="noopener">↗ ইউটিউবে খুলুন</a></div>';
+ document.body.appendChild(m);
+}
+document.addEventListener('click',function(e){
+ var t=e.target&&e.target.closest?e.target:null;if(!t)return;
+ var vt=t.closest('[data-vt]');
+ if(vt){vdTab=vt.getAttribute('data-vt');vdRender();return}
+ if(t.closest('[data-vc]')||t.id==='vdmod'){vdClose();return}
+ var vd=t.closest('[data-vd]');
+ if(vd){var p=vd.getAttribute('data-vd').split(':');vdOpen(p[0],+p[1])}
+});
+document.addEventListener('keydown',function(e){
+ if(e.key==='Escape')vdClose();
+ else if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.getAttribute&&e.target.getAttribute('data-vd')){e.preventDefault();var p=e.target.getAttribute('data-vd').split(':');vdOpen(p[0],+p[1])}
+});
+document.addEventListener('error',function(e){var t=e.target;if(t&&t.tagName==='IMG'&&t.className==='vdimg')t.remove()},true);
 /* ---------- মূল পাতা ---------- */
 var NMI='<svg class="nmi" viewBox="0 0 24 24" aria-hidden="true"><path fill="#d9a21f" d="M15 3.6A9 9 0 1 0 15 20.4A9.5 9.5 0 0 1 15 3.6z"/><polygon fill="#d9a21f" points="17.50,8.90 18.26,10.95 20.45,11.04 18.74,12.40 19.32,14.51 17.50,13.30 15.68,14.51 16.26,12.40 14.55,11.04 16.74,10.95"/></svg>';
-var HT=[['salat','🕋','নামাজের সময়'],['quran','📖','কুরআন'],['hadith','📜','হাদিস'],['dua','🤲','দোয়া'],['masail','❓','মাসায়েল'],['library','📚','কিতাব'],['essay','✍️','প্রবন্ধ'],['live','📺','ইসলামিক লাইভ'],['qibla','🧭','কিবলা'],['tasbih','📿','তাসবিহ'],['amol','✅','আমল ট্র্যাকার'],['quiz','🧠','ছোটদের ইসলামিক কুইজ'],['names',NMI,'ইসলামিক নাম'],['asma','🌟','আসমাউল হুসনা'],['cal','🗓️','ক্যালেন্ডার'],['days','🌙','গুরুত্বপূর্ণ দিন'],['set','🎨','থিম ও সেটিং']];
+var HT=[['salat','🕋','নামাজের সময়'],['quran','📖','কুরআন'],['hadith','📜','হাদিস'],['dua','🤲','দোয়া'],['masail','❓','মাসায়েল'],['library','📚','কিতাব'],['essay','✍️','প্রবন্ধ'],['live','🎬','ইসলামিক ভিডিও'],['qibla','🧭','কিবলা'],['tasbih','📿','তাসবিহ'],['amol','✅','আমল ট্র্যাকার'],['quiz','🧠','ছোটদের ইসলামিক কুইজ'],['names',NMI,'ইসলামিক নাম'],['asma','🌟','আসমাউল হুসনা'],['cal','🗓️','ক্যালেন্ডার'],['days','🌙','গুরুত্বপূর্ণ দিন'],['set','🎨','থিম ও সেটিং']];
 function hubHtml(){
  switch(view){
   case 'hub':return hubHome();
@@ -1886,8 +1978,8 @@ $('app').addEventListener('input',function(ev){
 });
 /* ===== পরিচালক: কিতাব, মাসায়েল, প্রবন্ধ ইত্যাদি যোগ ===== */
 var adT='books',adEd=-1,ADD=null,adMsg='',adTaps=0;
-var ADN={notifs:'নোটিফিকেশন (সবাইকে জানান)',quran:'কুরআনের PDF/লিংক',tilawat:'তিলাওয়াত (ভিডিও লিংক)',books:'কিতাব (PDF)',masail:'মাসায়েল',essays:'প্রবন্ধ',hadiths:'হাদিস',duas:'দোয়া',live:'লাইভ লিংক',names:'ইসলামিক নাম'};
-var FS={books:[['title','কিতাবের নাম'],['author','লেখক'],['file','PDF ফাইল (ফোন/কম্পিউটার থেকে)'],['url','অথবা PDF-এর লিংক (ঐচ্ছিক)']],masail:[['q','প্রশ্ন বা বিষয়'],['a','উত্তর','t'],['source','সূত্র (কিতাব/আলেমের নাম)']],essays:[['title','প্রবন্ধের শিরোনাম'],['author','লেখক'],['text','লেখা','t'],['url','লিংক (ঐচ্ছিক)']],hadiths:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অনুবাদ','t'],['source','সূত্র (গ্রন্থ ও নম্বর)']],duas:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অর্থ','t'],['source','সূত্র']],live:[['title','নাম'],['url','লিংক']],tilawat:[['title','তিলাওয়াতের নাম (যেমন: সূরা আর-রহমান)'],['author','ক্বারীর নাম (ঐচ্ছিক)'],['url','ভিডিও লিংক (ইউটিউব ইত্যাদি, https:// দিয়ে)']],names:[['name','নাম (বাংলায়)'],['gender','ছেলে বা মেয়ে','g'],['ar','আরবি লেখা (ঐচ্ছিক)'],['meaning','অর্থ']]};
+var ADN={notifs:'নোটিফিকেশন (সবাইকে জানান)',quran:'কুরআনের PDF/লিংক',tilawat:'তিলাওয়াত (ভিডিও লিংক)',books:'কিতাব (PDF)',masail:'মাসায়েল',essays:'প্রবন্ধ',hadiths:'হাদিস',duas:'দোয়া',live:'ইসলামিক লাইভ (ভিডিও লিংক)',waz:'ওয়াজ (ভিডিও লিংক)',gojol:'গজল (ভিডিও লিংক)',names:'ইসলামিক নাম'};
+var FS={books:[['title','কিতাবের নাম'],['author','লেখক'],['file','PDF ফাইল (ফোন/কম্পিউটার থেকে)'],['url','অথবা PDF-এর লিংক (ঐচ্ছিক)']],masail:[['q','প্রশ্ন বা বিষয়'],['a','উত্তর','t'],['source','সূত্র (কিতাব/আলেমের নাম)']],essays:[['title','প্রবন্ধের শিরোনাম'],['author','লেখক'],['text','লেখা','t'],['url','লিংক (ঐচ্ছিক)']],hadiths:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অনুবাদ','t'],['source','সূত্র (গ্রন্থ ও নম্বর)']],duas:[['title','শিরোনাম'],['ar','আরবি','t'],['bn','বাংলা অর্থ','t'],['source','সূত্র']],live:[['title','ভিডিওর নাম'],['author','বক্তা / শিল্পীর নাম (ঐচ্ছিক)'],['url','ভিডিও লিংক (ইউটিউব ইত্যাদি, https:// দিয়ে)'],['thumb','থাম্বনেইল ছবির লিংক (ঐচ্ছিক — ইউটিউব হলে নিজে থেকেই আসবে)']],waz:[['title','ভিডিওর নাম'],['author','বক্তা / শিল্পীর নাম (ঐচ্ছিক)'],['url','ভিডিও লিংক (ইউটিউব ইত্যাদি, https:// দিয়ে)'],['thumb','থাম্বনেইল ছবির লিংক (ঐচ্ছিক — ইউটিউব হলে নিজে থেকেই আসবে)']],gojol:[['title','ভিডিওর নাম'],['author','বক্তা / শিল্পীর নাম (ঐচ্ছিক)'],['url','ভিডিও লিংক (ইউটিউব ইত্যাদি, https:// দিয়ে)'],['thumb','থাম্বনেইল ছবির লিংক (ঐচ্ছিক — ইউটিউব হলে নিজে থেকেই আসবে)']],tilawat:[['title','তিলাওয়াতের নাম (যেমন: সূরা আর-রহমান)'],['author','ক্বারীর নাম (ঐচ্ছিক)'],['url','ভিডিও লিংক (ইউটিউব ইত্যাদি, https:// দিয়ে)']],names:[['name','নাম (বাংলায়)'],['gender','ছেলে বা মেয়ে','g'],['ar','আরবি লেখা (ঐচ্ছিক)'],['meaning','অর্থ']]};
 function ghTok(){return lsGet('mf-gh')||''}
 function ghInfo(){var s=mfs().gh||{},h=location.hostname||'';return{o:s.o||h.split('.')[0],r:s.r||(location.pathname||'/').split('/')[1]||'',b:s.b||'main'}}
 function ghApi(path,opt){
@@ -1988,7 +2080,7 @@ function adminAct(p){
   var it={},keys=FS[adT];
   keys.forEach(function(f){if(f[0]==='file')return;var e=$('af-'+f[0]);it[f[0]]=((e&&e.value)||'').trim()});
   var isB=(adT==='books'||adT==='quran');if(keys[0][0]==='topic'&&!it.topic){adSet('বিষয় লিখুন');return}if(isB&&!it.title){adSet('নাম লিখুন');return}if(!isB&&!Object.keys(it).some(function(k){return k!=='topic'&&it[k]})){adSet('লেখা পূরণ করুন');return}
-  if(adT==='tilawat'&&(!it.title||!/^https?:\/\//i.test(it.url||''))){adSet('নাম লিখুন এবং ভিডিও লিংক https:// দিয়ে দিন');return}
+  if((adT==='tilawat'||adT==='live'||adT==='waz'||adT==='gojol')&&(!it.title||!/^https?:\/\//i.test(it.url||''))){adSet('ভিডিওর নাম লিখুন এবং লিংক https:// দিয়ে দিন');return}
   var fi=$('af-file'),file=fi&&fi.files&&fi.files[0],idx=adEd;
   var fin=function(){adCommit(function(d){var old=idx>=0?d[adT][idx]:{};var m=Object.assign({},old,it);if(adT==='notifs'&&!m.id){m.id=Date.now();m.date=dkey()}if(idx>=0)d[adT][idx]=m;else d[adT].push(m)},(idx>=0?'update ':'add ')+adT)};
   if((adT==='books'||adT==='quran')&&file){
@@ -3303,7 +3395,9 @@ var AG=[
  {k:'essays',i:'✍️',n:'প্রবন্ধ',t:1},
  {k:'hadiths',i:'📜',n:'হাদিস',t:1},
  {k:'duas',i:'🤲',n:'দোয়া',t:1},
- {k:'live',i:'📺',n:'লাইভ লিংক',t:1},
+ {k:'live',i:'📡',n:'ইসলামিক লাইভ',t:1},
+ {k:'waz',i:'🎙️',n:'ওয়াজ',t:1},
+ {k:'gojol',i:'🎶',n:'গজল',t:1},
  {k:'names',i:'🌟',n:'ইসলামিক নাম',t:1},
  {k:'font',i:'🔤',n:'ফন্ট'},
  {k:'theme',i:'🎨',n:'থিমের সাজ'},
